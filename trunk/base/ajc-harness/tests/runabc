@@ -1,0 +1,5 @@
+#!/bin/sh -e
+
+CP="../../lib/abc-complete.jar;../../lib/abc-testing.jar"
+
+java -Xmx512M -cp $CP abc.main.Main $*

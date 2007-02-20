@@ -1,0 +1,64 @@
+<suite xmlns:ns="http://www.comlab.ox.ac.uk/abc" xmlns="http://www.comlab.ox.ac.uk/abc"> 
+ <ajc-test title="Test of cast pointcuts" num="975" dir="abctests/eaj/casting">
+         <compile options="-ext,abc.eaj" files="Test.java"></compile>
+         <run class="Test"></run>
+    </ajc-test>
+<ajc-test title="Test of global and private pointcuts" num="976" dir="abctests/eaj/global_pointcuts">
+         <compile options="-ext,abc.eaj" files="aaa/A.java,bbb/B.java"></compile>
+         <run class="aaa.A"></run>
+    </ajc-test>
+<ajc-test title="Test of private pointcuts" num="977" dir="abctests/eaj/local_vars">
+         <compile options="-ext,abc.eaj" files="Fibonacci.java,Observer.java"></compile>
+         <run class="Fibonacci"></run>
+    </ajc-test>
+<ajc-test title="Try all advice types on the throw joinpoint" num="993" dir="abctests/eaj/throw_pointcut">
+        <compile options="-ext,abc.eaj" files="Throw.java">
+            <message line="18" kind="warning"></message>
+        </compile>
+        <run class="Throw"></run>
+    </ajc-test>
+<ajc-test title="Cflowdepth Factorial" num="1200" dir="cflowdepth">
+        <compile options="-ext,abc.eaj" files="Fact.java">
+        </compile>
+        <run class="Fact"></run>
+    </ajc-test>
+<ajc-test title="Cflowdepth Factorial with arguments" num="1201" dir="cflowdepth">
+        <compile options="-ext,abc.eaj" files="Fact2.java">
+        </compile>
+        <run class="Fact2"></run>
+    </ajc-test>
+<ajc-test title="Cflowbelowdepth Factorial" num="1202" dir="cflowdepth">
+        <compile options="-ext,abc.eaj" files="Fact3.java">
+        </compile>
+        <run class="Fact3"></run>
+    </ajc-test>
+<ajc-test title="Cflowbelowdepth Factorial with arguments" num="1203" dir="cflowdepth">
+        <compile options="-ext,abc.eaj" files="Fact4.java">
+        </compile>
+        <run class="Fact4"></run>
+    </ajc-test>
+<ajc-test title="Cflowdepth Factorial" num="1204" dir="cflowdepth">
+        <compile options="-ext,abc.eaj" files="Fact5.java">
+            <message line="14" kind="error"></message>
+            <message line="17" kind="error"></message>
+            <message line="22" kind="error"></message>
+        </compile>
+    </ajc-test>
+<ajc-test title="Cflowdepth in complicated booleans" num="1212" dir="cflowdepth">
+        <compile options="-ext,abc.eaj" files="Test.java">
+        </compile>
+        <run class="Test"></run>
+    </ajc-test>
+<ajc-test title="Contains static test" num="1214" dir="contains/checkstatic">
+        <compile options="-ext,abc.eaj" files="ContainsTest.java">
+          <message line="3" kind="error"></message>  
+          <message line="4" kind="error"></message>  
+        </compile>
+    </ajc-test>
+<ajc-test title="Contains basic matching test" num="1215" dir="contains/basic">
+        <compile options="-ext,abc.eaj" files="ContainsTest.java">
+        </compile>
+        <run class="ContainsTest"></run>
+    </ajc-test>
+ 
+</suite>

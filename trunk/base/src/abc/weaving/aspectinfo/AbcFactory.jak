@@ -1,0 +1,76 @@
+/* abc - The AspectBench Compiler
+ * Copyright (C) 2004 Aske Simon Christensen
+ *
+ * This compiler is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ *
+ * This compiler is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this compiler, in the file LESSER-GPL;
+ * if not, write to the Free Software Foundation, Inc.,
+ * 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ */
+
+//package abc.weaving.aspectinfo;
+
+import java.util.Map;
+import java.util.HashMap;
+import polyglot.types.ClassType;
+import soot.SootClass;
+import soot.SootResolver;
+import polyglot.types.Resolver;
+
+/** 
+ *  @author Aske Simon Christensen
+ */
+
+public class AbcFactory {
+    protected static Map/*<ClassType,String>*/ ct_to_name;
+    protected static Resolver resolver;
+
+    public static void init(Resolver res) {
+        ct_to_name = new HashMap();
+        resolver = res;
+    }
+
+    public static void reset() {
+        ct_to_name = null;
+        resolver = null;
+    }
+
+    public static void registerName(ClassType ct, String name) {
+        ct_to_name.put(ct, name);
+    }
+
+    public static AbcClass AbcClass(ClassType ct) {
+        return new AbcClass(ct);
+    }
+
+    public static AbcClass AbcClass(ClassType ct, String java_name) {
+        return new AbcClass(ct, java_name);
+    }
+
+    public static AbcClass AbcClass(SootClass sc) {
+        return new AbcClass(sc);
+    }
+
+    public static SootClass classTypeToSootClass(ClassType ct) {
+        if (ct_to_name.containsKey(ct)) {
+            return SootResolver.v().makeClassRef((String)ct_to_name.get(ct));
+        } else {
+            soot.RefType rt=(soot.RefType) soot.javaToJimple.Util.getSootType(ct);
+            SootClass sc = rt.getSootClass();
+            if(sc==null) 
+                throw new polyglot.util.InternalCompilerError("Failed to get soot class of "+ct);
+            AbcFactory.registerName(ct, sc.getName());
+            return sc;
+        }
+    }
+
+}

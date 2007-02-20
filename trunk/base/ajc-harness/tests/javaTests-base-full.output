@@ -1,0 +1,1238 @@
+Running test 27: base\test120/unicodes and literals
+Commandline: abc -d base\test120 -warn-unused-advice:off base\test120\Driver.java 
+PASS: Test 27: "base\test120/unicodes and literals" passed.
+
+
+Running test 33: base\test126/For Statement
+Commandline: abc -d base\test126 -warn-unused-advice:off base\test126\Driver.java 
+PASS: Test 33: "base\test126/For Statement" passed.
+
+
+Running test 39: base\test133/correct super call lookup for method().name()
+Commandline: abc -d base\test133 -warn-unused-advice:off base\test133\Driver.java 
+PASS: Test 39: "base\test133/correct super call lookup for method().name()" passed.
+
+
+Running test 51: new/combined logic expression (handling coericions vs. parens)
+Commandline: abc -d new -warn-unused-advice:off new\CombinedLogic.java 
+PASS: Test 51: "new/combined logic expression (handling coericions vs. parens)" passed.
+
+
+Running test 52: new/comment after class closes (with no new line at end)
+Commandline: abc -d new -warn-unused-advice:off new\CommentAfterClass.java 
+PASS: Test 52: "new/comment after class closes (with no new line at end)" passed.
+
+
+Running test 54: new/multi-dimensional array initializers
+Commandline: abc -d new -warn-unused-advice:off new\MultiArrays.java 
+PASS: Test 54: "new/multi-dimensional array initializers" passed.
+
+
+Running test 55: new/probelm with the generated names of exceptions
+Commandline: abc -d new -warn-unused-advice:off new\ExceptionNames.java 
+PASS: Test 55: "new/probelm with the generated names of exceptions" passed.
+
+
+Running test 56: new/checks if the class field can be used on all of the primitive types
+Commandline: abc -d new -warn-unused-advice:off new\ClassFieldOnPrimitiveType.java 
+PASS: Test 56: "new/checks if the class field can be used on all of the primitive types" passed.
+
+
+Running test 57: new\volatileKeyword/advice on a static method
+Commandline: abc -d new\volatileKeyword -warn-unused-advice:off new\volatileKeyword\Driver.java 
+PASS: Test 57: "new\volatileKeyword/advice on a static method" passed.
+
+
+Running test 58: new\innerConsSyntax/inner constructor syntax causes compile error
+Commandline: abc -d new\innerConsSyntax -warn-unused-advice:off new\innerConsSyntax\Driver.java 
+PASS: Test 58: "new\innerConsSyntax/inner constructor syntax causes compile error" passed.
+
+
+Running test 59: new\paramWidening/widening of method parameters to match javac
+Commandline: abc -d new\paramWidening -warn-unused-advice:off new\paramWidening\Driver.java 
+PASS: Test 59: "new\paramWidening/widening of method parameters to match javac" passed.
+
+
+Running test 60: pureJava\equalsMethOnStr/equals method on quoted strings
+Commandline: abc -d pureJava\equalsMethOnStr -warn-unused-advice:off pureJava\equalsMethOnStr\Driver.java 
+PASS: Test 60: "pureJava\equalsMethOnStr/equals method on quoted strings" passed.
+
+
+Running test 61: new/parenthesized string literals matching primitive type names
+Commandline: abc -d new -warn-unused-advice:off new\ParenPrimitive.java 
+PASS: Test 61: "new/parenthesized string literals matching primitive type names" passed.
+
+
+Running test 62: pureJava\anonInnerClass/anonymous inner class
+Commandline: abc -d pureJava\anonInnerClass -warn-unused-advice:off pureJava\anonInnerClass\Driver.java 
+PASS: Test 62: "pureJava\anonInnerClass/anonymous inner class" passed.
+
+
+Running test 63: new/simple type coercions tests
+Commandline: abc -d new -warn-unused-advice:off new\TypeCoercions.java 
+PASS: Test 63: "new/simple type coercions tests" passed.
+
+
+Running test 64: new/order of type declarations shouldn't matter
+Commandline: abc -d new -warn-unused-advice:off new\OrderOfTypes.java 
+PASS: Test 64: "new/order of type declarations shouldn't matter" passed.
+
+
+Running test 65: pureJava/parsing of parenthesized 'this' (in returns)
+Commandline: abc -d pureJava -warn-unused-advice:off pureJava\ReturnThis.java 
+PASS: Test 65: "pureJava/parsing of parenthesized 'this' (in returns)" passed.
+
+
+Running test 66: new/Scanner non recognizing strictfp.
+Commandline: abc -d new -warn-unused-advice:off new\StrictFp.java 
+PASS: Test 66: "new/Scanner non recognizing strictfp." passed.
+
+
+Running test 67: pureJava/Strings are folded and interned correctly
+Commandline: abc -d pureJava -warn-unused-advice:off pureJava\StringFold.java 
+PASS: Test 67: "pureJava/Strings are folded and interned correctly" passed.
+
+
+Running test 68: pureJava/Cast binds tighter than equality tests
+Commandline: abc -d pureJava -warn-unused-advice:off pureJava\CastAndBinary.java 
+false
+PASS: Test 68: "pureJava/Cast binds tighter than equality tests" passed.
+
+
+Running test 69: pureJava/Boundary base values can be parsed
+Commandline: abc -d pureJava -warn-unused-advice:off pureJava\BoundaryNums.java 
+PASS: Test 69: "pureJava/Boundary base values can be parsed" passed.
+
+
+Running test 70: pureJava/State is passed correctly across nested annonymous inners
+Commandline: abc -d pureJava -warn-unused-advice:off pureJava\NestedInners.java 
+PASS: Test 70: "pureJava/State is passed correctly across nested annonymous inners" passed.
+
+
+Running test 71: pureJava/?: expressions should typecheck in interesting ways
+Commandline: abc -d pureJava -warn-unused-advice:off pureJava\TriTestTypecheck.java 
+PASS: Test 71: "pureJava/?: expressions should typecheck in interesting ways" passed.
+
+
+Running test 72: pureJava/cast expressions should allow casts to/from interfaces at compile-time.
+Commandline: abc -d pureJava -warn-unused-advice:off pureJava\InterfaceCast.java 
+PASS: Test 72: "pureJava/cast expressions should allow casts to/from interfaces at compile-time." passed.
+
+
+Running test 73: pureJava/various anonymous inner classes plus super types tests
+Commandline: abc -d pureJava -warn-unused-advice:off pureJava\InnerSuper.java 
+PASS: Test 73: "pureJava/various anonymous inner classes plus super types tests" passed.
+
+
+Running test 74: new/Doesn't parse an array-returning method that throws an exception
+Commandline: abc -d new -warn-unused-advice:off new\ArrayMethod.java 
+PASS: Test 74: "new/Doesn't parse an array-returning method that throws an exception" passed.
+
+
+Running test 75: new/Crashes when a lot of zeros are in front of a double variable [!!! purejava]
+Commandline: abc -d new -warn-unused-advice:off new\Zeros.java 
+PASS: Test 75: "new/Crashes when a lot of zeros are in front of a double variable [!!! purejava]" passed.
+
+
+Running test 76: pureJava/Various comment syntaxes should be handled.
+Commandline: abc -d pureJava -warn-unused-advice:off pureJava\CommentSyntax.java 
+PASS: Test 76: "pureJava/Various comment syntaxes should be handled." passed.
+
+
+Running test 77: pureJava\abstractInner/Abstract inner classes across package boundaries
+Commandline: abc -d pureJava\abstractInner -warn-unused-advice:off pureJava\abstractInner\C.java pureJava\abstractInner\pkg\A.java 
+PASS: Test 77: "pureJava\abstractInner/Abstract inner classes across package boundaries" passed.
+
+
+Running test 78: pureJava/inner classes accessing outers and some more inner class names
+Commandline: abc -d pureJava -warn-unused-advice:off pureJava\InnerAccess.java 
+PASS: Test 78: "pureJava/inner classes accessing outers and some more inner class names" passed.
+
+
+Running test 79: pureJava/remember to cast folded values down to the proper types.
+Commandline: abc -d pureJava -warn-unused-advice:off pureJava\CastingFoldedValues.java 
+PASS: Test 79: "pureJava/remember to cast folded values down to the proper types." passed.
+
+
+Running test 80: pureJava/inner classes can be built using protected constructors in super
+Commandline: abc -d pureJava -warn-unused-advice:off pureJava\VariousConstructors.java 
+PASS: Test 80: "pureJava/inner classes can be built using protected constructors in super" passed.
+
+
+Running test 81: pureJava/check that nested constructions of local classes work
+Commandline: abc -d pureJava -warn-unused-advice:off pureJava\NestedConstructionsOfLocalClasses.java 
+PASS: Test 81: "pureJava/check that nested constructions of local classes work" passed.
+
+
+Running test 82: pureJava/Make sure anonymous classes can have non-nullary constructors
+Commandline: abc -d pureJava -warn-unused-advice:off pureJava\NonNullaryAnonymous.java 
+PASS: Test 82: "pureJava/Make sure anonymous classes can have non-nullary constructors" passed.
+
+
+Running test 83: new/Full names are dropped from inner interfaces
+Commandline: abc -d new -warn-unused-advice:off new\PR417a.java 
+PASS: Test 83: "new/Full names are dropped from inner interfaces" passed.
+
+
+Running test 84: new/Making sure full names stay on static inner classes
+Commandline: abc -d new -warn-unused-advice:off new\PR417b.java 
+PASS: Test 84: "new/Making sure full names stay on static inner classes" passed.
+
+
+Running test 85: pureJava/The current AspectJ compiler cannot parse qualified superclass constructor invocations
+Commandline: abc -d pureJava -warn-unused-advice:off pureJava\QualifiedSuperClassConstructorInvocations_PR401.java 
+PASS: Test 85: "pureJava/The current AspectJ compiler cannot parse qualified superclass constructor invocations" passed.
+
+
+Running test 86: pureJava/More thourough test of static members using full names
+Commandline: abc -d pureJava -warn-unused-advice:off pureJava\Statics.java pureJava\StaticMembers_PR421.java pureJava\p1\C1.java pureJava\p1\P1Statics.java pureJava\p1\subp1\SubC1.java pureJava\p1\p2\P1P2Statics.java 
+PASS: Test 86: "pureJava/More thourough test of static members using full names" passed.
+
+
+Running test 87: pureJava/More thourough test of static members using imports
+Commandline: abc -d pureJava -warn-unused-advice:off pureJava\Statics.java pureJava\StaticMembersImports_PR421.java pureJava\p1\C1.java pureJava\p1\P1Statics.java pureJava\p1\subp1\SubC1.java pureJava\p1\p2\P1P2Statics.java 
+PASS: Test 87: "pureJava/More thourough test of static members using imports" passed.
+
+
+Running test 88: pureJava\conflictingPackageNames/Looking in class Java for java.lang.String WITH separate compilation
+Commandline: abc -d pureJava\conflictingPackageNames -warn-unused-advice:off pureJava\conflictingPackageNames\Java.java 
+Commandline: abc -d pureJava\conflictingPackageNames -warn-unused-advice:off pureJava\conflictingPackageNames\Main.java 
+PASS: Test 88: "pureJava\conflictingPackageNames/Looking in class Java for java.lang.String WITH separate compilation" passed.
+
+
+Running test 89: pureJava\conflictingPackageNames/Looking in class Java for java.lang.String WITHOUT separate compilation
+Commandline: abc -d pureJava\conflictingPackageNames -warn-unused-advice:off pureJava\conflictingPackageNames\Main.java pureJava\conflictingPackageNames\Java.java 
+PASS: Test 89: "pureJava\conflictingPackageNames/Looking in class Java for java.lang.String WITHOUT separate compilation" passed.
+
+
+Running test 90: pureJava\conflictingPackageNamesWithPackages/Looking in class Java for java.lang.String WITH separate compilation with packages
+Commandline: abc -d pureJava\conflictingPackageNamesWithPackages -warn-unused-advice:off pureJava\conflictingPackageNamesWithPackages\Java.java 
+Commandline: abc -d pureJava\conflictingPackageNamesWithPackages -warn-unused-advice:off pureJava\conflictingPackageNamesWithPackages\Main.java 
+PASS: Test 90: "pureJava\conflictingPackageNamesWithPackages/Looking in class Java for java.lang.String WITH separate compilation with packages" passed.
+
+
+Running test 91: pureJava\conflictingPackageNamesWithPackages/Looking in class Java for java.lang.String WITHOUT separate compilation with packages
+Commandline: abc -d pureJava\conflictingPackageNamesWithPackages -warn-unused-advice:off pureJava\conflictingPackageNamesWithPackages\Main.java pureJava\conflictingPackageNamesWithPackages\Java.java 
+PASS: Test 91: "pureJava\conflictingPackageNamesWithPackages/Looking in class Java for java.lang.String WITHOUT separate compilation with packages" passed.
+
+
+Running test 92: pureJava/Testing ternary operations.
+Commandline: abc -d pureJava -warn-unused-advice:off pureJava\MultiTernaryOps.java 
+PASS: Test 92: "pureJava/Testing ternary operations." passed.
+
+
+Running test 93: pureJava/Lifting locals in switch statements.
+Commandline: abc -d pureJava -warn-unused-advice:off pureJava\SwitchStmtLocals.java 
+PASS: Test 93: "pureJava/Lifting locals in switch statements." passed.
+
+
+Running test 94: pureJava/Getting confused when looking up method signatures
+Commandline: abc -d pureJava -warn-unused-advice:off pureJava\MethodSigs.java 
+PASS: Test 94: "pureJava/Getting confused when looking up method signatures" passed.
+
+
+Running test 95: pureJava/Not recognizing the chars '\0', '\1', '\2', '\3', '\4', '\5', '\6', '\7'
+Commandline: abc -d pureJava -warn-unused-advice:off pureJava\Chars.java 
+PASS: Test 95: "pureJava/Not recognizing the chars '\0', '\1', '\2', '\3', '\4', '\5', '\6', '\7'" passed.
+
+
+Running test 96: pureJava/Test chars '\0', '\1', '\2', '\3', '\4', '\5', '\6', '\7' with a case statement
+Commandline: abc -d pureJava -warn-unused-advice:off pureJava\CaseClauses.java 
+PASS: Test 96: "pureJava/Test chars '\0', '\1', '\2', '\3', '\4', '\5', '\6', '\7' with a case statement" passed.
+
+
+Running test 97: pureJava/Checking character values with all the unicode chars.
+Commandline: abc -d pureJava -warn-unused-advice:off pureJava\CharsUnicode.java 
+PASS: Test 97: "pureJava/Checking character values with all the unicode chars." passed.
+
+
+Running test 98: pureJava/Trouble finding methods with the same name and different parameter types
+Commandline: abc -d pureJava -warn-unused-advice:off pureJava\MethodsWithTheSameName.java 
+PASS: Test 98: "pureJava/Trouble finding methods with the same name and different parameter types" passed.
+
+
+Running test 99: pureJava/Binding non-public static inner classes of interfaces in other packages
+Commandline: abc -d pureJava -warn-unused-advice:off pureJava\StaticClassesInInterfaces.java pureJava\anotherPackage\AnotherPackageInterface.java 
+PASS: Test 99: "pureJava/Binding non-public static inner classes of interfaces in other packages" passed.
+
+
+Running test 100: pureJava/Not recognizing the octal chars '\0', '\1', '\2', '\3', '\4', '\5', '\6', '\7'
+Commandline: abc -d pureJava -warn-unused-advice:off pureJava\OctalChars.java 
+PASS: Test 100: "pureJava/Not recognizing the octal chars '\0', '\1', '\2', '\3', '\4', '\5', '\6', '\7'" passed.
+
+
+Running test 101: pureJava/Members with the same name as their package cause confusion with fully-qualified names.
+Commandline: abc -d pureJava -warn-unused-advice:off pureJava\samenames\Main.java pureJava\samenames\Other.java 
+PASS: Test 101: "pureJava/Members with the same name as their package cause confusion with fully-qualified names." passed.
+
+
+Running test 102: pureJava/Fully-qual'ed names with same start as variable names
+Commandline: abc -d pureJava -warn-unused-advice:off pureJava\FullNames.java 
+PASS: Test 102: "pureJava/Fully-qual'ed names with same start as variable names" passed.
+
+
+Running test 103: pureJava/Fully qualifying inner classes within annonymous classes causes problems.
+Commandline: abc -d pureJava -warn-unused-advice:off pureJava\InnerClassesInAnnonymousClasses.java 
+PASS: Test 103: "pureJava/Fully qualifying inner classes within annonymous classes causes problems." passed.
+
+
+Running test 104: pureJava/Calls to methods in outer annonymous classes are being qual's incorrectly with 'this'
+Commandline: abc -d pureJava -warn-unused-advice:off pureJava\MisplacedThisInAnnonymousInnerClasses.java 
+PASS: Test 104: "pureJava/Calls to methods in outer annonymous classes are being qual's incorrectly with 'this'" passed.
+
+
+Running test 105: pureJava\innersFromSourceAndBytecode/Reading inner classes from source and bytecode (1) -- was failing
+Commandline: abc -d pureJava\innersFromSourceAndBytecode -warn-unused-advice:off pureJava\innersFromSourceAndBytecode\C.java pureJava\innersFromSourceAndBytecode\D.java 
+Commandline: abc -cp pureJava\innersFromSourceAndBytecode;../../lib/abc-complete.jar;../../lib/abc-testing.jar -d pureJava\innersFromSourceAndBytecode -warn-unused-advice:off pureJava\innersFromSourceAndBytecode\Main.java pureJava\innersFromSourceAndBytecode\C.java 
+PASS: Test 105: "pureJava\innersFromSourceAndBytecode/Reading inner classes from source and bytecode (1) -- was failing" passed.
+
+
+Running test 106: pureJava\innersFromSourceAndBytecode/Reading inner classes from source and bytecode (2)
+Commandline: abc -d pureJava\innersFromSourceAndBytecode -warn-unused-advice:off pureJava\innersFromSourceAndBytecode\Main.java pureJava\innersFromSourceAndBytecode\C.java pureJava\innersFromSourceAndBytecode\D.java 
+PASS: Test 106: "pureJava\innersFromSourceAndBytecode/Reading inner classes from source and bytecode (2)" passed.
+
+
+Running test 107: pureJava\innersFromSourceAndBytecode/Reading inner classes from source and bytecode (3)
+Commandline: abc -d pureJava\innersFromSourceAndBytecode -warn-unused-advice:off pureJava\innersFromSourceAndBytecode\C.java pureJava\innersFromSourceAndBytecode\D.java 
+Commandline: abc -cp pureJava\innersFromSourceAndBytecode;../../lib/abc-complete.jar;../../lib/abc-testing.jar -d pureJava\innersFromSourceAndBytecode -warn-unused-advice:off pureJava\innersFromSourceAndBytecode\Main.java pureJava\innersFromSourceAndBytecode\C.java pureJava\innersFromSourceAndBytecode\D.java 
+PASS: Test 107: "pureJava\innersFromSourceAndBytecode/Reading inner classes from source and bytecode (3)" passed.
+
+
+Running test 108: pureJava/Not lifting types correctly with bytes and shorts with ternary ops
+Commandline: abc -d pureJava -warn-unused-advice:off pureJava\TernaryPrimitiveOps.java 
+PASS: Test 108: "pureJava/Not lifting types correctly with bytes and shorts with ternary ops" passed.
+
+
+Running test 109: pureJava/Not looking up methods inside of anonymous declarations correctly.
+Commandline: abc -d pureJava -warn-unused-advice:off pureJava\AnonymousMethodLookup.java 
+PASS: Test 109: "pureJava/Not looking up methods inside of anonymous declarations correctly." passed.
+
+
+Running test 110: pureJava/Resolving extended classes with array parameters
+Commandline: abc -d pureJava -warn-unused-advice:off pureJava\ResolvingArrayParameters.java 
+PASS: Test 110: "pureJava/Resolving extended classes with array parameters" passed.
+
+
+Running test 111: pureJava/Assignments as second arguments in ternary operators.
+Commandline: abc -d pureJava -warn-unused-advice:off pureJava\TernaryAssignments.java 
+PASS: Test 111: "pureJava/Assignments as second arguments in ternary operators." passed.
+
+
+Running test 112: pureJava/Using 'aspect' as identifier is legal TODO
+Commandline: abc -d pureJava -warn-unused-advice:off pureJava\KeywordAspect.java 
+Compilation succeeded but was expected to fail.
+FAIL: Test 112: "pureJava/Using 'aspect' as identifier is legal TODO" failed.
+
+
+Running test 113: pureJava/Using 'pointcut' as identifier is legal TODO
+Commandline: abc -d pureJava -warn-unused-advice:off pureJava\KeywordPointcut.java 
+Compilation succeeded but was expected to fail.
+FAIL: Test 113: "pureJava/Using 'pointcut' as identifier is legal TODO" failed.
+
+
+Running test 114: pureJava/Conflicting inner classes with interfaces.
+Commandline: abc -d pureJava -warn-unused-advice:off pureJava\PR413.java 
+PASS: Test 114: "pureJava/Conflicting inner classes with interfaces." passed.
+
+
+Running test 116: pureJava/confusions of casts and parens
+Commandline: abc -d pureJava -warn-unused-advice:off pureJava\CastVsParen.java 
+PASS: Test 116: "pureJava/confusions of casts and parens" passed.
+
+
+Running test 117: pureJava/default constructors seen by inner classes subtyping outers
+Commandline: abc -d pureJava -warn-unused-advice:off pureJava\DefaultConsAndInner.java 
+PASS: Test 117: "pureJava/default constructors seen by inner classes subtyping outers" passed.
+
+
+Running test 118: pureJava/folding fields set to anonymous instances containing self-references
+Commandline: abc -d pureJava -warn-unused-advice:off pureJava\AnonFolding.java 
+PASS: Test 118: "pureJava/folding fields set to anonymous instances containing self-references" passed.
+
+
+Running test 119: pureJava/finally at the end of a method that needs to return
+Commandline: abc -d pureJava -warn-unused-advice:off pureJava\FinallyAndReturns.java 
+PASS: Test 119: "pureJava/finally at the end of a method that needs to return" passed.
+
+
+Running test 120: pureJava/return;;; is not really legal
+Commandline: abc -d pureJava -warn-unused-advice:off pureJava\ReachableEmpty.java 
+Compilation failed with 8 errors, which were matched and verified against the expected errors.
+PASS: Test 120: "pureJava/return;;; is not really legal" passed.
+
+
+Running test 121: new/ajc treating Throwable as checked, issuing error if not found
+Commandline: abc -d new -warn-unused-advice:off new\FalseThrowsCE.java 
+PASS: Test 121: "new/ajc treating Throwable as checked, issuing error if not found" passed.
+
+
+Running test 122: pureJava/overriding methods from object in interfaces and multiple-inheritance
+Commandline: abc -d pureJava -warn-unused-advice:off pureJava\InterfaceAndObject.java 
+InterfaceAndObject$1@f66471
+PASS: Test 122: "pureJava/overriding methods from object in interfaces and multiple-inheritance" passed.
+
+
+Running test 123: pureJava/private fields in an outer class accessed by an inner which also extends the outer
+Commandline: abc -d pureJava -warn-unused-advice:off pureJava\PrivateFields.java 
+PASS: Test 123: "pureJava/private fields in an outer class accessed by an inner which also extends the outer" passed.
+
+
+Running test 124: pureJava/breaking out of a labeled block inside of an if
+Commandline: abc -d pureJava -warn-unused-advice:off pureJava\Breaks.java 
+true
+PASS: Test 124: "pureJava/breaking out of a labeled block inside of an if" passed.
+
+
+Running test 125: pureJava/abstractifying a method and getting it back through super
+Commandline: abc -d pureJava -warn-unused-advice:off pureJava\Abstracts.java 
+PASS: Test 125: "pureJava/abstractifying a method and getting it back through super" passed.
+
+
+Running test 126: new/package protected classes becoming public
+Commandline: abc -d new -warn-unused-advice:off new\PR328.java 
+PASS: Test 126: "new/package protected classes becoming public" passed.
+
+
+Running test 127: pureJava/Packages and static classes with the same name produce compile errors.
+Commandline: abc -d pureJava -warn-unused-advice:off pureJava\PackagesAndStaticClassesWithTheSameName.java 
+PASS: Test 127: "pureJava/Packages and static classes with the same name produce compile errors." passed.
+
+
+Running test 128: pureJava\innerTypeModifiers/Inner types must generate classfiles with only Public/Default access flags.
+Commandline: abc -d pureJava\innerTypeModifiers -warn-unused-advice:off pureJava\innerTypeModifiers\pkg1\Main.java pureJava\innerTypeModifiers\pkg2\Foo.java 
+PASS: Test 128: "pureJava\innerTypeModifiers/Inner types must generate classfiles with only Public/Default access flags." passed.
+
+
+Running test 129: pureJava\innerDefaultConstructors/Default constructors have same access as their enclosing type
+Commandline: abc -d pureJava\innerDefaultConstructors -warn-unused-advice:off pureJava\innerDefaultConstructors\pkg1\Main.java pureJava\innerDefaultConstructors\pkg2\Foo.java 
+Compilation failed with 1 errors, which were matched and verified against the expected errors.
+PASS: Test 129: "pureJava\innerDefaultConstructors/Default constructors have same access as their enclosing type" passed.
+
+
+Running test 130: pureJava/Returning primitive values matching method return type (minimal)
+Commandline: abc -d pureJava -warn-unused-advice:off pureJava\ReturnTypes.java 
+PASS: Test 130: "pureJava/Returning primitive values matching method return type (minimal)" passed.
+
+
+Running test 131: pureJava/Flow analysis and if(true)
+Commandline: abc -d pureJava -warn-unused-advice:off pureJava\Flow.java 
+PASS: Test 131: "pureJava/Flow analysis and if(true)" passed.
+
+
+Running test 133: pureJava/A.this exprs match by exact type matching
+Commandline: abc -d pureJava -warn-unused-advice:off pureJava\QualifiedThisMatchesExactly.java 
+Compilation failed with 1 errors, which were matched and verified against the expected errors.
+PASS: Test 133: "pureJava/A.this exprs match by exact type matching" passed.
+
+
+Running test 134: pureJava/Implicit this for new inner instance must be avaliable
+Commandline: abc -d pureJava -warn-unused-advice:off pureJava\ImplicitThisMissing.java 
+Compilation failed with 1 errors, which were matched and verified against the expected errors.
+PASS: Test 134: "pureJava/Implicit this for new inner instance must be avaliable" passed.
+
+
+Running test 135: pureJava/Inners can reference protected fields of their outer's super.
+Commandline: abc -d pureJava -warn-unused-advice:off pureJava\protectedFieldRefInInner\Main.java pureJava\protectedFieldRefInInner\p1\C.java 
+PASS: Test 135: "pureJava/Inners can reference protected fields of their outer's super." passed.
+
+
+Running test 136: new/IOException on windows if nul used as identifier
+Commandline: abc -d new -warn-unused-advice:off new\NulIOException.java 
+Compilation failed with 3 errors, which were matched and verified against the expected errors.
+PASS: Test 136: "new/IOException on windows if nul used as identifier" passed.
+
+
+Running test 137: new/NullPointerException (not compiler error) when extending non-static inner class
+Commandline: abc -d new -warn-unused-advice:off new\ExtendInnerCE.java 
+Compilation failed with 1 errors, which were matched and verified against the expected errors.
+PASS: Test 137: "new/NullPointerException (not compiler error) when extending non-static inner class" passed.
+
+
+Running test 138: new/compiler flags final static variable as indefinite in member assignment.
+Commandline: abc -d new -warn-unused-advice:off new\DefiniteStatic.java 
+PASS: Test 138: "new/compiler flags final static variable as indefinite in member assignment." passed.
+
+
+Running test 139: new/confirm no IOException on windows if nul used as identifier
+Commandline: abc -d new -warn-unused-advice:off new\NulIOException2.java 
+PASS: Test 139: "new/confirm no IOException on windows if nul used as identifier" passed.
+
+
+Running test 140: pureJava/Primitives that special case for a constant arm should work
+Commandline: abc -d pureJava -warn-unused-advice:off pureJava\OneArmedPrimitiveTests.java 
+PASS: Test 140: "pureJava/Primitives that special case for a constant arm should work" passed.
+
+
+Running test 141: pureJava/Parenthesized true and false don't parse
+Commandline: abc -d pureJava -warn-unused-advice:off pureJava\ParenKeywords.java 
+PASS: Test 141: "pureJava/Parenthesized true and false don't parse" passed.
+
+
+Running test 142: pureJava/Field sets to public fields of private fields of enclosing types
+Commandline: abc -d pureJava -warn-unused-advice:off pureJava\InnerFieldRef.java 
+PASS: Test 142: "pureJava/Field sets to public fields of private fields of enclosing types" passed.
+
+
+Running test 143: pureJava/Constant values should be stored with the correct type of their fields
+Commandline: abc -d pureJava -warn-unused-advice:off pureJava\ConstantValueConversion.java 
+PASS: Test 143: "pureJava/Constant values should be stored with the correct type of their fields" passed.
+
+
+Running test 144: pureJava/Local variables in initializers should not be treated as blank final fields
+Commandline: abc -d pureJava -warn-unused-advice:off pureJava\LocalInitializerVariableNotBlank.java 
+PASS: Test 144: "pureJava/Local variables in initializers should not be treated as blank final fields" passed.
+
+
+Running test 145: pureJava/Binops aren't allowed as update stmts in for loops
+Commandline: abc -d pureJava -warn-unused-advice:off pureJava\NonStmtInFor.java 
+Compilation failed with 1 errors, which were matched and verified against the expected errors.
+PASS: Test 145: "pureJava/Binops aren't allowed as update stmts in for loops" passed.
+
+
+Running test 146: pureJava/Can't avoid doing division in case of div by zero
+Commandline: abc -d pureJava -warn-unused-advice:off pureJava\DivOpMustHappen.java 
+PASS: Test 146: "pureJava/Can't avoid doing division in case of div by zero" passed.
+
+
+Running test 147: pureJava/Testing frames w/greater than FF locals and 7F incs (i.e., WIDE instruction)
+Commandline: abc -d pureJava -warn-unused-advice:off pureJava\BigFrameTest.java 
+PASS: Test 147: "pureJava/Testing frames w/greater than FF locals and 7F incs (i.e., WIDE instruction)" passed.
+
+
+Running test 148: pureJava/correct numeric literals
+Commandline: abc -d pureJava -warn-unused-advice:off pureJava\LiteralsCp.java 
+PASS: Test 148: "pureJava/correct numeric literals" passed.
+
+
+Running test 149: pureJava/invalid numeric literals
+Commandline: abc -d pureJava -warn-unused-advice:off pureJava\LiteralsCf.java 
+Compilation failed with 18 errors, which were matched and verified against the expected errors.
+PASS: Test 149: "pureJava/invalid numeric literals" passed.
+
+
+Running test 150: pureJava/inner types can't have the same simple name as an enclosing type
+Commandline: abc -d pureJava -warn-unused-advice:off pureJava\InnerNameConflictsCf.java 
+Compilation failed with 4 errors, which were matched and verified against the expected errors.
+PASS: Test 150: "pureJava/inner types can't have the same simple name as an enclosing type" passed.
+
+
+Running test 152: pureJava/test + and += for strings and variously typed values
+Commandline: abc -d pureJava -warn-unused-advice:off pureJava\BigString.java 
+PASS: Test 152: "pureJava/test + and += for strings and variously typed values" passed.
+
+
+Running test 153: pureJava/test try/catch/finally statements
+Commandline: abc -d pureJava -warn-unused-advice:off pureJava\TryCatchFinally.java 
+PASS: Test 153: "pureJava/test try/catch/finally statements" passed.
+
+
+Running test 154: pureJava/local types can be bound in the signatures of other local types
+Commandline: abc -d pureJava -warn-unused-advice:off pureJava\LocalInners.java 
+PASS: Test 154: "pureJava/local types can be bound in the signatures of other local types" passed.
+
+
+Running test 155: new/final constructor parameter causes incorrect compiler error
+Commandline: abc -d new -warn-unused-advice:off new\FinalConstructorParm.java 
+PASS: Test 155: "new/final constructor parameter causes incorrect compiler error" passed.
+
+
+Running test 156: new/Error expected for field of type void
+Commandline: abc -d new -warn-unused-advice:off new\VoidField.java 
+Compilation failed with 3 errors, which were matched and verified against the expected errors.
+PASS: Test 156: "new/Error expected for field of type void" passed.
+
+
+Running test 157: new/Error expected for constructor in interfaces
+Commandline: abc -d new -warn-unused-advice:off new\InterfaceConstructor.java 
+Compilation failed with 3 errors, which were matched and verified against the expected errors.
+PASS: Test 157: "new/Error expected for constructor in interfaces" passed.
+
+
+Running test 158: new/class name for identifier as String should provoke error
+Commandline: abc -d new -warn-unused-advice:off new\PR558.java 
+Compilation failed with 1 errors, which were matched and verified against the expected errors.
+PASS: Test 158: "new/class name for identifier as String should provoke error" passed.
+
+
+Running test 159: new/cyclic interface inheritance not detected if no classes implement the interfaces
+Commandline: abc -d new -warn-unused-advice:off new\CyclicInterfaceInheritance.java 
+Compilation failed with 1 errors, which were matched and verified against the expected errors.
+PASS: Test 159: "new/cyclic interface inheritance not detected if no classes implement the interfaces" passed.
+
+
+Running test 160: new/cyclic class inheritance
+Commandline: abc -d new -warn-unused-advice:off new\CyclicClassInheritance.java 
+Compilation failed with 3 errors, which were matched and verified against the expected errors.
+PASS: Test 160: "new/cyclic class inheritance" passed.
+
+
+Running test 161: pureJava/Type names are not expressions on their own
+Commandline: abc -d pureJava -warn-unused-advice:off pureJava\TypeExprErrors.java 
+Compilation failed with 22 errors, which were matched and verified against the expected errors.
+PASS: Test 161: "pureJava/Type names are not expressions on their own" passed.
+
+
+Running test 162: pureJava\nameConflicts/type and package name conflicts are resolved happily (1a)
+Commandline: abc -d pureJava\nameConflicts -warn-unused-advice:off pureJava\nameConflicts\p1\Main1.java pureJava\nameConflicts\p1\Foo.java pureJava\nameConflicts\p1\p2.java 
+PASS: Test 162: "pureJava\nameConflicts/type and package name conflicts are resolved happily (1a)" passed.
+
+
+Running test 163: pureJava\nameConflicts/(fails in USEJAVAC) type and package name conflicts are resolved happily (1b)
+Commandline: abc -d pureJava\nameConflicts -warn-unused-advice:off pureJava\nameConflicts\p1.java pureJava\nameConflicts\p1\p2\Foo.java 
+Commandline: abc -d pureJava\nameConflicts -warn-unused-advice:off pureJava\nameConflicts\p1\Main1.java pureJava\nameConflicts\p1\Foo.java pureJava\nameConflicts\p1\p2.java 
+PASS: Test 163: "pureJava\nameConflicts/(fails in USEJAVAC) type and package name conflicts are resolved happily (1b)" passed.
+
+
+Running test 164: pureJava\nameConflicts/type and package name conflicts are resolved happily (2)
+Commandline: abc -d pureJava\nameConflicts -warn-unused-advice:off pureJava\nameConflicts\p1\Main2.java pureJava\nameConflicts\p1\p2\Foo.java 
+PASS: Test 164: "pureJava\nameConflicts/type and package name conflicts are resolved happily (2)" passed.
+
+
+Running test 166: pureJava/flow analysis where final variable set in another constructor
+Commandline: abc -d pureJava -warn-unused-advice:off pureJava\ConstructorFlow.java 
+PASS: Test 166: "pureJava/flow analysis where final variable set in another constructor" passed.
+
+
+Running test 167: new/Can construct inner classes using qualified expressions
+Commandline: abc -d new -warn-unused-advice:off new\PR584.java 
+PASS: Test 167: "new/Can construct inner classes using qualified expressions" passed.
+
+
+Running test 168: new\protectedStatic/subclass unable to access protected static methods using type-qualified references
+Commandline: abc -d new\protectedStatic -warn-unused-advice:off new\protectedStatic\SubClass.java new\protectedStatic\pack\SuperClass.java 
+PASS: Test 168: "new\protectedStatic/subclass unable to access protected static methods using type-qualified references" passed.
+
+
+Running test 169: new/Undefined inner class constructor
+Commandline: abc -d new -warn-unused-advice:off new\UndefinedInner.java 
+Compilation failed with 1 errors, which were matched and verified against the expected errors.
+PASS: Test 169: "new/Undefined inner class constructor" passed.
+
+
+Running test 170: pureJava/try statements work sorta like scoped items for exception flow control
+Commandline: abc -d pureJava -warn-unused-advice:off pureJava\TryWorksLikeEnvironment.java 
+PASS: Test 170: "pureJava/try statements work sorta like scoped items for exception flow control" passed.
+
+
+Running test 171: pureJava/qualified this must work exactly, not based on subtypes
+Commandline: abc -d pureJava -warn-unused-advice:off pureJava\QualifiedThisExactness.java 
+Compilation failed with 1 errors, which were matched and verified against the expected errors.
+PASS: Test 171: "pureJava/qualified this must work exactly, not based on subtypes" passed.
+
+
+Running test 172: new\packagePrefix/classes that are package prefixes are illegal
+Commandline: abc -d new\packagePrefix -warn-unused-advice:off new\packagePrefix\p\prefix.java new\packagePrefix\p\prefix\SomeClass.java 
+Compilation failed with 1 errors, which were matched and verified against the expected errors.
+PASS: Test 172: "new\packagePrefix/classes that are package prefixes are illegal" passed.
+
+
+Running test 173: new\introTypeMissing/valid type expressions for introduced type testing
+Commandline: abc -d new\introTypeMissing -warn-unused-advice:off new\introTypeMissing\TargetClass.java new\introTypeMissing\Util.java 
+PASS: Test 173: "new\introTypeMissing/valid type expressions for introduced type testing" passed.
+
+
+Running test 174: new\introTypeMissing/CF expected when enclosing class superclass used as this qualifier in inner class
+Commandline: abc -d new\introTypeMissing -warn-unused-advice:off new\introTypeMissing\TargetClassCF.java new\introTypeMissing\Util.java 
+Compilation failed with 4 errors, which were matched and verified against the expected errors.
+PASS: Test 174: "new\introTypeMissing/CF expected when enclosing class superclass used as this qualifier in inner class" passed.
+
+
+Running test 175: new\introTypeMissing/enclosing class may be used as this qualifier in inner class
+Commandline: abc -d new\introTypeMissing -warn-unused-advice:off new\introTypeMissing\TargetClassCP.java new\introTypeMissing\Util.java 
+PASS: Test 175: "new\introTypeMissing/enclosing class may be used as this qualifier in inner class" passed.
+
+
+Running test 176: new/PR591 compiler error expected when directly calling unimplemented abstract method using super
+Commandline: abc -d new -warn-unused-advice:off new\AbstractMethodCall.java 
+Compilation failed with 1 errors, which were matched and verified against the expected errors.
+PASS: Test 176: "new/PR591 compiler error expected when directly calling unimplemented abstract method using super" passed.
+
+
+Running test 177: pureJava/suggested by Jacks 15.28-qualified-namestr tests
+Commandline: abc -d pureJava -warn-unused-advice:off pureJava\NonConstants.java 
+Compilation failed with 2 errors, which were matched and verified against the expected errors.
+PASS: Test 177: "pureJava/suggested by Jacks 15.28-qualified-namestr tests" passed.
+
+
+Running test 179: pureJava/suggested by jacks 3.7-15 all comments must be closed
+Commandline: abc -d pureJava -warn-unused-advice:off pureJava\OpenComment.java 
+Compilation succeeded but was expected to fail.
+FAIL: Test 179: "pureJava/suggested by jacks 3.7-15 all comments must be closed" failed.
+
+
+Running test 180: pureJava/nested synchronized blocks have interesting frame location problems
+Commandline: abc -d pureJava -warn-unused-advice:off pureJava\NestedSynchronized.java 
+PASS: Test 180: "pureJava/nested synchronized blocks have interesting frame location problems" passed.
+
+
+Running test 181: new\classaccess/package class access not enforced outside of package
+Commandline: abc -d new\classaccess -warn-unused-advice:off new\classaccess\main\Main.java new\classaccess\pack1\Target.java 
+Compilation failed with 1 errors, which were matched and verified against the expected errors.
+PASS: Test 181: "new\classaccess/package class access not enforced outside of package" passed.
+
+
+Running test 182: new/expecting CE for ambiguous reference
+Commandline: abc -d new -warn-unused-advice:off new\AmbiguousClassReference.java 
+Compilation failed with 1 errors, which were matched and verified against the expected errors.
+PASS: Test 182: "new/expecting CE for ambiguous reference" passed.
+
+
+Running test 183: new/try without catch or finally
+Commandline: abc -d new -warn-unused-advice:off new\TryNoCatchCE.java 
+Error position is null; assuming error matches current expected error with no line number. Error message: Couldn't repair and continue parse
+WARNING: This test was probably not really passed!!
+Compilation failed with 2 errors, which were matched and verified against the expected errors.
+PASS: Test 183: "new/try without catch or finally" passed.
+
+
+Running test 184: new/invalid floating-point constant
+Commandline: abc -d new -warn-unused-advice:off new\ParsingFloatCE.java 
+Compilation failed with 2 errors, which were matched and verified against the expected errors.
+PASS: Test 184: "new/invalid floating-point constant" passed.
+
+
+Running test 185: pureJava/anonymous inner classes with inner types
+Commandline: abc -d pureJava -warn-unused-advice:off pureJava\AnonymousWithInner.java 
+PASS: Test 185: "pureJava/anonymous inner classes with inner types" passed.
+
+
+Running test 186: pureJava/qualified super call expr
+Commandline: abc -d pureJava -warn-unused-advice:off pureJava\QualifiedSuperCall.java 
+PASS: Test 186: "pureJava/qualified super call expr" passed.
+
+
+Running test 188: new/super reference used to disambiguate names of different but compatible types
+Commandline: abc -d new -warn-unused-advice:off new\SuperDisambiguatingType.java 
+PASS: Test 188: "new/super reference used to disambiguate names of different but compatible types" passed.
+
+
+Running test 189: pureJava/anonymous explicit inner constructors
+Commandline: abc -d pureJava -warn-unused-advice:off pureJava\QualifiedNewCP.java 
+m
+mi
+helper
+mi
+PASS: Test 189: "pureJava/anonymous explicit inner constructors" passed.
+
+
+Running test 191: pureJava/Overruning the lineStarts buffer, DO NOT EDIT THIS FILE!!!!
+Commandline: abc -d pureJava -warn-unused-advice:off pureJava\AJError.java 
+PASS: Test 191: "pureJava/Overruning the lineStarts buffer, DO NOT EDIT THIS FILE!!!!" passed.
+
+
+Running test 192: new/no CE for unambiguous type reference
+Commandline: abc -d new -warn-unused-advice:off new\UnambiguousClassReference3CP.java 
+PASS: Test 192: "new/no CE for unambiguous type reference" passed.
+
+
+Running test 193: new/CE for ambiguous type reference (imports)
+Commandline: abc -d new -warn-unused-advice:off new\AmbiguousClassReference2CE.java 
+Compilation failed with 1 errors, which were matched and verified against the expected errors.
+PASS: Test 193: "new/CE for ambiguous type reference (imports)" passed.
+
+
+Running test 194: new/CE for ambiguous type reference (two type declarations)
+Commandline: abc -d new -warn-unused-advice:off new\AmbiguousClassReference3CE.java 
+Compilation failed with 1 errors, which were matched and verified against the expected errors.
+PASS: Test 194: "new/CE for ambiguous type reference (two type declarations)" passed.
+
+
+Running test 195: new/CE for ambiguous type reference (two inner types)
+Commandline: abc -d new -warn-unused-advice:off new\AmbiguousClassReference4CE.java 
+Compilation failed with 1 errors, which were matched and verified against the expected errors.
+PASS: Test 195: "new/CE for ambiguous type reference (two inner types)" passed.
+
+
+Running test 196: new/final assignment in loop
+Commandline: abc -d new -warn-unused-advice:off new\FinalInLoop.java 
+PASS: Test 196: "new/final assignment in loop" passed.
+
+
+Running test 197: pureJava/private super access in inners
+Commandline: abc -d pureJava -warn-unused-advice:off pureJava\PrivateSuperInnerAccess.java 
+PASS: Test 197: "pureJava/private super access in inners" passed.
+
+
+Running test 198: pureJava/nested interface does not require new qualifier (8)
+Commandline: abc -d pureJava -warn-unused-advice:off pureJava\InvalidNewQualifier8CE.java 
+Compilation failed with 1 errors, which were matched and verified against the expected errors.
+PASS: Test 198: "pureJava/nested interface does not require new qualifier (8)" passed.
+
+
+Running test 199: pureJava/nested interface does not require new qualifier (9)
+Commandline: abc -d pureJava -warn-unused-advice:off pureJava\InvalidNewQualifier9CE.java 
+Compilation failed with 1 errors, which were matched and verified against the expected errors.
+PASS: Test 199: "pureJava/nested interface does not require new qualifier (9)" passed.
+
+
+Running test 200: pureJava/nested interface does not require new qualifier (10)
+Commandline: abc -d pureJava -warn-unused-advice:off pureJava\InvalidNewQualifier10CE.java 
+Compilation failed with 1 errors, which were matched and verified against the expected errors.
+PASS: Test 200: "pureJava/nested interface does not require new qualifier (10)" passed.
+
+
+Running test 201: pureJava/nested interface does not require new qualifier (14)
+Commandline: abc -d pureJava -warn-unused-advice:off pureJava\InvalidNewQualifier14CE.java 
+Compilation failed with 1 errors, which were matched and verified against the expected errors.
+PASS: Test 201: "pureJava/nested interface does not require new qualifier (14)" passed.
+
+
+Running test 202: pureJava/nested interface does not require new qualifier (15)
+Commandline: abc -d pureJava -warn-unused-advice:off pureJava\InvalidNewQualifier15CE.java 
+Compilation failed with 1 errors, which were matched and verified against the expected errors.
+PASS: Test 202: "pureJava/nested interface does not require new qualifier (15)" passed.
+
+
+Running test 203: pureJava/nested interface does not require new qualifier (16)
+Commandline: abc -d pureJava -warn-unused-advice:off pureJava\InvalidNewQualifier16CE.java 
+Compilation failed with 1 errors, which were matched and verified against the expected errors.
+PASS: Test 203: "pureJava/nested interface does not require new qualifier (16)" passed.
+
+
+Running test 204: pureJava/Operands work correctly
+Commandline: abc -d pureJava -warn-unused-advice:off pureJava\Ops.java 
+PASS: Test 204: "pureJava/Operands work correctly" passed.
+
+
+Running test 207: errors/check that constructor name's match the enclosing type
+Commandline: abc -d errors -warn-unused-advice:off errors\BadConstructorName.java 
+Compilation failed with 1 errors, which were matched and verified against the expected errors.
+PASS: Test 207: "errors/check that constructor name's match the enclosing type" passed.
+
+
+Running test 209: errors/errors for not applicable or accessible methods
+Commandline: abc -d errors -warn-unused-advice:off errors\MethodsNotFound.java 
+Compilation failed with 3 errors, which were matched and verified against the expected errors.
+PASS: Test 209: "errors/errors for not applicable or accessible methods" passed.
+
+
+Running test 217: errors/import statement within class body crashes compiler
+Commandline: abc -d errors -warn-unused-advice:off errors\ImportWithinClassBody.java 
+Compilation failed with 1 errors, which were matched and verified against the expected errors.
+PASS: Test 217: "errors/import statement within class body crashes compiler" passed.
+
+
+Running test 245: errors/Crashes when a cast is within another cast
+Commandline: abc -d errors -warn-unused-advice:off errors\CastInCast.java 
+Compilation failed with 1 errors, which were matched and verified against the expected errors.
+PASS: Test 245: "errors/Crashes when a cast is within another cast" passed.
+
+
+Running test 246: errors/Crashes when a cast of the form )int) appears
+Commandline: abc -d errors -warn-unused-advice:off errors\BadCast.java 
+Compilation failed with 1 errors, which were matched and verified against the expected errors.
+PASS: Test 246: "errors/Crashes when a cast of the form )int) appears" passed.
+
+
+Running test 247: errors/Crashes when the closing brace is reversed
+Commandline: abc -d errors -warn-unused-advice:off errors\ClosingBrace.java 
+Error position is null; assuming error matches current expected error with no line number. Error message: Couldn't repair and continue parse
+WARNING: This test was probably not really passed!!
+Found an unexpected error - should be on line 12, but is on line 13.
+Errors found during this compilation:
+Syntax Error at null: Couldn't repair and continue parse
+Syntax Error at ClosingBrace.java:13,0-0: Unexpected end of file.
+FAIL: Test 247: "errors/Crashes when the closing brace is reversed" failed.
+
+
+Running test 248: errors/Crashes when a method name is missing in a call -- e.g. 'System.out.();'
+Commandline: abc -d errors -warn-unused-advice:off errors\NoMethodName.java 
+Compilation failed with 1 errors, which were matched and verified against the expected errors.
+PASS: Test 248: "errors/Crashes when a method name is missing in a call -- e.g. 'System.out.();'" passed.
+
+
+Running test 249: errors/Crashes when a bad r-value appears.
+Commandline: abc -d errors -warn-unused-advice:off errors\BadValue.java 
+Compilation failed with 1 errors, which were matched and verified against the expected errors.
+PASS: Test 249: "errors/Crashes when a bad r-value appears." passed.
+
+
+Running test 250: errors/Two underscores as a variables causes a crash
+Commandline: abc -d errors -warn-unused-advice:off errors\BadVar.java 
+Compilation failed with 1 errors, which were matched and verified against the expected errors.
+PASS: Test 250: "errors/Two underscores as a variables causes a crash" passed.
+
+
+Running test 251: errors/Crashes when assigning to a final static in an intializer and declaration
+Commandline: abc -d errors -warn-unused-advice:off errors\FinalStatic.java 
+Compilation failed with 1 errors, which were matched and verified against the expected errors.
+PASS: Test 251: "errors/Crashes when assigning to a final static in an intializer and declaration" passed.
+
+
+Running test 252: errors/Crashes when two dots appear instead of one
+Commandline: abc -d errors -warn-unused-advice:off errors\TwoDots.java 
+Compilation failed with 1 errors, which were matched and verified against the expected errors.
+PASS: Test 252: "errors/Crashes when two dots appear instead of one" passed.
+
+
+Running test 253: errors/Crashes when there're stray dots
+Commandline: abc -d errors -warn-unused-advice:off errors\StrayDot.java 
+Compilation failed with 7 errors, which were matched and verified against the expected errors.
+PASS: Test 253: "errors/Crashes when there're stray dots" passed.
+
+
+Running test 254: errors/Stray characters cause a crash
+Commandline: abc -d errors -warn-unused-advice:off errors\StraySlash.java 
+Compilation failed with 4 errors, which were matched and verified against the expected errors.
+PASS: Test 254: "errors/Stray characters cause a crash" passed.
+
+
+Running test 255: errors/Colon instead of a semi-colon causes a crash
+Commandline: abc -d errors -warn-unused-advice:off errors\Colon.java 
+Compilation failed with 1 errors, which were matched and verified against the expected errors.
+PASS: Test 255: "errors/Colon instead of a semi-colon causes a crash" passed.
+
+
+Running test 256: errors/type error in initializer caught by ajc, not javac
+Commandline: abc -d errors -warn-unused-advice:off errors\ArrayInitializerType.java 
+Compilation failed with 1 errors, which were matched and verified against the expected errors.
+PASS: Test 256: "errors/type error in initializer caught by ajc, not javac" passed.
+
+
+Running test 257: errors/Circular inheritance with classes causes a stack overflow.
+Commandline: abc -d errors -warn-unused-advice:off errors\CircularExtends.java 
+Compilation failed with 1 errors, which were matched and verified against the expected errors.
+PASS: Test 257: "errors/Circular inheritance with classes causes a stack overflow." passed.
+
+
+Running test 261: errors/Missing ;
+Commandline: abc -d errors -warn-unused-advice:off errors\PR405.java 
+Error position is null; assuming error matches current expected error with no line number. Error message: Couldn't repair and continue parse
+WARNING: This test was probably not really passed!!
+Compilation failed with 2 errors, which were matched and verified against the expected errors.
+PASS: Test 261: "errors/Missing ;" passed.
+
+
+Running test 262: errors/cast expressions should not allow casts between ifaces and array types
+Commandline: abc -d errors -warn-unused-advice:off errors\InterfaceArrayCast.java 
+Compilation failed with 2 errors, which were matched and verified against the expected errors.
+PASS: Test 262: "errors/cast expressions should not allow casts between ifaces and array types" passed.
+
+
+Running test 263: errors/parsing errors for various bad forms of NewArrayExprs.
+Commandline: abc -d errors -warn-unused-advice:off errors\BadNewArrayExprs.java 
+Compilation failed with 4 errors, which were matched and verified against the expected errors.
+PASS: Test 263: "errors/parsing errors for various bad forms of NewArrayExprs." passed.
+
+
+Running test 270: errors/Implementing a non-interface used to crash the compiler.
+Commandline: abc -d errors -warn-unused-advice:off errors\PR333.java 
+Compilation failed with 1 errors, which were matched and verified against the expected errors.
+PASS: Test 270: "errors/Implementing a non-interface used to crash the compiler." passed.
+
+
+Running test 282: pureJava/simple tests of throws and for stmt typing
+Commandline: abc -d pureJava -warn-unused-advice:off pureJava\SimpleSpec.java 
+Compilation failed with 2 errors, which were matched and verified against the expected errors.
+PASS: Test 282: "pureJava/simple tests of throws and for stmt typing" passed.
+
+
+Running test 284: errors/error of no return statement detected not by ajc but by javac (line 4)
+Commandline: abc -d errors -warn-unused-advice:off errors\NoReturnStatementSimple.java 
+Compilation failed with 1 errors, which were matched and verified against the expected errors.
+PASS: Test 284: "errors/error of no return statement detected not by ajc but by javac (line 4)" passed.
+
+
+Running test 285: errors/class and interface extension
+Commandline: abc -d errors -warn-unused-advice:off errors\BadExtension.java 
+Compilation failed with 7 errors, which were matched and verified against the expected errors.
+PASS: Test 285: "errors/class and interface extension" passed.
+
+
+Running test 291: errors/types in throws clauses
+Commandline: abc -d errors -warn-unused-advice:off errors\ThrowsClause.java 
+Compilation failed with 3 errors, which were matched and verified against the expected errors.
+PASS: Test 291: "errors/types in throws clauses" passed.
+
+
+Running test 293: errors/bad switch syntax
+Commandline: abc -d errors -warn-unused-advice:off errors\Switch.java 
+Compilation failed with 1 errors, which were matched and verified against the expected errors.
+PASS: Test 293: "errors/bad switch syntax" passed.
+
+
+Running test 297: pureJava/test for not folding circular constants
+Commandline: abc -d pureJava -warn-unused-advice:off pureJava\CircularFolding.java 
+Compilation failed with 3 errors, which were matched and verified against the expected errors.
+PASS: Test 297: "pureJava/test for not folding circular constants" passed.
+
+
+Running test 298: pureJava/continue targets must be continuable
+Commandline: abc -d pureJava -warn-unused-advice:off pureJava\BadContinueTarget.java 
+Compilation failed with 1 errors, which were matched and verified against the expected errors.
+PASS: Test 298: "pureJava/continue targets must be continuable" passed.
+
+
+Running test 299: pureJava/qualified this to non-inner should be caught
+Commandline: abc -d pureJava -warn-unused-advice:off pureJava\BadQualifiedNew.java 
+Compilation failed with 1 errors, which were matched and verified against the expected errors.
+PASS: Test 299: "pureJava/qualified this to non-inner should be caught" passed.
+
+
+Running test 300: pureJava/Referencing various things from static contexts
+Commandline: abc -d pureJava -warn-unused-advice:off pureJava\StaticContexts.java 
+Compilation failed with 8 errors, which were matched and verified against the expected errors.
+PASS: Test 300: "pureJava/Referencing various things from static contexts" passed.
+
+
+Running test 303: errors/Some expressions are illegal expression statements
+Commandline: abc -d errors -warn-unused-advice:off errors\BadExpressionStatement.java 
+Compilation failed with 1 errors, which were matched and verified against the expected errors.
+PASS: Test 303: "errors/Some expressions are illegal expression statements" passed.
+
+
+Running test 304: pureJava/illegal forward reference
+Commandline: abc -d pureJava -warn-unused-advice:off pureJava\IllegalForwardReference.java 
+Compilation failed with 1 errors, which were matched and verified against the expected errors.
+PASS: Test 304: "pureJava/illegal forward reference" passed.
+
+
+Running test 306: errors/protected accessibility
+Commandline: abc -d errors -warn-unused-advice:off errors\protectedAccess\Main.java errors\protectedAccess\p1\C1.java 
+Compilation failed with 1 errors, which were matched and verified against the expected errors.
+PASS: Test 306: "errors/protected accessibility" passed.
+
+
+Running test 307: errors/parse-time illegal modifiers
+Commandline: abc -d errors -warn-unused-advice:off errors\Modifiers1.java 
+Compilation failed with 1 errors, which were matched and verified against the expected errors.
+PASS: Test 307: "errors/parse-time illegal modifiers" passed.
+
+
+Running test 308: errors/check-time illegal modifiers
+Commandline: abc -d errors -warn-unused-advice:off errors\Modifiers.java 
+Compilation failed with 8 errors, which were matched and verified against the expected errors.
+PASS: Test 308: "errors/check-time illegal modifiers" passed.
+
+
+Running test 309: errors/illegal synchronized stmts
+Commandline: abc -d errors -warn-unused-advice:off errors\BadSynchronized.java 
+Error position is null; assuming error matches current expected error with no line number. Error message: Couldn't repair and continue parse
+WARNING: This test was probably not really passed!!
+Compilation failed with 2 errors, which were matched and verified against the expected errors.
+PASS: Test 309: "errors/illegal synchronized stmts" passed.
+
+
+Running test 310: pureJava/modifiers on interface members
+Commandline: abc -d pureJava -warn-unused-advice:off pureJava\InterfaceMembers.java 
+Compilation failed with 8 errors, which were matched and verified against the expected errors.
+PASS: Test 310: "pureJava/modifiers on interface members" passed.
+
+
+Running test 312: errors/good errors (and not too many) for missing members
+Commandline: abc -d errors -warn-unused-advice:off errors\NotFound.java 
+Compilation failed with 1 errors, which were matched and verified against the expected errors.
+PASS: Test 312: "errors/good errors (and not too many) for missing members" passed.
+
+
+Running test 313: new/expecting compile failures with subclass narrowing scope of superclass methods or accessing private superclass variables
+Commandline: abc -d new -warn-unused-advice:off new\RestrictingVisibilityCF.java 
+Compilation failed with 8 errors, which were matched and verified against the expected errors.
+PASS: Test 313: "new/expecting compile failures with subclass narrowing scope of superclass methods or accessing private superclass variables" passed.
+
+
+Running test 316: errors/inner classes may not have static non-constant members
+Commandline: abc -d errors -warn-unused-advice:off errors\InnerMembers.java 
+Compilation failed with 4 errors, which were matched and verified against the expected errors.
+PASS: Test 316: "errors/inner classes may not have static non-constant members" passed.
+
+
+Running test 318: pureJava/flow analysis with local types
+Commandline: abc -d pureJava -warn-unused-advice:off pureJava\InnerFlow.java 
+Compilation failed with 1 errors, which were matched and verified against the expected errors.
+PASS: Test 318: "pureJava/flow analysis with local types" passed.
+
+
+Running test 413: new/Cannot bind a name.
+Commandline: abc -d new -warn-unused-advice:off new\CannotReferenceSuper.java 
+Compilation failed with 1 errors, which were matched and verified against the expected errors.
+PASS: Test 413: "new/Cannot bind a name." passed.
+
+
+Running test 589: new/PR584 Can construct inner classes using qualified expressions
+Commandline: abc -d new -warn-unused-advice:off new\PR584.java 
+PASS: Test 589: "new/PR584 Can construct inner classes using qualified expressions" passed.
+
+
+Running test 609: new/incrementing objects, arrays - 2
+Commandline: abc -d new -warn-unused-advice:off new\ArrayInc2CE.java 
+Compilation failed with 4 errors, which were matched and verified against the expected errors.
+PASS: Test 609: "new/incrementing objects, arrays - 2" passed.
+
+
+Running test 610: new/incrementing objects, arrays CE
+Commandline: abc -d new -warn-unused-advice:off new\ArrayIncCE.java 
+Compilation failed with 6 errors, which were matched and verified against the expected errors.
+PASS: Test 610: "new/incrementing objects, arrays CE" passed.
+
+
+Running test 611: new/incrementing objects, arrays - 3
+Commandline: abc -d new -warn-unused-advice:off new\ArrayInc3CE.java 
+Compilation failed with 5 errors, which were matched and verified against the expected errors.
+PASS: Test 611: "new/incrementing objects, arrays - 3" passed.
+
+
+Running test 612: new/incrementing objects, arrays
+Commandline: abc -d new -warn-unused-advice:off new\ArrayInc.java 
+PASS: Test 612: "new/incrementing objects, arrays" passed.
+
+
+Running test 617: pureJava/no circularity errors simply because of inners (1)
+Commandline: abc -d pureJava -warn-unused-advice:off pureJava\circle\Test1CP.java 
+PASS: Test 617: "pureJava/no circularity errors simply because of inners (1)" passed.
+
+
+Running test 618: pureJava/no circularity errors simply because of inners (2)
+Commandline: abc -d pureJava -warn-unused-advice:off pureJava\circle\Test2CP.java 
+PASS: Test 618: "pureJava/no circularity errors simply because of inners (2)" passed.
+
+
+Running test 619: pureJava/should have circular inheritance errors (1)
+Commandline: abc -d pureJava -warn-unused-advice:off pureJava\circle\Test1CF.java 
+Compilation produced an unexpected number of errors: 1, should be 3
+Actual errors found: 
+Semantic Error at Test1CF.java:7,11-41: Circular inheritance involving circle.IBottom
+FAIL: Test 619: "pureJava/should have circular inheritance errors (1)" failed.
+
+
+Running test 620: pureJava/should have circular inheritance errors (2)
+Commandline: abc -d pureJava -warn-unused-advice:off pureJava\circle\Test2CF.java 
+Compilation failed with 1 errors, which were matched and verified against the expected errors.
+PASS: Test 620: "pureJava/should have circular inheritance errors (2)" passed.
+
+
+Running test 622: pureJava/interface using preceding subinterface in its definition
+Commandline: abc -d pureJava -warn-unused-advice:off pureJava\ParentUsingChild.java 
+PASS: Test 622: "pureJava/interface using preceding subinterface in its definition" passed.
+
+
+Running test 623: new/Parent interface using public inner interface of child in same file
+Commandline: abc -d new -warn-unused-advice:off new\ParentInterfaceUsingChildInnerInterface.java 
+PASS: Test 623: "new/Parent interface using public inner interface of child in same file" passed.
+
+
+Running test 624: errors/a type is not allowed to extend or implement its own innner type
+Commandline: abc -d errors -warn-unused-advice:off errors\NestedInterfaceTest.java 
+Compilation failed with 1 errors, which were matched and verified against the expected errors.
+PASS: Test 624: "errors/a type is not allowed to extend or implement its own innner type" passed.
+
+
+Running test 625: pureJava/try requires block JLS 14.19
+Commandline: abc -d pureJava -warn-unused-advice:off pureJava\TryBlockRequiredCE.java 
+Error position is null; assuming error matches current expected error with no line number. Error message: Couldn't repair and continue parse
+WARNING: This test was probably not really passed!!
+Compilation failed with 2 errors, which were matched and verified against the expected errors.
+PASS: Test 625: "pureJava/try requires block JLS 14.19" passed.
+
+
+Running test 626: pureJava/loop expressions not declarations
+Commandline: abc -d pureJava -warn-unused-advice:off pureJava\DeclarationsInLoopsCE.java 
+Compilation failed with 3 errors, which were matched and verified against the expected errors.
+PASS: Test 626: "pureJava/loop expressions not declarations" passed.
+
+
+Running test 628: pureJava/local variables must be final to be accessed from inner class
+Commandline: abc -d pureJava -warn-unused-advice:off pureJava\LocalsFromInnerCE.java 
+Compilation failed with 11 errors, which were matched and verified against the expected errors.
+PASS: Test 628: "pureJava/local variables must be final to be accessed from inner class" passed.
+
+
+Running test 629: pureJava/final local variables may be accessed from inner class
+Commandline: abc -d pureJava -warn-unused-advice:off pureJava\LocalsFromInnerCP.java 
+PASS: Test 629: "pureJava/final local variables may be accessed from inner class" passed.
+
+
+Running test 630: pureJava/missing package identifier
+Commandline: abc -d pureJava -warn-unused-advice:off pureJava\MissingPackageCE.java 
+Compilation failed with 1 errors, which were matched and verified against the expected errors.
+PASS: Test 630: "pureJava/missing package identifier" passed.
+
+
+Running test 631: pureJava/interface declaration not permitted in local method scope
+Commandline: abc -d pureJava -warn-unused-advice:off pureJava\LocalInterfaceCE.java 
+Compilation failed with 4 errors, which were matched and verified against the expected errors.
+PASS: Test 631: "pureJava/interface declaration not permitted in local method scope" passed.
+
+
+Running test 634: new/CE for ambiguous type reference (two files in package)
+Commandline: abc -d new -warn-unused-advice:off new\ambiguousClass\AmbiguousReferent.java new\ambiguousClass\AmbiguousClassReference.java 
+Compilation failed with 1 errors, which were matched and verified against the expected errors.
+PASS: Test 634: "new/CE for ambiguous type reference (two files in package)" passed.
+
+
+Running test 635: new/initializer can throw so long as all constructors declare so
+Commandline: abc -d new -warn-unused-advice:off new\InitializerWithThrow.java 
+PASS: Test 635: "new/initializer can throw so long as all constructors declare so" passed.
+
+
+Running test 636: pureJava/interfaces may not contain initializers (bug found by jacks)
+Commandline: abc -d pureJava -warn-unused-advice:off pureJava\InterfaceMembersCf.java 
+Compilation failed with 1 errors, which were matched and verified against the expected errors.
+PASS: Test 636: "pureJava/interfaces may not contain initializers (bug found by jacks)" passed.
+
+
+Running test 638: pureJava/initializers must be able to complete normally (found by jacks)
+Commandline: abc -d pureJava -warn-unused-advice:off pureJava\InitializerFlowCf.java 
+Compilation failed with 2 errors, which were matched and verified against the expected errors.
+PASS: Test 638: "pureJava/initializers must be able to complete normally (found by jacks)" passed.
+
+
+Running test 640: pureJava/more tests of super alone
+Commandline: abc -d pureJava -warn-unused-advice:off pureJava\SuperIsWeird.java 
+Compilation failed with 4 errors, which were matched and verified against the expected errors.
+PASS: Test 640: "pureJava/more tests of super alone" passed.
+
+
+Running test 651: pureJava/Locals inside other locals, ordering of processing [eh]
+Commandline: abc -d pureJava -warn-unused-advice:off pureJava\LocalInners2.java 
+PASS: Test 651: "pureJava/Locals inside other locals, ordering of processing [eh]" passed.
+
+
+Running test 652: pureJava/subclass access to enclosing super class private members
+Commandline: abc -d pureJava -warn-unused-advice:off pureJava\SubclassAccessToEnclosingSuperClassPrivate.java 
+PASS: Test 652: "pureJava/subclass access to enclosing super class private members" passed.
+
+
+Running test 658: pureJava/various tests of switch bounds
+Commandline: abc -d pureJava -warn-unused-advice:off pureJava\SwitchBounds.java 
+PASS: Test 658: "pureJava/various tests of switch bounds" passed.
+
+
+Running test 662: pureJava/assert flow
+Commandline: abc -d pureJava -warn-unused-advice:off -source 1.4 pureJava\AssertsCF.java 
+Compilation failed with 1 errors, which were matched and verified against the expected errors.
+PASS: Test 662: "pureJava/assert flow" passed.
+
+
+Running test 663: pureJava/assert flow - 2
+Commandline: abc -d pureJava -warn-unused-advice:off -source 1.4 pureJava\AssertsCF2.java 
+Compilation failed with 1 errors, which were matched and verified against the expected errors.
+PASS: Test 663: "pureJava/assert flow - 2" passed.
+
+
+Running test 664: pureJava/assert typing
+Commandline: abc -d pureJava -warn-unused-advice:off -source 1.4 pureJava\AssertsCF1.java 
+Compilation failed with 1 errors, which were matched and verified against the expected errors.
+PASS: Test 664: "pureJava/assert typing" passed.
+
+
+Running test 665: pureJava/asserts
+Commandline: abc -d pureJava -warn-unused-advice:off -source 1.4 pureJava\Asserts.java 
+PASS: Test 665: "pureJava/asserts" passed.
+
+
+Running test 666: pureJava/assert coverage tests [requires 1.4]
+Commandline: abc -d pureJava -warn-unused-advice:off -source 1.4 pureJava\AssertsCv.java 
+PASS: Test 666: "pureJava/assert coverage tests [requires 1.4]" passed.
+
+
+Running test 667: pureJava/assert coverage tests in one package [requires 1.4]
+Commandline: abc -d pureJava -warn-unused-advice:off -source 1.4 pureJava\AssertInOnePackage.java 
+PASS: Test 667: "pureJava/assert coverage tests in one package [requires 1.4]" passed.
+
+
+Running test 686: pureJava/non-constant static final fields marked as final in .class
+Commandline: abc -d pureJava -warn-unused-advice:off pureJava\FinalStaticField.java 
+PASS: Test 686: "pureJava/non-constant static final fields marked as final in .class" passed.
+
+
