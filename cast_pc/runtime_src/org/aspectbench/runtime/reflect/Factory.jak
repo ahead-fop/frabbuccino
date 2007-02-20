@@ -1,0 +1,13 @@
+
+import org.aspectj.lang.reflect.CastSignature;
+
+public refines class Factory
+{
+
+    public CastSignature makeCastSig(String stringRep) {
+        CastSignatureImpl ret = new CastSignatureImpl(stringRep);
+        ret.setLookupClassLoader(lookupClassLoader);
+        return ret;
+    }
+
+}

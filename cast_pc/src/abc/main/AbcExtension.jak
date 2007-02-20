@@ -1,0 +1,22 @@
+
+import abc.weaving.matching.CastShadowMatch;
+
+public refines class AbcExtension
+{
+
+    protected List/*<ShadowType>*/ listShadowTypes()
+    {
+        List/*<ShadowType*/ shadowTypes = Super().listShadowTypes();
+        shadowTypes.add(CastShadowMatch.shadowType());
+        return shadowTypes;
+    }
+
+    public void initLexerKeywords(AbcLexer lexer) {
+        // Add the base keywords
+        Super().initLexerKeywords(lexer);
+
+        // keyword for the "cast" pointcut extension
+        lexer.addPointcutKeyword("cast", new LexerAction_c(new Integer(abc.aspectj.parse.sym.PC_CAST)));
+    }
+
+}

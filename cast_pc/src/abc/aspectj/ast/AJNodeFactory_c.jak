@@ -1,0 +1,13 @@
+
+public refines class AJNodeFactory_c
+{
+
+    public PCCast PCCast(Position pos, TypePatternExpr type_pattern)
+    {
+        PCCast n = new PCCast_c(pos, type_pattern);
+        n = (PCCast)n.ext(((AJExtFactory)extFactory()).extPCCast());
+        n = (PCCast)n.del(((AJDelFactory)delFactory()).delPCCast());
+        return n;
+    }
+
+}
