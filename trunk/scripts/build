@@ -1,0 +1,337 @@
+#!/usr/bin/perl -w
+
+#
+# This script takes an equation name (e.g. 'blah.equation') and attempts to
+# build the composition in this order:
+#
+#   (1) Run composer on the equation file.
+#
+#   (2) Fix the layer names in the generated Jak files (of the final directory,
+#       not the feature module directories) to remove the first parts of the
+#       layer name that are only related to the directory structure, not the
+#       package structure.
+#
+#   (3) Run jak2java on the generated Jak files.
+#
+#   (4) Run ant on the final directory.
+#
+
+use strict;
+use File::Basename;
+
+my $usage = "Usage:  $0 <equation-file>\n";
+my $eq_fullname;
+my $eq_filename;
+my $eq_name;
+my @jak_files;
+my $stage_num = 0;
+
+# Enable (1) or disable (0) stages
+my $do_stage_clean      = 1;
+my $do_stage_composer   = 1;
+my $do_stage_ppg        = 1;
+my $do_stage_fixlayers  = 1;
+my $do_stage_jak2java   = 1;
+my $do_stage_build      = 1;
+
+my $stage_sum = 
+    $do_stage_composer  +
+    $do_stage_ppg       +
+    $do_stage_fixlayers +
+    $do_stage_jak2java  +
+    $do_stage_build;
+
+########################################################################
+#
+#   Check command-line arguments
+#
+########################################################################
+
+(@ARGV == 1) or die $usage;
+$eq_fullname = $ARGV[0];
+if ($eq_fullname =~ /(.+)\.equation$/)
+{
+    $eq_name = basename $1;
+}
+else
+{
+    die "ERROR: Argument must be an equation file, e.g. 'blah.equation'.\n\n";
+}
+
+$eq_filename = "$eq_name.equation";
+(-e $eq_fullname) or
+    die "ERROR: File '$eq_fullname' does not exist.\n\n".$usage;
+
+########################################################################
+#
+#   Remove composed directory
+#
+########################################################################
+
+if ($do_stage_clean)
+{
+    print_stage("Remove previous results directory");
+    my @sysargs = ('rm', '-rf', $eq_name);
+    if (-d $eq_name)
+    {
+        print "SYSTEM: ".join(' ', @sysargs)."\n";
+        system(@sysargs);
+        check_return();
+    }
+}
+
+########################################################################
+#
+#   Composer
+#
+########################################################################
+
+if ($do_stage_composer)
+{
+    print_stage("Launch composer");
+    run_command('composer', "--equation=$eq_fullname");
+}
+
+########################################################################
+#
+#   Generate PPG files
+#
+########################################################################
+
+if ($do_stage_ppg)
+{
+    print_stage("Generate PPG files");
+    my %ppgfiles;
+    open EQ_FILE, "<$eq_fullname" or
+        die "ERROR: File '$eq_fullname' does not exist!\n";
+    my $line;
+    LINE: while ($line = <EQ_FILE>)
+    {
+        # Skip if comment
+        next LINE if $line =~ /^#/;
+
+        chomp $line;
+
+        FEATURE_DIR: foreach my $fdir (split /\s+/, $line)
+        {
+            # Check to see if the feature is a directory
+            (-d $fdir)
+                or (($fdir =~ /^#/) and next FEATURE_DIR)
+                or (($fdir =~ /^\s*$/) and next FEATURE_DIR)
+                or die "ERROR: Feature directory does not exist! ($fdir)\n";
+
+            #print "fdir: $fdir\n";
+            foreach my $ppgfilename (`find $fdir -name "*.ppg"`)
+            {
+                chomp $ppgfilename;
+                $ppgfilename =~ s/^$fdir\///;
+                #print "ppg: $ppgfilename\n";
+                push @{$ppgfiles{$ppgfilename}}, $fdir;
+            }
+        }
+    }
+    close EQ_FILE;
+
+    foreach my $filename (keys %ppgfiles)
+    {
+        #print "\$ppgfiles{$filename} = {".join(',', @{$ppgfiles{$filename}})."}\n";
+        my $features = $ppgfiles{$filename};
+
+        #############################################################
+        # First file:
+        #
+        #   - file name: append feature name
+        #   - "include": unchanged
+        #
+        #############################################################
+
+        my $feature = shift @$features;
+        my $new_filename = "$filename-$feature";
+
+        # Copy .ppg file to new directory, append originating feature name to
+        # differentiate
+        run_command('cp', "$feature/$filename", "$eq_name/$new_filename");
+
+        #############################################################
+        # Middle set of files:
+        #
+        #   - file name: append feature name
+        #   - "include": refer to previous file
+        #
+        #############################################################
+
+        my $last_filename;
+
+        while (@$features)
+        {
+            # Get file name for changing the "include" in the next iteration
+            $last_filename = substr $new_filename, (rindex $new_filename, '/')+1;
+
+            # Get the next feature directory from the list for this file
+            $feature = shift @$features;
+            $new_filename = "$filename-$feature";
+
+            # Copy .ppg file to new directory, append originating feature
+            # name to differentiate
+            run_command('cp', "$feature/$filename", "$eq_name/$new_filename");
+
+            # Change "include" statement to use previous file name
+            fix_ppg_file("$eq_name/$new_filename", "$last_filename");
+        }
+
+        #############################################################
+        # Last file:
+        #
+        #   - file name: same as original (reverted)
+        #   - "include": refer to previous file
+        #
+        #############################################################
+
+        # Revert latest new file name to it's old file name
+        rename "$eq_name/$new_filename", "$eq_name/$filename" or
+            die "ERROR: can't rename $eq_name/$new_filename";
+
+        if (defined $last_filename)
+        {
+            # Change "include" statement to use previous file name
+            fix_ppg_file("$eq_name/$filename", "$last_filename");
+        }
+
+    }
+
+}
+
+########################################################################
+#
+#   Fix layer names
+#
+########################################################################
+
+if ($do_stage_fixlayers)
+{
+    print_stage("Fix layer names");
+    foreach my $jf (`find $eq_name -name "*.jak"`)
+    {
+        chomp $jf;
+        fix_jak_file($jf);
+        push @jak_files, $jf;
+    }
+}
+
+########################################################################
+#
+#   Jak to Java
+#
+########################################################################
+
+if ($do_stage_jak2java)
+{
+    if (@jak_files)
+    {
+        print_stage("Launch jak2java");
+        my @sysargs = ('jak2java', @jak_files);
+        print "SYSTEM: $sysargs[0] [".@jak_files." files]\n";
+        system(@sysargs);
+        check_return();
+    }
+    else
+    {
+        # Did not find any Jak files in last stage
+        print_stage("No Jak files. Skipping jak2java!");
+    }
+}
+
+########################################################################
+#
+#   Build with ant
+#
+########################################################################
+
+if ($do_stage_build)
+{
+    print_stage("Launch ant");
+    chdir $eq_name or die "ERROR: can't change to directory '$eq_name'";
+    run_command('ant', 'jars');
+}
+
+
+print "\nINFO: Done\n";
+exit(0);
+
+########################################################################
+########################################################################
+
+
+sub check_return
+{
+    if ($? & 127)
+    {
+        printf "ERROR: died with signal %d%s\n",
+            ($? & 127),  (($? & 128) ? ' with coredump' : '');
+        exit(-1);
+    }
+    elsif ($? == -1)
+    {
+        print "ERROR: failed to execute: $!\n";
+        exit(-1);
+    }
+    elsif ($? != 0)
+    {
+        printf "ERROR: failed with return value %d\n", ($? >> 8);
+        exit(-1);
+    }
+}
+
+
+sub fix_jak_file
+{
+    my $filename = shift;
+    rename $filename, "$filename~" or die "ERROR: can't rename '$filename'";
+    open(INF,  "<$filename~") or die "ERROR: can't open '$filename~' for reading";
+    open(OUTF, ">$filename") or die "ERROR: can't open '$filename' for writing";
+    while (<INF>)
+    {
+        # Replace fake layer name with real name that then
+        # becomes the package.
+        s/layer $eq_name\.src\.(.+?);/layer $1;/;
+        s/layer $eq_name\.runtime_src\.(.+?);/layer $1;/;
+        print OUTF;
+    }
+    close INF;
+    close OUTF;
+}
+
+
+sub fix_ppg_file
+{
+    my $filename = shift;
+    my $new_include = shift;
+    rename $filename, "$filename~" or die "ERROR: can't rename '$filename'";
+    open(INF,  "<$filename~") or die "ERROR: can't open '$filename~' for reading";
+    open(OUTF, ">$filename") or die "ERROR: can't open '$filename' for writing";
+    while (<INF>)
+    {
+        # Replace old include with new
+        s/^include.*/include "$new_include"/;
+        print OUTF;
+    }
+    close INF;
+    close OUTF;
+}
+
+
+sub run_command
+{
+    print "SYSTEM: ".join(' ', @_)."\n";
+    system(@_);
+    check_return();
+}
+
+
+sub print_stage
+{
+    my $str = shift;
+    ++$stage_num;
+    print "\nSTAGE ($stage_num of $stage_sum): $str\n";
+}
+

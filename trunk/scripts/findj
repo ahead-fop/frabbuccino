@@ -1,0 +1,2 @@
+#!/bin/bash
+find $* -not -wholename "*.svn*" -a -name "*\.java" -o -name "*\.jak"

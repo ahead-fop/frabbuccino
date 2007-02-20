@@ -1,0 +1,7 @@
+#!/bin/sh
+
+ABCDIR=./all/lib/
+
+java -Xmx512M \
+     -cp "${ABCDIR}/abc-complete.jar" \
+     abc.main.Main $*
