@@ -1,0 +1,9 @@
+
+public refines interface AJExtFactory {
+
+    /**
+     * @return extensions for let pointcuts
+     */
+    public Ext extPCLet();
+
+}

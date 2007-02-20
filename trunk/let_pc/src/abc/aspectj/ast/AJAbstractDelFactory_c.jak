@@ -1,0 +1,22 @@
+
+public refines class AJAbstractDelFactory_c {
+
+    public final JL delPCLet() {
+        JL e = delPCLetImpl();
+
+        if (nextDelFactory != null) {
+            JL e2 = nextDelFactory.delPCLet();
+            e = composeDels(e, e2);
+        }
+        return postDelPCLet(e);
+    }
+
+    protected JL delPCLetImpl() {
+        return delPCIfImpl();
+    }
+
+    protected JL postDelPCLet(JL del) {
+        return postDelPCIf(del);
+    } 
+
+}

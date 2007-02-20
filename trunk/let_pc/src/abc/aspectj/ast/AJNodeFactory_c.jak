@@ -1,0 +1,13 @@
+
+public refines class AJNodeFactory_c
+{
+
+    public PCLet PCLet(Position pos, Local var, Expr expr)
+    {
+        PCLet n = new PCLet_c(pos,var,expr);
+        n = (PCLet)n.ext(((AJExtFactory)extFactory()).extPCLet());
+        n = (PCLet)n.del(((AJDelFactory)delFactory()).delPCLet());
+        return n;
+    }
+
+}
