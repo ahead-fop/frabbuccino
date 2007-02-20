@@ -1,0 +1,13 @@
+
+public refines class AbcExtension
+{
+
+    public void initLexerKeywords(AbcLexer lexer) {
+        // Add the base keywords
+        Super().initLexerKeywords(lexer);
+
+        // keyword for the "let" pointcut extension
+        lexer.addPointcutKeyword("let", new LexerAction_c(new Integer(abc.aspectj.parse.sym.PC_LET)));
+    }
+
+}

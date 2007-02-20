@@ -1,0 +1,22 @@
+
+public refines class AJAbstractExtFactory_c {
+
+    public Ext extPCLet() {
+        Ext e = extPCLetImpl();
+
+        if (nextExtFactory != null) {
+            Ext e2 = nextExtFactory.extPCLet();
+            e = composeExts(e, e2);
+        }
+        return postExtPCLet(e);
+    }
+
+    protected Ext extPCLetImpl() {
+        return extPCIfImpl();
+    }
+
+    protected Ext postExtPCLet(Ext e) {
+        return postExtPCIf(e);
+    }
+
+}
