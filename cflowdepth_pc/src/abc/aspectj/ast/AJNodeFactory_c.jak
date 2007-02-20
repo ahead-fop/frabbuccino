@@ -1,0 +1,19 @@
+
+public refines class AJNodeFactory_c
+{
+
+    public PCCflowDepth PCCflowDepth(Position pos, Local var, Pointcut pc) {
+        PCCflowDepth n = new PCCflowDepth_c(pos,pc,var);
+        n = (PCCflowDepth)n.ext(((AJExtFactory)extFactory()).extPCCflowDepth());
+        n = (PCCflowDepth)n.del(((AJDelFactory)delFactory()).delPCCflowDepth());
+        return n;
+    }
+
+    public PCCflowBelowDepth PCCflowBelowDepth(Position pos, Local var, Pointcut pc) {
+        PCCflowBelowDepth n = new PCCflowBelowDepth_c(pos,pc,var);
+        n = (PCCflowBelowDepth)n.ext(((AJExtFactory)extFactory()).extPCCflowBelowDepth());
+        n = (PCCflowBelowDepth)n.del(((AJDelFactory)delFactory()).delPCCflowBelowDepth());
+        return n;
+    }
+
+}

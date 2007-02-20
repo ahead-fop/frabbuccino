@@ -1,0 +1,29 @@
+
+include "previous.ppg"
+
+package abc.aspectj.parse;
+
+
+// ------- tokens ----------------------------------
+
+terminal Token PC_CFLOWDEPTH;
+terminal Token PC_CFLOWBELOWDEPTH;
+
+// ------- extensions ------------------------------
+
+start with goal;
+
+extend basic_pointcut_expr ::=
+        PC_CFLOWDEPTH:x LPAREN IDENTIFIER:i COMMA pointcut_expr:a RPAREN:y
+        {:
+            Grm.parserTrace("CFLOWDEPTH pointcut");
+            RESULT = parser.nf.PCCflowDepth(parser.pos(x,y), parser.nf.Local(parser.pos(i),i.getIdentifier()), a);
+        :}
+    |
+        PC_CFLOWBELOWDEPTH:x LPAREN IDENTIFIER:i COMMA pointcut_expr:a RPAREN:y
+        {:
+            Grm.parserTrace("CFLOWBELOWDEPTH pointcut");
+            RESULT = parser.nf.PCCflowBelowDepth(parser.pos(x,y), parser.nf.Local(parser.pos(i),i.getIdentifier()), a);
+        :}
+    ;
+

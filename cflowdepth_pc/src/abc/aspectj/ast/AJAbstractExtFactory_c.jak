@@ -1,0 +1,40 @@
+
+public refines class AJAbstractExtFactory_c {
+
+    public Ext extPCCflowDepth() {
+        Ext e = extPCCflowDepthImpl();
+
+        if (nextExtFactory != null) {
+            Ext e2 = nextExtFactory.extPCCflowDepth();
+            e = composeExts(e, e2);
+        }
+        return postExtPCCflowDepth(e);
+    }
+
+    protected Ext extPCCflowDepthImpl() {
+        return extPCCflowImpl();
+    }
+
+    protected Ext postExtPCCflowDepth(Ext e) {
+        return postExtPCCflow(e);
+    }
+
+    public Ext extPCCflowBelowDepth() {
+        Ext e = extPCCflowBelowDepthImpl();
+
+        if (nextExtFactory != null) {
+            Ext e2 = nextExtFactory.extPCCflowBelowDepth();
+            e = composeExts(e, e2);
+        }
+        return postExtPCCflowBelowDepth(e);
+    }
+
+    protected Ext extPCCflowBelowDepthImpl() {
+        return extPCCflowBelowImpl();
+    }
+
+    protected Ext postExtPCCflowBelowDepth(Ext e) {
+        return postExtPCCflowBelow(e);
+    }
+
+}

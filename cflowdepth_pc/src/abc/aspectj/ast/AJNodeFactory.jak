@@ -1,0 +1,7 @@
+
+public refines interface AJNodeFactory {
+
+    public PCCflowDepth PCCflowDepth(Position pos, Local var, Pointcut pc);
+    public PCCflowBelowDepth PCCflowBelowDepth(Position pos, Local var, Pointcut pc);
+
+}

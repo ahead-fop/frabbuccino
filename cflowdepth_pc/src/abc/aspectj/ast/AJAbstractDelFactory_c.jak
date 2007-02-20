@@ -1,0 +1,40 @@
+
+public refines class AJAbstractDelFactory_c {
+
+    public final JL delPCCflowBelowDepth() {
+        JL e = delPCCflowBelowDepthImpl();
+
+        if (nextDelFactory != null) {
+            JL e2 = nextDelFactory.delPCCflowBelowDepth();
+            e = composeDels(e, e2);
+        }
+        return postDelPCCflowBelowDepth(e);
+    }
+
+    protected JL delPCCflowBelowDepthImpl() {
+        return delPCCflowBelowImpl();
+    }
+
+    protected JL postDelPCCflowBelowDepth(JL del) {
+        return postDelPCCflowBelow(del);
+    }       
+
+    public final JL delPCCflowDepth() {
+        JL e = delPCCflowDepthImpl();
+
+        if (nextDelFactory != null) {
+            JL e2 = nextDelFactory.delPCCflowDepth();
+            e = composeDels(e, e2);
+        }
+        return postDelPCCflowDepth(e);
+    }
+
+    protected JL delPCCflowDepthImpl() {
+        return delPCCflowImpl();
+    }
+
+    protected JL postDelPCCflowDepth(JL del) {
+        return postDelPCCflow(del);
+    } 
+
+}

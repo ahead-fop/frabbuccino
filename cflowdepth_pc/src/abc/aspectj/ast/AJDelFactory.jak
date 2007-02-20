@@ -1,0 +1,14 @@
+
+public refines interface AJDelFactory {
+
+    /**
+     * @return delegates for cflowdepth pointcuts
+     */
+    public JL delPCCflowDepth();
+
+    /**
+     * @return delegates for cflowbelowdepth pointcuts
+     */
+    public JL delPCCflowBelowDepth();
+
+}
