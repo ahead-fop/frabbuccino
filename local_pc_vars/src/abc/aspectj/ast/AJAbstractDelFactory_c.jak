@@ -1,0 +1,22 @@
+
+public refines class AJAbstractDelFactory_c {
+
+    public final JL delPCLocalVars() {
+        JL e = delPCLocalVarsImpl();
+
+        if (nextDelFactory != null) {
+            JL e2 = nextDelFactory.delPCLocalVars();
+            e = composeDels(e, e2);
+        }
+        return postDelPCLocalVars(e);
+    }
+
+    protected JL delPCLocalVarsImpl() {
+        return delPointcutImpl();
+    }
+
+    protected JL postDelPCLocalVars(JL del) {
+        return postDelPointcut(del);
+    } 
+
+}

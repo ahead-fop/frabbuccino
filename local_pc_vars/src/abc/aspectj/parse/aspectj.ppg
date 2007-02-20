@@ -1,0 +1,19 @@
+
+include "previous.ppg"
+
+package abc.aspectj.parse;
+
+
+// ------- extensions ------------------------------
+
+start with goal;
+
+extend basic_pointcut_expr ::=
+        PRIVATE:x LPAREN formal_parameter_list_opt:a RPAREN LPAREN pointcut_expr:b RPAREN:y
+        {:
+            Grm.parserTrace("PRIVATE formal_parameter_list, pointcut_expr");
+            RESULT = parser.nf.PCLocalVars(parser.pos(x,y), a, b);
+        :}
+    ;
+
+
