@@ -1,0 +1,9 @@
+
+public refines interface AJDelFactory {
+
+    /**
+     * @return delegates for pointcut local variables node
+     */
+    public JL delPCLocalVars();
+
+}

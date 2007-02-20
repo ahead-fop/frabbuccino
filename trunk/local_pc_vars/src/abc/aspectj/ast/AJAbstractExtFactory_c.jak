@@ -1,0 +1,22 @@
+
+public refines class AJAbstractExtFactory_c {
+
+    public Ext extPCLocalVars() {
+        Ext e = extPCLocalVarsImpl();
+
+        if (nextExtFactory != null) {
+            Ext e2 = nextExtFactory.extPCLocalVars();
+            e = composeExts(e, e2);
+        }
+        return postExtPCLocalVars(e);
+    }
+
+    protected Ext extPCLocalVarsImpl() {
+        return extPointcutImpl();
+    }
+
+    protected Ext postExtPCLocalVars(Ext e) {
+        return postExtPointcut(e);
+    }
+
+}

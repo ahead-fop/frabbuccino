@@ -1,0 +1,15 @@
+
+public refines class AJNodeFactory_c
+{
+
+    public PCLocalVars PCLocalVars(Position pos,
+            List varlist,
+            Pointcut pc)
+    {
+        PCLocalVars n = new PCLocalVars_c(pos, varlist, pc);
+        n = (PCLocalVars)n.ext(((AJExtFactory)extFactory()).extPCLocalVars());
+        n = (PCLocalVars)n.del(((AJDelFactory)delFactory()).delPCLocalVars());
+        return n;
+    }
+
+}
