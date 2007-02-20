@@ -1,0 +1,68 @@
+
+import abc.aspectj.ast.PCIf;
+import abc.aspectj.ast.AdviceDecl;
+
+public refines class AspectMethods {
+
+    private Stack /* MethodDecl */ proceeds; // dummy proceed methods for transforming proceed calls
+    private Stack /* AdviceDecl */ advices;
+    private Stack /* PCIf */ pcifs;
+
+	refines AspectMethods(Job job, NodeFactory nf, TypeSystem ts) {
+		this.proceeds = new Stack();
+		this.advices = new Stack();
+		this.pcifs = new Stack();
+	}
+
+        public void pushProceedFor(AdviceDecl ad)
+        {
+                proceeds.push(ad.proceedDecl(nf,ts));
+        }
+
+        public MethodDecl proceed()
+        {
+                return (MethodDecl) proceeds.peek();
+        }
+
+        public void popProceed()
+        {
+                proceeds.pop();
+        }
+
+        public void pushAdvice(AdviceDecl ad)
+        {
+                advices.push(ad);
+        }
+
+        public AdviceDecl advice()
+        {
+                return (AdviceDecl) advices.peek();
+        }
+
+        public boolean isAdvice()
+        {
+                return ! advices.isEmpty();
+        }
+
+        public void popAdvice()
+        {
+                advices.pop();
+        }
+
+    public void pushPCIf(PCIf pcif) {
+	pcifs.push(pcif);
+    }
+
+    public PCIf pcif() {
+	return (PCIf) pcifs.peek();
+    }
+
+    public boolean isPCIf() {
+	return !pcifs.isEmpty();
+    }
+
+    public void popPCIf() {
+	pcifs.pop();
+    }
+
+}

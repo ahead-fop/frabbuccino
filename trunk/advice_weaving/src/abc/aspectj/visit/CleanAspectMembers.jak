@@ -1,0 +1,29 @@
+
+public refines class CleanAspectMembers {
+
+    // HOOK method
+    protected Node cleanAdvice(Node n) {
+        if (n instanceof AdviceDecl) {
+            AdviceDecl ad = (AdviceDecl) n;
+            //System.out.println("Cleaning out an advice declaration");
+            return nf.MethodDecl(ad.position(), ad.flags(), ad.returnType(), ad.name(),
+                    ad.formals(), ad.throwTypes(), ad.body())
+                .methodInstance(ad.methodInstance());
+        }
+        return Super().cleanAdvice(n);
+    }
+
+    protected boolean cleanClassMember(ClassMember m, ParsedClassType pct, List newmembers) {
+        // SPL: abc checks this first.
+        if (m instanceof AdviceDecl) {
+            throw new RuntimeException("Advice declaration not cleaned up");
+        }
+        if (m instanceof PointcutDecl) {
+            PointcutDecl pcd = (PointcutDecl) m;
+            pct.methods().remove(pcd.methodInstance());
+            return true;
+        }
+        return Super().cleanClassMember(m, pct, newmembers);
+    }
+
+}

@@ -1,0 +1,34 @@
+
+import abc.aspectj.types.PointcutInstance_c;
+import abc.aspectj.types.AJContext;
+
+public refines class AJClassBody_c {
+
+    protected static void checkOtherInstances(MethodInstance mi, MethodInstance mj) throws SemanticException {
+        Super().checkOtherInstances(mi, mj);
+
+        // FIXME: I think this should be mj, but I'm leaving it as it was in abc
+        // for now.
+        if (mi instanceof PointcutInstance_c)
+            throw new SemanticException("Duplicate "+mj+
+                    " in class \""+mj.container() +"\".",mj.position());
+    }
+
+    public void aspectMethodsEnter(AspectMethods visitor)
+    {
+        Super().aspectMethodsEnter(visitor);
+        AJContext c = (AJContext) visitor.context();
+        ClassType ct = c.currentClassScope();
+        if (c.inAdvice()) {
+            for (Iterator mets = ct.methods().iterator(); mets.hasNext(); ) {
+                MethodInstance mi = (MethodInstance) mets.next();
+                visitor.advice().localMethod(mi);
+            }
+            for (Iterator cons = ct.constructors().iterator(); cons.hasNext(); ) {
+                ConstructorInstance ci = (ConstructorInstance) cons.next();
+                visitor.advice().localMethod(ci);
+            }
+        }
+    }
+
+}

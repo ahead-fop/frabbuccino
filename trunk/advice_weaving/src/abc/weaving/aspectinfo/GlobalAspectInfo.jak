@@ -1,0 +1,253 @@
+
+
+import abc.weaving.matching.*;
+
+
+public refines class GlobalAspectInfo {
+
+    protected List/*<AbstractAdviceDecl>*/ ads = new ArrayList();
+    protected List/*<PointcutDecl>*/ pcds = new ArrayList();
+    protected List/*<DeclarePrecedence>*/ dprs = new ArrayList();
+
+    protected Map/*<String,Set<PointcutDecl>>*/ pc_map = new HashMap();
+
+    /** Returns the list of all advice declarations.
+     *  @return a list of {@link abc.weaving.aspectinfo.AbstractAdviceDecl} objects.
+     */
+    public List getAdviceDecls() {
+        return ads;
+    }
+
+    /** Returns the list of all pointcut declarations.
+     *  @return a list of {@link abc.weaving.aspectinfo.PointcutDecl} objects.
+     */
+    public List getPointcutDecls() {
+        return pcds;
+    }
+
+    public PointcutDecl getPointcutDecl(String name, Aspect context) {
+        if (abc.main.Debug.v().abstractPointcutLookup)
+            System.err.println("Looking up pointcut "+name+" in aspect "+context.getName());
+        Set matching_pcds = (Set)pc_map.get(name);
+        Iterator pi = matching_pcds.iterator();
+        while (pi.hasNext()) {
+            PointcutDecl p = (PointcutDecl)pi.next();
+            if (abc.main.Debug.v().abstractPointcutLookup)
+                System.err.println(p);
+            if (!p.isAbstract() &&
+                p.getAspect() != null &&
+                ((Set)aspect_visibility.get(p.getAspect())).contains(context)) {
+                return p;
+            }
+        }
+        return null;
+        // throw new InternalCompilerError("Pointcut "+name+" was not found in "+context);
+    }
+
+    /** Returns the list of all <code>declare precedence</code> declarations.
+     *  @return a list of {@link abc.weaving.aspectinfo.DeclarePrecedence} objects.
+     */
+    public List getDeclarePrecedence() {
+        return dprs;
+    }
+
+    public void addAdviceDecl(AbstractAdviceDecl ad) {
+        ads.add(ad);
+    }
+
+    public void addPointcutDecl(PointcutDecl pcd) {
+        pcds.add(pcd);
+        String name = pcd.getName();
+        if (!pc_map.containsKey(name)) {
+            pc_map.put(name, new HashSet());
+        }
+        ((Set)pc_map.get(name)).add(pcd);
+    }
+
+    public void addDeclarePrecedence(DeclarePrecedence dpr) {
+        dprs.add(dpr);
+    }
+
+    public void addDeclareMessage(DeclareMessage dm) {
+        ads.add(dm);
+    }
+
+    public void addDeclareSoft(DeclareSoft ds) {
+        ads.add(ds);
+    }
+
+    public void print(java.io.PrintStream p) {
+        Super().print(p);
+        printList(p, ads, "Advice decls:");
+        printList(p, pcds, "Pointcut decls:");
+        printList(p, dprs, "Declare precedence:");
+    }
+
+    public void sinkAdviceDecls() {
+        List/*<AbstractAdviceDecl>*/ newAds=new LinkedList();
+        Iterator it=ads.iterator();
+        while(it.hasNext()) {
+            AbstractAdviceDecl ad=(AbstractAdviceDecl) it.next();
+            if(ad.getAspect().getInstanceClass().getSootClass().isAbstract()) {
+                Set/*<Aspect>*/ concreteset=(Set) aspect_visibility.get(ad.getAspect());
+                Iterator concreteit=concreteset.iterator();
+                while(concreteit.hasNext()) {
+                    Aspect concrete=(Aspect) concreteit.next();
+                    newAds.add(ad.makeCopyInAspect(concrete));
+                }
+            }
+            else newAds.add(ad);
+        }
+        ads=newAds;
+    }
+
+    protected Hashtable /*<SootMethod,MethodAdviceList>*/ adviceLists=null;
+
+    /** Computes the lists of advice application points for all weavable classes */
+    public void computeAdviceLists() throws SemanticException {
+        sinkAdviceDecls();
+
+        // manual iterator because we want to add things as we go
+        for(int i=0;i<ads.size();i++) ((AbstractAdviceDecl) (ads.get(i))).preprocess();
+
+        // We may now need to remove some unused CFlowSetups (the CSE for sharing CFlowSetups
+        // can make CFS instance redundant - if we have cfs1 and we want cfs2, and they can be
+        // unified to cfs3, then all pcs using cfs1 are changed to use cfs3, making cfs1 redundant)
+        int i = 0;
+        while (i < ads.size()) {
+                if (ads.get(i) instanceof CflowSetup) {
+                        CflowSetup cfs = (CflowSetup)ads.get(i);
+                        if (cfs.isUsed()) {
+                                // Don't do anything
+                                i++;
+                        } else {
+                                // Remove it, but don't increment i as ads(i) will now be
+                                // the next advice on the list
+                                ads.remove(i);
+                                if (abc.main.Debug.v().debugCflowSharing)
+                                        System.out.println("Removed CflowSetup: \n"+cfs.getPointcut());
+                        }
+                } else i++;
+        }
+
+        adviceLists=abc.weaving.matching.AdviceApplication.computeAdviceLists(this);
+    }
+
+    /** Returns the list of AdviceApplication structures for the given method */
+    public MethodAdviceList getAdviceList(SootMethod m) {
+
+        if(adviceLists==null)
+            throw new InternalCompilerError
+                ("Must compute advice lists before trying to get them");
+
+        return (MethodAdviceList) adviceLists.get(m);
+    }
+
+    protected Hashtable/*<SootMethod,List<SJPInfo>*/ sjpInfoLists=new Hashtable();
+    public void addSJPInfo(SootMethod method,SJPInfo sjpInfo) {
+        List/*<SJPInfo>*/ list;
+        if(sjpInfoLists.containsKey(method)) {
+            list = (List) sjpInfoLists.get(method);
+        } else {
+            list = new LinkedList();
+            sjpInfoLists.put(method,list);
+        }
+        list.add(sjpInfo);
+    }
+    public List/*<SJPInfo>*/ getSJPInfoList(SootMethod method) {
+        if(sjpInfoLists.containsKey(method)) {
+            return (List) sjpInfoLists.get(method);
+        } else {
+            return new LinkedList();
+        }
+    }
+
+    public List/*<ShadowMatch>*/ getShadowMatchList(SootMethod method) {
+        LinkedList res=new LinkedList();
+        res.addAll(getStmtShadowMatchList(method));
+        res.addAll(getInterfaceInitializationShadowMatchList(method));
+        ShadowMatch esm=getExecutionShadowMatch(method);
+        if(esm!=null) res.add(esm);
+        ShadowMatch cism=getClassInitializationShadowMatch(method);
+        if(cism!=null) res.add(cism);
+        ShadowMatch pism=getPreinitializationShadowMatch(method);
+        if(pism!=null) res.add(pism);
+        return res;
+    }
+
+    protected Hashtable/*<SootMethod,List<StmtShadowMatch>*/ stmtShadowMatchLists=new Hashtable();
+    public List/*<StmtShadowMatch>*/ getStmtShadowMatchList(SootMethod method) {
+        if(stmtShadowMatchLists.containsKey(method)) {
+            return (List) stmtShadowMatchLists.get(method);
+        } else {
+            return new LinkedList();
+        }
+    }
+
+    protected Hashtable/*<SootMethod,List<InterfaceInitializationShadowMatch>*/
+        interfaceinitShadowMatchLists=new Hashtable();
+    public List/*<StmtShadowMatch>*/ getInterfaceInitializationShadowMatchList(SootMethod method) {
+        if(interfaceinitShadowMatchLists.containsKey(method)) {
+            return (List) interfaceinitShadowMatchLists.get(method);
+        } else {
+            return new LinkedList();
+        }
+    }
+
+    protected Hashtable/*<SootMethod,ExecutionShadowMatch>*/
+        executionShadowMatches=new Hashtable();
+    protected Hashtable/*<SootMethod,PreintializationShadowMatch>*/
+        preinitShadowMatches=new Hashtable();
+    protected Hashtable/*<SootMethod,ClassInitializationShadowMatch>*/
+        classinitShadowMatches=new Hashtable();
+
+
+    public ExecutionShadowMatch getExecutionShadowMatch(SootMethod method) {
+        return (ExecutionShadowMatch) executionShadowMatches.get(method);
+    }
+    public ClassInitializationShadowMatch getClassInitializationShadowMatch(SootMethod method) {
+        return (ClassInitializationShadowMatch) classinitShadowMatches.get(method);
+    }
+    public PreinitializationShadowMatch getPreinitializationShadowMatch(SootMethod method) {
+        return (PreinitializationShadowMatch) preinitShadowMatches.get(method);
+    }
+
+    public void addShadowMatch(SootMethod method,ShadowMatch sm) {
+        if(sm instanceof StmtShadowMatch) {
+            List/*<StmtShadowMatch>*/ list;
+            if(stmtShadowMatchLists.containsKey(method)) {
+                list = (List) stmtShadowMatchLists.get(method);
+            } else {
+                list = new LinkedList();
+                stmtShadowMatchLists.put(method,list);
+            }
+            list.add(sm);
+        } else if(sm instanceof InterfaceInitializationShadowMatch) {
+            List/*<InterfaceInitializationShadowMatch>*/ list;
+            if(interfaceinitShadowMatchLists.containsKey(method)) {
+                list = (List) interfaceinitShadowMatchLists.get(method);
+            } else {
+                list = new LinkedList();
+                interfaceinitShadowMatchLists.put(method,list);
+            }
+            list.add(sm);
+        } else if(sm instanceof ExecutionShadowMatch) {
+            if(executionShadowMatches.containsKey(method))
+                throw new InternalCompilerError
+                    ("Something tried to record two ExecutionShadowMatches for method "+method);
+            executionShadowMatches.put(method,sm);
+        } else if(sm instanceof PreinitializationShadowMatch) {
+            if(preinitShadowMatches.containsKey(method))
+                throw new InternalCompilerError
+                    ("Something tried to record two PreinitializationShadowMatches for method "+method);
+            preinitShadowMatches.put(method,sm);
+        } else if(sm instanceof ClassInitializationShadowMatch) {
+            if(classinitShadowMatches.containsKey(method))
+                throw new InternalCompilerError
+                    ("Something tried to record two ClassInitializationShadowMatches for method "+method);
+            classinitShadowMatches.put(method,sm);
+        } else throw new InternalCompilerError
+              ("Unknown ShadowMatch type "+sm+" for method "+method);
+    }
+
+}
