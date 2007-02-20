@@ -1,0 +1,22 @@
+#!/usr/bin/perl -w
+
+#
+# This script finds all equation files (e.g. 'blah.equation') and deletes all
+# directories with the same base name (e.g. 'blah').
+#
+
+use strict;
+
+print "\nINFO: Deleting results directories.\n";
+my @sysargs = ('rm', '-rf');
+foreach (`cd equations; ls *.equation`)
+{
+    my ($eq_name,$ext) = split /\./;
+    $sysargs[2] = $eq_name;
+    if (-d $eq_name)
+    {
+        print "SYSTEM: ".join(' ', @sysargs)."\n";
+        system(@sysargs);
+    }
+}
+

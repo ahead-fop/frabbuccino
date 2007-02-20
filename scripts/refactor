@@ -1,0 +1,46 @@
+#! /usr/bin/python
+
+import sys
+import os
+
+# executable base_feature_dir refactor_feature_dir subdir_to_be_refactored files_to_be_refactored
+
+def foo():
+    flagsvn = 0
+    flagcp = 0
+    if len(sys.argv) < 5:
+        print "Usage: " + sys.argv[0] + " [-cp] <fromdir> <todir> <hierarchy> <files>"
+        sys.exit()
+    cmd=""
+    if sys.argv[1] == "-svn":
+    	cmd = "svn "
+	sys.argv.pop(1)
+    	flagsvn=1
+    if sys.argv[1] == "-cp":
+        cmd += "cp "
+        sys.argv.pop(1)
+    	flagcp=1
+    else:
+        cmd += "mv "
+    base = sys.argv[1]
+    basesubdir = sys.argv[1] + "/" + sys.argv[3] + "/"
+    feature = sys.argv[2]
+    featuresubdir = sys.argv[2] + "/" + sys.argv[3] + "/"
+
+    print ("flags ", flagcp, flagsvn)
+    if not os.access( featuresubdir, 000 ):
+	os.makedirs( featuresubdir )
+	if flagsvn == 1 and flagcp == 1:
+       		svnaddcmd = "svn add " 
+		svnaddcmd += feature
+		svnaddcmd += "/*"
+		print "adding new dir to svn:"
+		print svnaddcmd
+		os.system(svnaddcmd)
+
+    for x in sys.argv[4:]:
+        command = cmd + basesubdir + x + " " + featuresubdir
+        print ( command )
+        os.system( command )
+
+foo()
