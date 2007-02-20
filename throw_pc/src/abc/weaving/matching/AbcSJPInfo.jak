@@ -1,0 +1,18 @@
+
+import soot.SootMethod;
+import soot.Type;
+
+public refines class AbcSJPInfo
+{
+
+    public static String makeThrowSigData(SootMethod container, Type throw_type)
+    {
+        StringBuffer sb = new StringBuffer();
+        sb.append('-');     // a throw has no associated modifiers
+        sb.append('-');     // a throw has no associated name-part
+        sb.append(AbcSJPInfo.getTypeString(throw_type));
+        sb.append('-');
+        return sb.toString();
+    }
+
+}

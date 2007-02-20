@@ -1,0 +1,6 @@
+
+public refines interface AJNodeFactory {
+
+    public PCThrow PCThrow(Position pos, TypePatternExpr type_pattern);
+
+}

@@ -1,0 +1,13 @@
+
+public refines class AJNodeFactory_c
+{
+
+    public PCThrow PCThrow(Position pos, TypePatternExpr type_pattern)
+    {
+        PCThrow n = new PCThrow_c(pos, type_pattern);
+        n = (PCThrow)n.ext(((AJExtFactory)extFactory()).extPCThrow());
+        n = (PCThrow)n.del(((AJDelFactory)delFactory()).delPCThrow());
+        return n;
+    }
+
+}

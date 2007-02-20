@@ -1,0 +1,23 @@
+
+import abc.weaving.matching.ThrowShadowMatch;
+
+public refines class AbcExtension
+{
+
+    protected List/*<ShadowType>*/ listShadowTypes()
+    {
+        List/*<ShadowType*/ shadowTypes = Super().listShadowTypes();
+        shadowTypes.add(ThrowShadowMatch.shadowType());
+        return shadowTypes;
+    }
+
+    public void initLexerKeywords(AbcLexer lexer) {
+        // Add the base keywords
+        Super().initLexerKeywords(lexer);
+
+        // keyword for the "throw" pointcut extension
+        lexer.addPointcutKeyword("throw", new LexerAction_c(new Integer(abc.aspectj.parse.sym.PC_THROW)));
+
+    }
+
+}
