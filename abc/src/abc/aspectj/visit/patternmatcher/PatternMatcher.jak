@@ -1,0 +1,167 @@
+/* abc - The AspectBench Compiler
+ * Copyright (C) 2004 Aske Simon Christensen
+ * Copyright (C) 2004 Damien Sereni
+ *
+ * This compiler is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ *
+ * This compiler is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this compiler, in the file LESSER-GPL;
+ * if not, write to the Free Software Foundation, Inc.,
+ * 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ */
+
+//package abc.aspectj.visit.patternmatcher;
+
+import abc.aspectj.ast.*;
+import abc.aspectj.visit.PCStructure;
+import abc.aspectj.visit.PCNode;
+
+import polyglot.ast.*;
+import polyglot.visit.*;
+
+import java.util.*;
+import java.util.regex.*;
+
+import abc.weaving.aspectinfo.MethodCategory;
+import abc.weaving.aspectinfo.AbcFactory;
+
+import soot.*;
+
+/** Encapsulates the pattern matching code.
+ *  Contains means for matching classname patterns, type patterns,
+ *  method patterns, field patterns and constructor patterns.
+ *  @author Aske Simon Christensen
+ *  @author Damien Sereni
+ */
+public class PatternMatcher {
+    protected PCStructure hierarchy;
+    protected Map/*<NamePattern,Set<PCNode>>*/ pattern_matches = new HashMap();
+    protected Map/*<NamePattern,Set<String>>*/ pattern_classes = new HashMap();
+    protected Map/*<NamePattern,Set<String>>*/ pattern_packages = new HashMap();
+    protected Map/*<NamePattern,PCNode>*/ pattern_context = new HashMap();
+
+    protected Set/*<String>*/ prim_types;
+
+    protected Map/*<String,Pattern>*/ name_pattern_cache = new HashMap();
+
+    protected static PatternMatcher instance;
+
+    public static PatternMatcher v() {
+	return instance;
+    }
+
+    protected PatternMatcher(PCStructure hierarchy) {
+	this.hierarchy = hierarchy;
+
+	prim_types = new HashSet();
+	prim_types.add("void");
+	prim_types.add("char");
+	prim_types.add("byte");
+	prim_types.add("short");
+	prim_types.add("int");
+	prim_types.add("long");
+	prim_types.add("float");
+	prim_types.add("double");
+	prim_types.add("boolean");
+    }
+
+    public static PatternMatcher create(PCStructure hierarchy) {
+	instance = new PatternMatcher(hierarchy);
+	return instance;
+    }
+
+    public Pattern compileNamePattern(String name_pat) {
+	if (name_pattern_cache.containsKey(name_pat)) {
+	    return (Pattern)name_pattern_cache.get(name_pat);
+	}
+	String pat;
+	// Make sure that the pattern never matches a pure integer name
+	if (name_pat.equals("*")) {
+	    pat = "[^0-9].*";
+	} else if (name_pat.startsWith("*")) {
+	    String pat_start;
+	    char after_star = name_pat.charAt(1);
+	    if (after_star >= '0' && after_star <= '9') {
+		pat_start = "[^0-9].*";
+	    } else {
+		pat_start = "([^0-9].*)?";
+	    }
+	    pat = pat_start + name_pat.substring(1).replaceAll("\\*", ".*");
+	} else {
+	    char first = name_pat.charAt(0);
+	    if (first >= '0' && first <= '9') {
+		pat = "[a&&b]"; // The nonmatching pattern. Any better way to do it?
+	    } else {
+		pat = name_pat.replaceAll("\\*", ".*");
+	    }
+	}
+	if (abc.main.Debug.v().namePatternMatches)
+	    System.err.println("Compiling the name pattern component "+name_pat+" into "+pat);
+	pat = pat.replaceAll("\\$","\\\\\\$");
+	Pattern p = Pattern.compile("^"+pat+"$");
+	name_pattern_cache.put(name_pat, p);
+	return p;
+    }
+
+    public void computeMatches(NamePattern pat, PCNode context, Set/*<String>*/ classes, Set/*<String>*/ packages) {
+	if (abc.main.Debug.v().namePatternMatches)
+	    System.err.println("Evaluating the name pattern "+pat+" ("+pat.getClass()+") in context "+context+" on "+pat.position());
+	pattern_classes.put(pat, classes);
+	pattern_packages.put(pat, packages);
+	pattern_context.put(pat, context);
+	pattern_matches.put(pat, hierarchy.matchName(pat, context, classes, packages));
+    }
+
+    /** Should be called when jimplification is complete.
+     *  This ensures that all Soot classes can be used to index into the
+     *  hierarchy.
+     */
+    public void updateWithAllSootClasses() {
+	PCStructure.v().updateWithAllSootClasses();
+    }
+
+    public void recomputeAllMatches() {
+	Iterator pati = pattern_matches.keySet().iterator();
+	while (pati.hasNext()) {
+	    NamePattern pat = (NamePattern)pati.next();
+	    PCNode context = (PCNode)pattern_context.get(pat);
+	    Set classes = (Set)pattern_classes.get(pat);
+	    Set packages = (Set)pattern_packages.get(pat);
+	    //System.out.print("Recomputing pattern "+pat+"...");
+	    pattern_matches.put(pat, hierarchy.matchName(pat, context, classes, packages));
+	    //System.out.println("DONE");
+	}
+    }
+
+    public Set getMatches(NamePattern pat) {
+	if (!pattern_matches.containsKey(pat)) {
+	    throw new RuntimeException("Unknown name pattern: "+pat+" ("+pat.getClass()+") at "+pat.position());
+	}
+	return (Set)pattern_matches.get(pat);
+    }
+
+    public boolean matchesName(NamePattern pat, PCNode name) {
+	//System.out.print("Matching pattern "+pat+"...");
+	boolean res = getMatches(pat).contains(name);
+	//System.out.println("DONE");
+	return res;
+    }
+
+    boolean matchesClass(ClassnamePatternExpr pattern, SootClass sc) {
+	PCNode cl_node = hierarchy.getClass(sc);
+	return pattern.matches(this, cl_node);
+    }
+
+    public abc.weaving.aspectinfo.ClassnamePattern makeAIClassnamePattern(ClassnamePatternExpr pattern) {
+	return new AIClassnamePattern(pattern);
+    }
+
+}

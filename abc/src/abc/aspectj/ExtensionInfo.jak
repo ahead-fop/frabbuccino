@@ -1,0 +1,179 @@
+
+import abc.aspectj.types.AJTypeSystem_c;
+import abc.aspectj.visit.AJAmbiguityRemover;
+import abc.aspectj.visit.AJTypeBuilder;
+import abc.aspectj.visit.AnonBodyITDs;
+import abc.aspectj.visit.AspectInfoHarvester;
+import abc.aspectj.visit.AspectMethods;
+import abc.aspectj.visit.AspectNameCollector;
+import abc.aspectj.visit.AspectReflectionInspect;
+import abc.aspectj.visit.AspectReflectionRewrite;
+import abc.aspectj.visit.CleanAspectMembers;
+import abc.aspectj.visit.DeclareParentsAmbiguityRemover;
+import abc.aspectj.visit.DependsChecker;
+import abc.aspectj.visit.InterfaceITDs;
+import abc.aspectj.visit.JarCheck;
+import abc.aspectj.visit.MangleNameComponents;
+import abc.aspectj.visit.MangleNames;
+import abc.aspectj.visit.NamePatternEvaluator;
+import abc.aspectj.visit.NamePatternReevaluator;
+import abc.aspectj.visit.PCStructure;
+import abc.aspectj.visit.ParentDeclarer;
+import abc.aspectj.visit.PatternTester;
+import abc.aspectj.visit.SourceClasses;
+import abc.aspectj.visit.patternmatcher.PatternMatcher;
+
+public refines class ExtensionInfo {
+
+    public static final Pass.ID ASPECT_METHODS = new Pass.ID("aspect-methods");
+
+    public static final Pass.ID CLEAN_CLASSES = new Pass.ID("clean-classes");
+    public static final Pass.ID COLLECT_ASPECT_NAMES = new Pass.ID("collect-aspect-names");
+    public static final Pass.ID EVALUATE_PATTERNS = new Pass.ID("evaluate-patterns");
+    public static final Pass.ID PATTERNS_EVALUATED = new Pass.ID("patterns-evaluated");
+    public static final Pass.ID TEST_PATTERNS = new Pass.ID("test-patterns");
+    public static final Pass.ID DECLARE_PARENTS = new Pass.ID("declare-parents");
+    public static final Pass.ID PARENTS_DECLARED = new Pass.ID("parents-declared");
+
+    public static final Pass.ID EVALUATE_PATTERNS_AGAIN = new Pass.ID("evaluate-patterns-again");
+    public static final Pass.ID PATTERNS_EVALUATED_AGAIN = new Pass.ID("patterns-evaluated-again");
+
+    public static final Pass.ID JAR_CHECK = new Pass.ID("jar-check");
+    public static final Pass.ID SET_DEPENDS = new Pass.ID("set-depends");
+    public static final Pass.ID CHECK_DEPENDS = new Pass.ID("check-depends");
+    public static final Pass.ID CHECKING_DONE = new Pass.ID("checking-done");
+
+    public static final Pass.ID INTERFACE_ITDS = new Pass.ID("interface-itds");
+    public static final Pass.ID ANON_ITDS = new Pass.ID("anon-itds");
+    public static final Pass.ID SOURCE_CLASSES = new Pass.ID("source-classes");
+    public static final Pass.ID INTERFACE_ITDS_ALL = new Pass.ID("interface-itds-all");
+
+    public static final Pass.ID MANGLE_NAME_COMPONENTS = new Pass.ID("mangle-name-components");
+    public static final Pass.ID NAME_COMPONENTS = new Pass.ID("name-components");
+    public static final Pass.ID MANGLE_NAMES = new Pass.ID("mangle-names");
+    public static final Pass.ID NAMES_MANGLED = new Pass.ID("names-mangled");
+
+    public static final Pass.ID CLEAN_DECLARE = new Pass.ID("clean-declare");
+
+    public static final Pass.ID ASPECT_PREPARE = new Pass.ID("aspect-prepare");
+    public static final Pass.ID HARVEST_ASPECT_INFO = new Pass.ID("harvest");
+    public static final Pass.ID CLEAN_MEMBERS = new Pass.ID("clean-members");
+
+    public static final Pass.ID ASPECT_REFLECTION_INSPECT = new Pass.ID("aspect-reflection-inspect");
+    public static final Pass.ID ASPECT_REFLECTION_REWRITE = new Pass.ID("aspect-reflection-rewrite");
+
+    public Collection/*<String>*/ aspect_names;
+    public PCStructure hierarchy;
+    public PatternMatcher pattern_matcher;
+    public Map/*<String,Set<String>>*/ prec_rel = new HashMap();
+
+    refines ExtensionInfo(Collection jar_classes, Collection source_files)
+    {
+        //Super(Collection, Collection)(jar_classes, source_files);
+        aspect_names = new ArrayList();
+	hierarchy = PCStructure.v();
+    }
+
+    protected TypeSystem createTypeSystem() {
+        return new AJTypeSystem_c();
+    }
+
+    protected TypeBuilder getTypeBuilder(Job job, TypeSystem ts, NodeFactory nf)
+    {
+        return new AJTypeBuilder(job, ts, nf);
+    }
+
+    protected void passes_pre_hierarchy(List l, Job job)
+    {
+        Super().passes_pre_hierarchy(l, job);
+
+        // Disambiguate inner/outer classes
+        l.add(new VisitorPass(CLEAN_CLASSES,job, new AJAmbiguityRemover(job,ts,nf,AmbiguityRemover.SIGNATURES)));
+        // Disambiguate parents in declare parents
+        l.add(new VisitorPass(CLEAN_DECLARE, job,
+                    new DeclareParentsAmbiguityRemover(job, ts, nf))); 
+        // Collect the full names of aspects
+        l.add(new VisitorPass(COLLECT_ASPECT_NAMES, job, new AspectNameCollector(aspect_names)));
+    }
+
+    protected void passes_post_hierarchy(List l, Job job)
+    {
+        Super().passes_post_hierarchy(l, job);
+
+        // Finds list of classes matched by each name pattern
+        l.add(new VisitorPass(EVALUATE_PATTERNS, job, new NamePatternEvaluator(this)));
+        if (abc.main.Debug.v().namePatternMatches) {
+            // Print list of matched classes for each name pattern
+            l.add(new VisitorPass(TEST_PATTERNS, job, new PatternTester(this)));
+        }
+        l.add(new GlobalBarrierPass(PATTERNS_EVALUATED, job));
+        // Alter hierarchy according to declare parents (both internal pattern matching hierarchy
+        // and Polyglot hierarchy)
+        l.add(new VisitorPass(DECLARE_PARENTS, job, new ParentDeclarer(job, ts, nf, this)));
+        l.add(new GlobalBarrierPass(PARENTS_DECLARED, job));
+        // Finds list of classes matched by each name pattern, according to new hierarchy
+        // but only for weavable classes.
+        l.add(new NamePatternReevaluator(EVALUATE_PATTERNS_AGAIN));
+        l.add(new GlobalBarrierPass(PATTERNS_EVALUATED_AGAIN, job));
+    }
+
+    protected void passes_check_jars_depends(List l, Job job) {
+        Super().passes_check_jars_depends(l, job);
+        // check for itd conflicts in jars
+        l.add(new JarCheck(JAR_CHECK,job,ts));
+        l.add(new GlobalBarrierPass(SET_DEPENDS,job));
+        // pointcuts are not recursive; and concrete pointcuts don't depend on abstract ones
+        l.add(new VisitorPass(CHECK_DEPENDS,job, new DependsChecker(job,ts,nf)));
+        l.add(new GlobalBarrierPass(CHECKING_DONE, job));
+    }
+
+    protected void passes_mangle_names(List l, Job job)
+    {
+        Super().passes_mangle_names(l, job);
+
+        // determine components that need to get the same mangled name
+        l.add(new VisitorPass(MANGLE_NAME_COMPONENTS, job, new MangleNameComponents()));
+        l.add(new GlobalBarrierPass(NAME_COMPONENTS, job));
+        // record what mangled names will be
+        l.add(new VisitorPass(MANGLE_NAMES, job, new MangleNames()));
+        l.add(new GlobalBarrierPass(NAMES_MANGLED, job));
+    }
+
+    protected void passes_aspectj_transforms(List l, Job job)
+    {
+        Super().passes_aspectj_transforms(l, job);
+
+        // look to see if all thisJoinPoint references could be changed into thisJoinPointStaticPart
+        l.add(new VisitorPass(ASPECT_REFLECTION_INSPECT,job, new AspectReflectionInspect()));
+        // Change them
+        l.add(new VisitorPass(ASPECT_REFLECTION_REWRITE,job, new AspectReflectionRewrite(nf,ts)));
+
+        // add new methods for proceed and if-pointcuts, and turn advice into methods
+        // mangle names, introduce accessor methods
+        l.add(new VisitorPass(ASPECT_METHODS,job, new AspectMethods(job,nf,ts)));
+        l.add(new GlobalBarrierPass(ASPECT_PREPARE,job));
+
+        // to test the above:
+        // l.add(new PrettyPrintPass(INSPECT_AST,job,new CodeWriter(System.out,70),new PrettyPrinter()));
+        // build AspectInfo structure, register real names and real classes
+        l.add(new VisitorPass(HARVEST_ASPECT_INFO, job, new AspectInfoHarvester(job, ts, nf)));
+        // remove all AST nodes and members of classtypes that will be re-introduced by weaving
+        l.add(new VisitorPass(CLEAN_MEMBERS, job, new CleanAspectMembers(nf,ts)));
+        // l.add(new PrettyPrintPass(INSPECT_AST,job,new CodeWriter(System.out,70),new PrettyPrinter()));
+    }
+
+    protected void passes_interface_ITDs(List l, Job job)
+    {
+        Super().passes_interface_ITDs(l, job);
+
+        // put interface itds in types
+        l.add(new InterfaceITDs(INTERFACE_ITDS));
+        // collect all class types that came from source files (in preparation for typechecking classes from classfiles)
+        l.add(new VisitorPass(SOURCE_CLASSES, job, new SourceClasses()));
+        // add interface itds to anonymous classes - interfaces for these are added separately in a locally
+        // spawned pass
+        l.add(new VisitorPass(ANON_ITDS,job,new AnonBodyITDs(job,ts,nf)));
+        l.add(new GlobalBarrierPass(INTERFACE_ITDS_ALL,job));
+    }
+
+}

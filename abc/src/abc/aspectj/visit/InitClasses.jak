@@ -1,0 +1,21 @@
+
+
+import abc.aspectj.visit.patternmatcher.PatternMatcher;
+public refines class InitClasses {
+
+    protected void createPatternMatcher() {
+        Super().createPatternMatcher();
+        ext.pattern_matcher = PatternMatcher.create(ext.hierarchy);
+    }
+
+    protected void insertClassAndSuperclasses(ClassType ct, boolean weavable) {
+        Super().insertClassAndSuperclasses(ct, weavable);
+        ext.hierarchy.insertClassAndSuperclasses(ct, true);
+    }
+
+    protected void initPrecedenceRelation() {
+        Super().initPrecedenceRelation();
+        abc.main.Main.v().getAbcExtension().getGlobalAspectInfo().initPrecedenceRelation(ext.prec_rel);
+    }
+
+}

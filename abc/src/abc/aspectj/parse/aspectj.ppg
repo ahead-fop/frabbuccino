@@ -1,0 +1,420 @@
+/* abc - The AspectBench Compiler
+ * Copyright (C) 2004 Laurie Hendren
+ * Copyright (C) 2004 Oege de Moor
+ * Copyright (C) 2004 Aske Simon Christensen
+ *
+ * This compiler is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ *
+ * This compiler is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this compiler, in the file LESSER-GPL;
+ * if not, write to the Free Software Foundation, Inc.,
+ * 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ */
+
+include "java12.cup"
+
+package abc.aspectj.parse;
+
+import abc.aspectj.types.AJTypeSystem;
+import abc.aspectj.ast.AJNodeFactory;
+
+import abc.aspectj.ast.*;
+
+/**
+* @author Laurie Hendren
+* @author Oege de Moor
+* @author Aske Simon Christensen
+*/
+parser Grm extends polyglot.ext.jl.parse.Grm {:
+    public final AJTypeSystem ts;
+    public final AJNodeFactory nf;
+
+    public Grm(Lexer l, TypeSystem t, NodeFactory n, ErrorQueue q) {
+        super(l, t, n, q);
+        ts = (AJTypeSystem) t;
+        nf = (AJNodeFactory) n;
+    }
+
+    /* Flag for personalized parser trace. */
+    public static boolean parserTraceOn = false;
+
+    public static void parserTrace (String s)
+      { if (parserTraceOn) 
+          System.err.println(" REDUCED: " + s); 
+      }
+
+    /**
+     * Override the default Polyglot routine
+     */	
+     
+    public void report_fatal_error (String message, Object info)
+    throws Exception
+    {
+       report_error (message, info);
+       die ();
+    }	 
+:};
+
+/* ---------------------------------------------------------*/
+/* ----            TOKENS added for AspectJ             --- */
+/* ---------------------------------------------------------*/
+
+/* ----   tokens added to the Java part of scanner ---*/
+terminal Token ASPECT;
+terminal Token PRIVILEGED;
+
+/* ----   tokens added to the AspectJ part of scanner ---*/
+terminal Token DECLARE;
+
+/* ----   tokens added to the pointcut part of scanner ---*/
+terminal Token PC_PARENTS;
+
+terminal Token PC_DOTDOT; 
+terminal Token PC_NOT;
+terminal Token PC_ANDAND;
+terminal Token PC_OROR;
+terminal Token PC_PLUS;
+terminal Token PC_MULT;
+
+terminal Identifier IDENTIFIERPATTERN;
+
+/* ---------------------------------------------------------*/
+/* ----          NON-TERMINALS added for AspectJ        --- */
+/* ---------------------------------------------------------*/
+
+/* --- all types List must be fixed to give real types --- */
+non terminal AspectDecl aspect_declaration; 
+non terminal PerClause  perclause_opt;
+
+non terminal AspectBody aspect_body;
+non terminal List aspect_body_declarations;
+non terminal List aspect_body_declaration;
+
+non terminal DeclareDecl declare_declaration;
+
+non terminal IntertypeDecl intertype_member_declaration;
+
+non terminal NamePattern name_pattern;
+non terminal SimpleNamePattern simple_name_pattern;
+non terminal Token aspectj_reserved_identifier;
+
+non terminal ClassnamePatternExpr classname_pattern_expr;
+non terminal ClassnamePatternExpr and_classname_pattern_expr;
+non terminal ClassnamePatternExpr unary_classname_pattern_expr;
+non terminal ClassnamePatternExpr basic_classname_pattern;
+
+
+start with goal;
+
+/* ---------------------------------------------------------------- */
+/*             EXTENSIONS TO BASE JAVA RULES                        */
+/* ---------------------------------------------------------------- */
+
+/* add the possiblility of declaring an apspect to type_declaration */
+extend type_declaration ::=   // class | interface | aspect
+     aspect_declaration:a
+       {: RESULT = a; :}
+  ;
+
+extend class_member_declaration ::=
+    aspect_declaration:a
+    {: Grm.parserTrace("a class member declaration is an aspect");
+       List l = new TypedList(new LinkedList(),
+                              ClassMember.class,
+                              false);
+       l.add(a);
+       RESULT = l;
+    :}
+  ;
+
+extend interface_member_declaration ::=
+    aspect_declaration:a
+    {: Grm.parserTrace("an interface declaration is an aspect");
+       List l = new TypedList(new LinkedList(),
+                              ClassMember.class,
+                              false);
+       l.add(a);
+       RESULT = l;
+    :}
+  ;
+
+
+/* ---------------------------------------------------------------- */
+/*                      ASPECTJ RULES                               */
+/* ---------------------------------------------------------------- */
+
+/* must explicitly give two alternatives here,  if you make PRIVILEGED
+   another rule which can go to epsilon,  then there is a shift reduce
+   conflict with modifiers_opt, which can also go to epsilon. */
+
+aspect_declaration ::=
+      modifiers_opt:a PRIVILEGED modifiers_opt:a1 ASPECT:n IDENTIFIER:b
+                         super_opt:c interfaces_opt:d  perclause_opt:f  
+                         aspect_body:g
+       {: Grm.parserTrace( "PRIVILEGED aspect declaration: " + 
+                                               b.getIdentifier()); 
+          RESULT = parser.nf.AspectDecl(parser.pos(n,g),
+                                        true,
+                                        a.set(a1),
+                                        b.getIdentifier(),
+                                        c,
+                                        d,
+                                        f,
+                                        g); // ignore per-clause for now
+       :}
+   |  modifiers_opt:a ASPECT:n IDENTIFIER:b
+                         super_opt:c interfaces_opt:d  perclause_opt:f  
+                         aspect_body:g
+       {: Grm.parserTrace( "aspect declaration: " + 
+                                               b.getIdentifier()); 
+          RESULT = parser.nf.AspectDecl(parser.pos(n,g),
+                                        false,
+                                        a,
+                                        b.getIdentifier(),
+                                        c,
+                                        d,
+                                        f,
+                                        g); // ignore per-clause for now
+       :}
+  ;
+
+perclause_opt ::=
+    /* epsilon */
+       {: Grm.parserTrace("empty perclause in perclause_opt");
+          RESULT = null;
+       :}
+  ;
+
+aspect_body ::=
+     LBRACE:lb  RBRACE:rb
+        {: Grm.parserTrace("empty aspect body"); 
+           RESULT = parser.nf.AspectBody(parser.pos(lb,rb),
+                                         new TypedList(new LinkedList(), 
+                                                       ClassMember.class, 
+                                                       false)); 
+        :}
+  |
+     LBRACE:lb aspect_body_declarations:a RBRACE:rb
+       {: Grm.parserTrace("aspect body"); 
+          RESULT = parser.nf.AspectBody(parser.pos(lb,rb),a); 
+       :}
+  ;
+
+aspect_body_declarations ::=
+     aspect_body_declaration:a
+       {: Grm.parserTrace("aspect_body_declaration");
+          RESULT = new TypedList(new LinkedList(), ClassMember.class, false);
+          RESULT.addAll(a);
+       :}
+  |  aspect_body_declarations:a aspect_body_declaration:b
+       {: Grm.parserTrace("aspect_body_declarations");
+          RESULT = a;
+          a.addAll(b);
+       :}
+  ;
+
+aspect_body_declaration ::= 
+     class_body_declaration:a
+       {: Grm.parserTrace("aspect_body_declaration is just a class_body_declaration\n");
+          Grm.parserTrace("LINE " + parser.pos(a));
+          Grm.parserTrace("-----------------------------------------------\n");
+          RESULT = a;
+       :}
+  |  declare_declaration:a
+       {: Grm.parserTrace("declare declaration\n");
+          Grm.parserTrace("LINE " + parser.pos(a));
+          Grm.parserTrace("-----------------------------------------------\n");
+          List ds = new TypedList(new LinkedList(),ClassMember.class,false);
+          ds.add(a);
+          RESULT = ds;
+       :}
+  |  intertype_member_declaration:a
+       {: Grm.parserTrace("intertype_member_declaration\n");
+          Grm.parserTrace("LINE " + parser.pos(a));
+          Grm.parserTrace("-----------------------------------------------\n");
+          List ds = new TypedList(new LinkedList(),ClassMember.class,false);
+          ds.add(a);
+          RESULT = ds;
+       :}
+  ;
+
+declare_declaration ::=
+     DECLARE:d PC_PARENTS COLON classname_pattern_expr:a EXTENDS interface_type_list:b SEMICOLON:e
+       {: Grm.parserTrace("Declare class extension");
+          DeclareParents dpe = parser.nf.DeclareParents(parser.pos(d,e),a,b,DeclareParents.EXTENDS);
+          RESULT = dpe;
+       :}
+  |  DECLARE:d PC_PARENTS COLON classname_pattern_expr:a IMPLEMENTS interface_type_list:b SEMICOLON:e
+       {: Grm.parserTrace("Declare interface extension");
+          DeclareParents dpi = parser.nf.DeclareParents(parser.pos(d,e),a,b,DeclareParents.IMPLEMENTS);
+          RESULT = dpi;
+       :}
+  ;
+
+intertype_member_declaration ::=
+     modifiers_opt:a VOID:b name:c DOT IDENTIFIER:d 
+         LPAREN formal_parameter_list_opt:e RPAREN:r throws_opt:f method_body:g
+     /* must check if modifiers includes abstract, no body,  if doesn't
+          include abstract, has body */
+       {: Grm.parserTrace("Intertype VOID METHOD declaration");
+          TypeNode voidn =  parser.nf.CanonicalTypeNode(parser.pos(b),
+                                                        parser.ts.Void());
+        
+          IntertypeMethodDecl imd 
+            = parser.nf.IntertypeMethodDecl(parser.pos(b,r),
+                                      a,
+                                      voidn,
+				      c.toType(),
+				      d.getIdentifier(),
+                                      e,
+                                      f,
+                                      g);                                     
+           RESULT = imd;
+       :}
+  |  modifiers_opt:a type:b name:c DOT IDENTIFIER:d 
+         LPAREN formal_parameter_list_opt:e RPAREN:r throws_opt:f method_body:g
+     /* must check if modifiers includes abstract, no body,  if doesn't
+          include abstract, has body */
+       {: Grm.parserTrace("Intertype METHOD declaration");
+           IntertypeMethodDecl imd 
+            = parser.nf.IntertypeMethodDecl(parser.pos(b,r),
+                                      a,
+                                      b,
+				      c.toType(),
+				      d.getIdentifier(),
+                                      e,
+                                      f,
+                                      g);                                     
+           RESULT = imd;
+       :}
+  | modifiers_opt:a name:b DOT NEW 
+         LPAREN formal_parameter_list_opt:c RPAREN throws_opt:d constructor_body:e
+     /* must check that body is not null */
+       {: Grm.parserTrace("Intertype CONSTRUCTOR declaration");
+          IntertypeConstructorDecl icd
+           = parser.nf.IntertypeConstructorDecl(parser.pos(b,e),
+                                        a,
+					b.toType(),
+					b.toString(),
+					c,
+					d,
+					e);		
+          RESULT = icd;
+       :}
+  | modifiers_opt:a type:b name:c DOT IDENTIFIER:d SEMICOLON 
+       {: Grm.parserTrace("Intertype FIELD without initializer");
+          IntertypeFieldDecl ifd
+	   = parser.nf.IntertypeFieldDecl(parser.pos(b,d),
+                                          a,
+                                          b,
+                                          c.toType(),
+                                          d.getIdentifier(),
+                                          null);
+          RESULT = ifd;
+       :}
+  | modifiers_opt:a type:b name:c DOT IDENTIFIER:d  
+        EQ variable_initializer:e SEMICOLON 
+       {: Grm.parserTrace("Intertype FIELD with initializer");
+          IntertypeFieldDecl ifd
+	   = parser.nf.IntertypeFieldDecl(parser.pos(b,d),
+                                          a,
+                                          b,
+                                          c.toType(),
+                                          d.getIdentifier(),
+                                          e);
+          RESULT = ifd;
+       :}
+  ;
+
+
+
+/* ------------------- NAME PATTERNS ---------------------------------- */
+
+name_pattern ::=
+      simple_name_pattern:a
+        {: RESULT = a;
+        :}
+   ;
+
+simple_name_pattern ::= 
+     PC_MULT:m
+        {: Grm.parserTrace("name_pattern is a star: ");
+           RESULT = parser.nf.SimpleNamePattern(parser.pos(m),"*");
+        :}
+   | IDENTIFIERPATTERN:a
+        {: Grm.parserTrace("name_pattern is simple name pattern: " + a);
+           RESULT = parser.nf.SimpleNamePattern(parser.pos(a),a.getIdentifier());
+        :}
+   | IDENTIFIER:a
+        {: Grm.parserTrace("name_pattern is identifer: " + a);
+           RESULT = parser.nf.SimpleNamePattern(parser.pos(a),a.getIdentifier());
+        :}
+   | aspectj_reserved_identifier:a
+        {: Grm.parserTrace("name_pattern is aspectj_reserved_identifier");
+	   String token = a.toString();
+           // String keyword = token.substring(8,token.length()-1);
+           RESULT = parser.nf.SimpleNamePattern(parser.pos(a),token);
+        :}
+   ;
+
+aspectj_reserved_identifier ::=
+     ASPECT:a
+        {: Grm.parserTrace("aspectj_reserved_identifier: " + a);
+           RESULT = a;
+        :}
+  |  PRIVILEGED:a
+        {: Grm.parserTrace("aspectj_reserved_identifier: " + a);
+           RESULT = a;
+        :}
+  |  PC_PARENTS:a
+        {: Grm.parserTrace("aspectj_reserved_identifier: " + a);
+           RESULT = a;
+        :}
+  ;
+
+
+/* ------------------ CLASSNAME PATTERNS ------------------------------- */
+
+classname_pattern_expr ::= 
+      and_classname_pattern_expr:a
+        {: Grm.parserTrace("classname_pattern_expr is an and_classname_pattern_expr");
+           RESULT = a;
+        :}
+   ;
+
+and_classname_pattern_expr ::=
+      unary_classname_pattern_expr:a 
+        {: Grm.parserTrace("and_classname_pattern_expr is a unary_classname_pattern_expr");
+           RESULT = a;
+        :}
+   ;
+
+unary_classname_pattern_expr ::=
+      basic_classname_pattern:a
+        {: Grm.parserTrace("unary_classname_pattern_expr is a  basic_classname_pattern");
+           RESULT = a;
+        :}
+   ;
+
+basic_classname_pattern ::=
+     name_pattern:a 
+        {: Grm.parserTrace("classname_type_pattern is a name_pattern");
+	   ClassnamePatternExpr cpe;
+	   if (a.universal()) {
+	       cpe = parser.nf.CPEUniversal(parser.pos(a));
+	   } else {
+	       cpe = parser.nf.CPEName(parser.pos(a), a);
+	   }
+	   RESULT = cpe;
+        :}
+  ;
+
+

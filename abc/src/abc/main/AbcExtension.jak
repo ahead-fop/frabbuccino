@@ -1,0 +1,91 @@
+
+public refines class AbcExtension
+{
+
+    public void initLexerKeywords(AbcLexer lexer) {
+        Super().initLexerKeywords(lexer);
+        lexer.addGlobalKeyword("abstract",      new LexerAction_c(new Integer(sym.ABSTRACT)));
+        lexer.addGlobalKeyword("assert",        new LexerAction_c(new Integer(sym.ASSERT)));
+        lexer.addGlobalKeyword("boolean",       new LexerAction_c(new Integer(sym.BOOLEAN)));
+        lexer.addGlobalKeyword("break",         new LexerAction_c(new Integer(sym.BREAK)));
+        lexer.addGlobalKeyword("byte",          new LexerAction_c(new Integer(sym.BYTE)));
+        lexer.addGlobalKeyword("case",          new LexerAction_c(new Integer(sym.CASE)));
+        lexer.addGlobalKeyword("catch",         new LexerAction_c(new Integer(sym.CATCH)));
+        lexer.addGlobalKeyword("char",          new LexerAction_c(new Integer(sym.CHAR)));
+        lexer.addGlobalKeyword("class",         new LexerAction_c(new Integer(sym.CLASS)) {
+            public int getToken(AbcLexer lexer) {
+                if(!lexer.getLastTokenWasDot()) {
+                    lexer.enterLexerState(lexer.currentState() == lexer.aspectj_state() ?
+                        lexer.aspectj_state() : lexer.java_state());
+                }
+                return token.intValue();
+            }
+        });
+        lexer.addGlobalKeyword("const",         new LexerAction_c(new Integer(sym.CONST)));
+        lexer.addGlobalKeyword("continue",      new LexerAction_c(new Integer(sym.CONTINUE)));
+        lexer.addGlobalKeyword("default",       new LexerAction_c(new Integer(sym.DEFAULT)));
+        lexer.addGlobalKeyword("do",            new LexerAction_c(new Integer(sym.DO)));
+        lexer.addGlobalKeyword("double",        new LexerAction_c(new Integer(sym.DOUBLE)));
+        lexer.addGlobalKeyword("else",          new LexerAction_c(new Integer(sym.ELSE)));
+        lexer.addGlobalKeyword("extends",       new LexerAction_c(new Integer(sym.EXTENDS)));
+        lexer.addGlobalKeyword("final",         new LexerAction_c(new Integer(sym.FINAL)));
+        lexer.addGlobalKeyword("finally",       new LexerAction_c(new Integer(sym.FINALLY)));
+        lexer.addGlobalKeyword("float",         new LexerAction_c(new Integer(sym.FLOAT)));
+        lexer.addGlobalKeyword("for",           new LexerAction_c(new Integer(sym.FOR)));
+        lexer.addGlobalKeyword("goto",          new LexerAction_c(new Integer(sym.GOTO)));
+        // if is handled specifically, as it differs in pointcuts and non-pointcuts.
+        //lexer.addGlobalKeyword("if",            new LexerAction_c(new Integer(sym.IF)));
+        lexer.addGlobalKeyword("implements",    new LexerAction_c(new Integer(sym.IMPLEMENTS)));
+        lexer.addGlobalKeyword("import",        new LexerAction_c(new Integer(sym.IMPORT)));
+        lexer.addGlobalKeyword("instanceof",    new LexerAction_c(new Integer(sym.INSTANCEOF)));
+        lexer.addGlobalKeyword("int",           new LexerAction_c(new Integer(sym.INT)));
+        lexer.addGlobalKeyword("interface",     new LexerAction_c(new Integer(sym.INTERFACE),
+                    new Integer(lexer.java_state())));
+        lexer.addGlobalKeyword("long",          new LexerAction_c(new Integer(sym.LONG)));
+        lexer.addGlobalKeyword("native",        new LexerAction_c(new Integer(sym.NATIVE)));
+        lexer.addGlobalKeyword("new",           new LexerAction_c(new Integer(sym.NEW)));
+        lexer.addGlobalKeyword("package",       new LexerAction_c(new Integer(sym.PACKAGE)));
+        lexer.addGlobalKeyword("private",       new LexerAction_c(new Integer(sym.PRIVATE)));
+        /* ------------  keyword added to the Java part ------------------ */
+        lexer.addGlobalKeyword("privileged",    new LexerAction_c(new Integer(sym.PRIVILEGED)));
+        /* ------------  keyword added to the Java part ------------------ */
+        lexer.addGlobalKeyword("protected",     new LexerAction_c(new Integer(sym.PROTECTED)));
+        lexer.addGlobalKeyword("public",        new LexerAction_c(new Integer(sym.PUBLIC)));
+        lexer.addGlobalKeyword("return",        new LexerAction_c(new Integer(sym.RETURN)));
+        lexer.addGlobalKeyword("short",         new LexerAction_c(new Integer(sym.SHORT)));
+        lexer.addGlobalKeyword("static",        new LexerAction_c(new Integer(sym.STATIC)));
+        lexer.addGlobalKeyword("strictfp",      new LexerAction_c(new Integer(sym.STRICTFP)));
+        lexer.addGlobalKeyword("super",         new LexerAction_c(new Integer(sym.SUPER)));
+        lexer.addGlobalKeyword("switch",        new LexerAction_c(new Integer(sym.SWITCH)));
+        lexer.addGlobalKeyword("synchronized",  new LexerAction_c(new Integer(sym.SYNCHRONIZED)));
+        // this is handled explicitly, as it differs in pointcuts and non-pointcuts.
+        //lexer.addGlobalKeyword("this",          new LexerAction_c(new Integer(sym.THIS)));
+        lexer.addGlobalKeyword("throw",         new LexerAction_c(new Integer(sym.THROW)));
+        lexer.addGlobalKeyword("throws",        new LexerAction_c(new Integer(sym.THROWS)));
+        lexer.addGlobalKeyword("transient",     new LexerAction_c(new Integer(sym.TRANSIENT)));
+        lexer.addGlobalKeyword("try",           new LexerAction_c(new Integer(sym.TRY)));
+        lexer.addGlobalKeyword("void",          new LexerAction_c(new Integer(sym.VOID)));
+        lexer.addGlobalKeyword("volatile",      new LexerAction_c(new Integer(sym.VOLATILE)));
+        lexer.addGlobalKeyword("while",         new LexerAction_c(new Integer(sym.WHILE)));
+
+        lexer.addPointcutKeyword("parents", new LexerAction_c(new Integer(sym.PC_PARENTS)));
+
+        /* Special redefinition of aspect keyword so that we don't go out of ASPECTJ state
+           and remain in POINTCUT state */
+        lexer.addPointcutKeyword("aspect", new LexerAction_c(new Integer(sym.ASPECT)));
+
+        lexer.addAspectJContextKeyword("declare", new LexerAction_c(new Integer(sym.DECLARE),
+                    new Integer(lexer.pointcut_state())));
+
+        // Overloaded keywords - they mean different things in pointcuts, hence have to be
+        // declared separately.
+        lexer.addJavaKeyword("if", new LexerAction_c(new Integer(sym.IF)));
+        lexer.addJavaKeyword("this", new LexerAction_c(new Integer(sym.THIS)));
+        // keywords added to the Java part:
+        lexer.addJavaKeyword("aspect", new LexerAction_c(new Integer(sym.ASPECT),
+                    new Integer(lexer.aspectj_state())));
+        lexer.addAspectJKeyword("aspect", new LexerAction_c(new Integer(sym.ASPECT),
+                    new Integer(lexer.aspectj_state())));
+    }
+
+}

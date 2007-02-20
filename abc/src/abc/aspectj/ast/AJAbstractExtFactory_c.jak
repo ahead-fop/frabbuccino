@@ -1,0 +1,332 @@
+/* abc - The AspectBench Compiler
+ * Copyright (C) 2004 Julian Tibble
+ *
+ * This compiler is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ *
+ * This compiler is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this compiler, in the file LESSER-GPL;
+ * if not, write to the Free Software Foundation, Inc.,
+ * 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ */
+
+//package abc.aspectj.ast;
+
+import polyglot.ast.Ext;
+import polyglot.ext.jl.ast.AbstractExtFactory_c;
+
+/** Extension factory.
+ * 
+ * @author Julian Tibble
+ */
+public abstract class AJAbstractExtFactory_c extends AbstractExtFactory_c
+                                                 implements AJExtFactory
+{
+    protected AJAbstractExtFactory_c nextExtFactory;
+
+    protected AJAbstractExtFactory_c() {
+        this(null);
+    }
+
+    protected AJAbstractExtFactory_c(AJAbstractExtFactory_c nextExtFactory) {
+        Super(AJAbstractExtFactory_c)(nextExtFactory);
+        this.nextExtFactory = nextExtFactory;
+    }
+
+    // Final methods that call the implementation, and check
+    // for further extensions. Follows the design of
+    // AbstractExtFactory_c
+
+
+    public final Ext extAspectDecl() {
+        Ext e = extAspectDeclImpl();
+
+        if (nextExtFactory != null) {
+            Ext e2 = nextExtFactory.extAspectDecl();
+            e = composeExts(e, e2);
+        }
+        return postExtAspectDecl(e);
+    }
+
+    public final Ext extAspectBody() {
+        Ext e = extAspectBodyImpl();
+
+        if (nextExtFactory != null) {
+            Ext e2 = nextExtFactory.extAspectBody();
+            e = composeExts(e, e2);
+        }
+        return postExtAspectBody(e);
+    }
+
+    public final Ext extPerClause() {
+        Ext e = extPerClauseImpl();
+
+        if (nextExtFactory != null) {
+            Ext e2 = nextExtFactory.extPerClause();
+            e = composeExts(e, e2);
+        }
+        return postExtPerClause(e);
+    }
+
+    public final Ext extDeclareDecl() {
+        Ext e = extDeclareDeclImpl();
+
+        if (nextExtFactory != null) {
+            Ext e2 = nextExtFactory.extDeclareDecl();
+            e = composeExts(e, e2);
+        }
+        return postExtDeclareDecl(e);
+    }
+
+    public final Ext extDeclareParents() {
+        Ext e = extDeclareParentsImpl();
+
+        if (nextExtFactory != null) {
+            Ext e2 = nextExtFactory.extDeclareParents();
+            e = composeExts(e, e2);
+        }
+        return postExtDeclareParents(e);
+    }
+
+    public final Ext extIntertypeMethodDecl() {
+        Ext e = extIntertypeMethodDeclImpl();
+
+        if (nextExtFactory != null) {
+            Ext e2 = nextExtFactory.extIntertypeMethodDecl();
+            e = composeExts(e, e2);
+        }
+        return postExtIntertypeMethodDecl(e);
+    }
+
+    public final Ext extIntertypeConstructorDecl() {
+        Ext e = extIntertypeConstructorDeclImpl();
+
+        if (nextExtFactory != null) {
+            Ext e2 = nextExtFactory.extIntertypeConstructorDecl();
+            e = composeExts(e, e2);
+        }
+        return postExtIntertypeConstructorDecl(e);
+    }
+
+    public final Ext extIntertypeFieldDecl() {
+        Ext e = extIntertypeFieldDeclImpl();
+
+        if (nextExtFactory != null) {
+            Ext e2 = nextExtFactory.extIntertypeFieldDecl();
+            e = composeExts(e, e2);
+        }
+        return postExtIntertypeFieldDecl(e);
+    }
+
+    public final Ext extNamePattern() {
+        Ext e = extNamePatternImpl();
+
+        if (nextExtFactory != null) {
+            Ext e2 = nextExtFactory.extNamePattern();
+            e = composeExts(e, e2);
+        }
+        return postExtNamePattern(e);
+    }
+
+    public final Ext extSimpleNamePattern() {
+        Ext e = extSimpleNamePatternImpl();
+
+        if (nextExtFactory != null) {
+            Ext e2 = nextExtFactory.extSimpleNamePattern();
+            e = composeExts(e, e2);
+        }
+        return postExtSimpleNamePattern(e);
+    }
+
+    public final Ext extClassnamePatternExpr() {
+        Ext e = extClassnamePatternExprImpl();
+
+        if (nextExtFactory != null) {
+            Ext e2 = nextExtFactory.extClassnamePatternExpr();
+            e = composeExts(e, e2);
+        }
+        return postExtClassnamePatternExpr(e);
+    }
+
+    public final Ext extCPEUniversal() {
+        Ext e = extCPEUniversalImpl();
+
+        if (nextExtFactory != null) {
+            Ext e2 = nextExtFactory.extCPEUniversal();
+            e = composeExts(e, e2);
+        }
+        return postExtCPEUniversal(e);
+    }
+
+    public final Ext extCPEName() {
+        Ext e = extCPENameImpl();
+
+        if (nextExtFactory != null) {
+            Ext e2 = nextExtFactory.extCPEName();
+            e = composeExts(e, e2);
+        }
+        return postExtCPEName(e);
+    }
+
+    public final Ext extAJClassBody() {
+        Ext e = extAJClassBodyImpl();
+
+        if (nextExtFactory != null) {
+            Ext e2 = nextExtFactory.extAJClassBody();
+            e = composeExts(e, e2);
+        }
+        return postExtAJClassBody(e);
+    }
+
+    public final Ext extAJClassDecl() {
+        Ext e = extAJClassDeclImpl();
+
+        if (nextExtFactory != null) {
+            Ext e2 = nextExtFactory.extAJClassDecl();
+            e = composeExts(e, e2);
+        }
+        return postExtAJClassDecl(e);
+    }
+
+
+
+    //
+    // Implementations
+    //
+
+
+    protected Ext extAspectDeclImpl() {
+        return extClassDeclImpl();
+    }
+
+    protected Ext extAspectBodyImpl() {
+        return extClassBodyImpl();
+    }
+
+    protected Ext extPerClauseImpl() {
+        return extNodeImpl();
+    }
+
+    protected Ext extDeclareDeclImpl() {
+        return extTermImpl();
+    }
+
+    protected Ext extDeclareParentsImpl() {
+        return extDeclareDeclImpl();
+    }
+
+    protected Ext extIntertypeMethodDeclImpl() {
+        return extMethodDeclImpl();
+    }
+
+    protected Ext extIntertypeConstructorDeclImpl() {
+        return extConstructorDeclImpl();
+    }
+
+    protected Ext extIntertypeFieldDeclImpl() {
+        return extFieldDeclImpl();
+    }
+
+    protected Ext extNamePatternImpl() {
+        return extNodeImpl();
+    }
+
+    protected Ext extSimpleNamePatternImpl() {
+        return extNamePatternImpl();
+    }
+
+    protected Ext extClassnamePatternExprImpl() {
+        return extNodeImpl();
+    }
+
+    protected Ext extCPEUniversalImpl() {
+        return extClassnamePatternExprImpl();
+    }
+
+    protected Ext extCPENameImpl() {
+        return extClassnamePatternExprImpl();
+    }
+
+    protected Ext extAJClassBodyImpl() {
+        return extClassBodyImpl();
+    }
+
+    protected Ext extAJClassDeclImpl() {
+        return extClassDeclImpl();
+    }
+
+
+
+    //
+    // Post methods
+    //
+
+
+    protected Ext postExtAspectDecl(Ext ext) {
+        return postExtClassDecl(ext);
+    }
+
+    protected Ext postExtAspectBody(Ext ext) {
+        return postExtClassBody(ext);
+    }
+
+    protected Ext postExtPerClause(Ext ext) {
+        return postExtNode(ext);
+    }
+
+    protected Ext postExtDeclareDecl(Ext ext) {
+        return postExtTerm(ext);
+    }
+
+    protected Ext postExtDeclareParents(Ext ext) {
+        return postExtDeclareDecl(ext);
+    }
+
+    protected Ext postExtIntertypeMethodDecl(Ext ext) {
+        return postExtMethodDecl(ext);
+    }
+
+    protected Ext postExtIntertypeConstructorDecl(Ext ext) {
+        return postExtConstructorDecl(ext);
+    }
+
+    protected Ext postExtIntertypeFieldDecl(Ext ext) {
+        return postExtFieldDecl(ext);
+    }
+
+    protected Ext postExtNamePattern(Ext ext) {
+        return postExtNode(ext);
+    }
+
+    protected Ext postExtSimpleNamePattern(Ext ext) {
+        return postExtNamePattern(ext);
+    }
+
+    protected Ext postExtClassnamePatternExpr(Ext ext) {
+        return postExtNode(ext);
+    }
+
+    protected Ext postExtCPEUniversal(Ext ext) {
+        return postExtClassnamePatternExpr(ext);
+    }
+
+    protected Ext postExtCPEName(Ext ext) {
+        return postExtClassnamePatternExpr(ext);
+    }
+
+    protected Ext postExtAJClassBody(Ext ext) {
+        return postExtClassBody(ext);
+    }
+
+    protected Ext postExtAJClassDecl(Ext ext) {
+        return postExtClassDecl(ext);
+    }
+
+}

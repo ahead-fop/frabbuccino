@@ -1,0 +1,181 @@
+
+import java.util.HashMap;
+import polyglot.types.SemanticException;
+import polyglot.util.ErrorInfo;
+import soot.jimple.toolkits.base.ExceptionChecker;
+import abc.aspectj.visit.patternmatcher.PatternMatcher;
+import abc.soot.util.AspectJExceptionChecker;
+import abc.weaving.aspectinfo.DeclareParents;
+import abc.weaving.aspectinfo.DeclareParentsExt;
+import abc.weaving.aspectinfo.DeclareParentsImpl;
+import abc.weaving.tagkit.InstructionInlineCountTagAggregator;
+import abc.weaving.tagkit.InstructionInlineTagsAggregator;
+import abc.weaving.tagkit.InstructionKindTagAggregator;
+import abc.weaving.tagkit.InstructionProceedTagAggregator;
+import abc.weaving.tagkit.InstructionShadowTagAggregator;
+import abc.weaving.tagkit.InstructionSourceTagAggregator;
+import abc.weaving.weaver.DeclareParentsConstructorFixup;
+import abc.weaving.weaver.DeclareParentsWeaver;
+import abc.weaving.weaver.IntertypeAdjuster;
+
+public refines class Main {
+
+    public static void reset() {
+        abc.aspectj.parse.Lexer_c.reset();
+        abc.aspectj.visit.PCStructure.reset();
+        Super().reset();
+    }
+
+    public void parseArgs(String[] argArray) throws IllegalArgumentException, CompilerAbortedException {
+        Super().parseArgs(argArray);
+
+        //let reweaving analyses add their own soot arguments
+        setupReweaving();
+    }
+
+    // HOOK method
+    protected void setupReweaving() {
+    }
+
+    protected void add_tag_instructions() {
+        if(OptionsParser.v().tag_instructions()) {
+            PackManager.v().getPack("tag").add(new Transform("tag.kindtag", new InstructionKindTagAggregator()));
+            PackManager.v().getPack("tag").add(new Transform("tag.sourcetag", new InstructionSourceTagAggregator()));
+            PackManager.v().getPack("tag").add(new Transform("tag.shadowtag", new InstructionShadowTagAggregator()));
+            PackManager.v().getPack("tag").add(new Transform("tag.inlinecounttag", new InstructionInlineCountTagAggregator()));
+            PackManager.v().getPack("tag").add(new Transform("tag.inlinetag", new InstructionInlineTagsAggregator()));
+            PackManager.v().getPack("tag").add(new Transform("tag.proceedtag", new InstructionProceedTagAggregator()));
+        }
+    }
+
+    protected void pre_soot_resolving() {
+
+        Super().pre_soot_resolving();
+
+        // Make sure that anything mentioned on the RHS of a declare parents
+        // clause is resolved to HIERARCHY, so that the declare parents
+        // weaver knows what to do with it
+        for( Iterator dpIt = abc.main.Main.v().getAbcExtension().getGlobalAspectInfo().getDeclareParents().iterator(); dpIt.hasNext(); ) {
+            final DeclareParents dp = (DeclareParents) dpIt.next();
+            if(dp instanceof DeclareParentsImpl) {
+                final DeclareParentsImpl dpi = (DeclareParentsImpl) dp;
+                for( Iterator iIt = dpi.getInterfaces().iterator(); iIt.hasNext(); ) {
+                    final AbcClass i = (AbcClass) iIt.next();
+                    Scene.v().loadClass(i.getSootClass().getName(),SootClass.HIERARCHY);
+                }
+            } else if(dp instanceof DeclareParentsExt) {
+                final DeclareParentsExt dpe = (DeclareParentsExt) dp;
+                Scene.v().loadClass(dpe.getParent().getSootClass().getName(),
+                        SootClass.HIERARCHY);
+            } else throw new InternalCompilerError("Unknown kind of declare parents");
+        }
+
+    }
+
+    protected void post_soot_resolving() {
+
+        Super().post_soot_resolving();
+
+        abc.main.Main.v().getAbcExtension().getGlobalAspectInfo().buildAspectHierarchy();
+        AbcTimer.mark("Aspect inheritance");
+        phaseDebug("Aspect inheritance");
+    }
+
+    protected void post_weaving() throws CompilerFailedException {
+
+        Super().post_weaving();
+
+        if (!abc.main.Debug.v().dontCheckExceptions) {
+            checkExceptions();
+            AbcTimer.mark("Exceptions check");
+            phaseDebug("Exceptions check");
+        }
+
+    }
+
+    public void weave() throws CompilerFailedException {
+        try {
+            // Perform the declare parents
+            new DeclareParentsWeaver().weave();
+            // FIXME: put re-resolving here, from declareparents weaver
+            AbcTimer.mark("Declare Parents");
+            phaseDebug("Declare Parents");
+            Scene.v().setDoneResolving();
+
+            // Adjust Soot types for intertype decls
+            IntertypeAdjuster ita = new IntertypeAdjuster();
+            ita.adjust();
+            AbcTimer.mark("Intertype Adjuster");
+            phaseDebug("Intertype Adjuster");
+
+            Super().weave();
+
+            // Fix up constructors in binary classes with newly declared parents
+            new DeclareParentsConstructorFixup().weave();
+            AbcTimer.mark("Fix up constructor calls");
+            phaseDebug("Fix up constructor calls");
+
+            PatternMatcher.v().updateWithAllSootClasses();
+            // evaluate the patterns the third time (depends on re-resolving)
+            PatternMatcher.v().recomputeAllMatches();
+            AbcTimer.mark("Update pattern matcher");
+            phaseDebug("Update pattern matcher");
+
+            // any references made by itd initialisers will appear in a delegate method,
+            // and thus have already been processed by j2j; all resolving ok.
+            ita.initialisers(); // weave the field initialisers into the constructors
+            AbcTimer.mark("Weave Initializers");
+            phaseDebug("Weave Initializers");
+
+            if (!Debug.v().testITDsOnly) {
+                weave_advice();
+            }
+
+            // the intertype adjuster has put dummy fields into interfaces,
+            // which now have to be removed
+            ita.removeFakeFields();
+        } catch(SemanticException e) {
+            error_queue.enqueue(ErrorInfo.SEMANTIC_ERROR,e.getMessage(),e.position());
+        }
+    }
+
+    // HOOK method
+    protected void weave_advice() throws SemanticException {
+    }
+
+    public void validate() {
+        for( Iterator clIt = getAbcExtension().getGlobalAspectInfo().getWeavableClasses().iterator(); clIt.hasNext(); ) {
+            final AbcClass cl = (AbcClass) clIt.next();
+            abc.soot.util.Validate.validate(cl.getSootClass());
+        }
+    }
+
+    protected void checkExceptions() {
+        ExceptionChecker exccheck=new AspectJExceptionChecker(new GotCheckedExceptionError(error_queue));
+        HashMap options=new HashMap();
+        options.put("enabled","true");
+
+        for( Iterator clIt = getAbcExtension().getGlobalAspectInfo().getWeavableClasses().iterator(); clIt.hasNext(); ) {
+
+            final AbcClass cl = (AbcClass) clIt.next();
+
+            for( Iterator methodIt = cl.getSootClass().getMethods().iterator(); methodIt.hasNext(); ) {
+
+                final SootMethod method = (SootMethod) methodIt.next();
+
+                if(!method.isConcrete()) continue;
+                if(method.getName().equals(SootMethod.staticInitializerName))
+                    continue;
+                try {
+                    //FIXME: is "jtp.jec" sensible?
+                    exccheck.transform(method.getActiveBody(),"jtp.jec",options);
+                } catch(InternalCompilerError e) {
+                    throw e;
+                } catch(Throwable e) {
+                    throw new InternalCompilerError("Exception while checking exceptions in "+method,e);
+                }
+            }
+        }
+    }
+
+}
