@@ -1,0 +1,114 @@
+
+<!-- <!DOCTYPE suite SYSTEM "../tests/abcTestSuite.dtd"> -->
+<suite>
+    <!-- Tracematch tests -->
+    <ajc-test num="1019" dir="abctests/tracematches"
+        title="Tracematches: Basic tracematch">
+        <compile files="Basic.java" options="-ext,abc.tm,-debug,useIndexing"/>
+        <run class="Basic"/>
+    </ajc-test>
+    <ajc-test num="1020" dir="abctests/tracematches"
+        title="Tracematches: Plus and Star">
+        <compile files="PlusStar.java" options="-ext,abc.tm,-debug,useIndexing"/>
+        <run class="PlusStar"/>
+    </ajc-test>
+    <ajc-test num="1021" dir="abctests/tracematches"
+        title="Tracematches: Alternation">
+        <compile files="Alternation.java" options="-ext,abc.tm,-debug,useIndexing"/>
+	<run class="Alternation"/>
+    </ajc-test>
+    <ajc-test num="1022" dir="abctests/tracematches"
+        title="Tracematches: Basic variable bindings">
+        <compile files="Variables.java" options="-ext,abc.tm,-debug,useIndexing"/>
+	<run class="Variables"/>
+    </ajc-test>
+    <ajc-test num="1023" dir="abctests/tracematches/failsafe"
+        title="Failsafe enumerations: tracematch version 1">
+        <compile files="leaktest/LeakTest.java,tracematches/FailSafeEnum.java" options="-ext,abc.tm,-debug,useIndexing"/>
+	<run class="leaktest.LeakTest"/>
+    </ajc-test>
+    <ajc-test num="1024" dir="abctests/tracematches/failsafe3"
+        title="Failsafe enumerations: tracematch version 2">
+        <compile files="leaktest/LeakTest.java,tracematches/FailSafeEnum.java" options="-ext,abc.tm,-debug,useIndexing"/>
+	<run class="leaktest.LeakTest"/>
+    </ajc-test>
+    <ajc-test num="1025" dir="abctests/tracematches/failsafe4"
+        title="Failsafe enumerations: tracematch version 3">
+        <compile files="leaktest/LeakTest.java,tracematches/FailSafeEnum.java" options="-ext,abc.tm,-debug,useIndexing"/>
+	<run class="leaktest.LeakTest"/>
+    </ajc-test>
+    <ajc-test num="1026" dir="abctests/tracematches"
+        title="Tracematches: NoSuchMethodError (shouldn't occur..)">
+        <compile files="Test.java" options="-ext,abc.tm,-debug,useIndexing"/>
+	<run class="Test"/>
+    </ajc-test>
+    <ajc-test num="1027" dir="abctests/tracematches"
+        title="Tracematches: Negative bindings should be checked correctly...">
+        <compile files="NegBindings.java" options="-ext,abc.tm,-debug,useIndexing"/>
+	<run class="NegBindings"/>
+    </ajc-test>
+    <ajc-test num="1028" dir="abctests/tracematches"
+        title="Tracematches: states where x may be bound or unbound">
+        <compile files="MoreBindings.java" options="-ext,abc.tm,-debug,useIndexing"/>
+        <run class="MoreBindings"/>
+    </ajc-test>
+    <ajc-test num="1029" dir="abctests/tracematches"
+        title="Tracematches: Basic around tracematch">
+        <compile files="BasicAround.java" options="-ext,abc.tm,-debug,useIndexing"/>
+        <run class="BasicAround"/>
+    </ajc-test>
+    <ajc-test num="1030" dir="abctests/tracematches"
+        title="Tracematches: Around match with multiple bindings.">
+        <compile files="MultipleBindingsForAround.java" options="-ext,abc.tm,-debug,useIndexing">
+            <message kind="warning" line="24" />
+        </compile>
+        <run class="MultipleBindingsForAround"/>
+    </ajc-test>
+    <ajc-test num="1031" dir="abctests/tracematches"
+        title="Tracematches: Testing the `perthread' modifier">
+        <compile files="PerThread.java" options="-ext,abc.tm,-debug,useIndexing"/>
+        <run class="PerThread"/>
+    </ajc-test>
+    <ajc-test num="1032" dir="abctests/tracematches"
+        title="Tracematches: Testing self-applying around TM-advice">
+        <compile files="AdviseSelf.java" options="-ext,abc.tm,-debug,useIndexing"/>
+        <run class="AdviseSelf"/>
+    </ajc-test>
+    <ajc-test num="1033" dir="abctests/tracematches"
+        title="Tracematches: Testing if pointcuts in symbols">
+        <compile files="IfTest.java" options="-ext,abc.tm,-debug,useIndexing"/>
+        <run class="IfTest"/>
+    </ajc-test>
+    <ajc-test num="1034" dir="abctests/tracematches"
+        title="Tracematches: When there is some() advice but not per-symbol">
+        <compile files="NoUpdates.java" options="-ext,abc.tm,-debug,useIndexing"/>
+        <run class="NoUpdates"/>
+	</ajc-test>
+    <ajc-test num="1035" dir="abctests/tracematches"
+        title="Tracematches: Basic primitive variable bindings">
+        <compile files="PrimitiveVariables.java" options="-ext,abc.tm,-debug,useIndexing">
+	    <message kind="warning"/>
+	</compile>
+	<run class="PrimitiveVariables"/>
+    </ajc-test>
+    <ajc-test num="1036" dir="abctests/tracematches"
+        title="Tracematches: Primitive bindings don't cause errors.">
+	<compile files="IntVariable.java" options="-ext,abc.tm,-debug,useIndexing" />
+	<run class="IntVariable"/>
+    </ajc-test>
+    <ajc-test num="1037" dir="abctests/tracematches"
+        title="Tracematches: Primitive negative bindings should be checked correctly...">
+        <compile files="PrimNegBindings.java" options="-ext,abc.tm,-debug,useIndexing">
+	    <message kind="warning"/>
+	</compile>
+	<run class="PrimNegBindings"/>
+    </ajc-test>
+
+    <ajc-test num="1209" dir="abctests/tracematches"
+       title="Using private pointcut variables in an if(..) in a TM symbol">
+        <compile files="TracematchAndIfAndPPVs.java"
+            options="-ext,abc.tm" />
+    </ajc-test>
+
+
+</suite>

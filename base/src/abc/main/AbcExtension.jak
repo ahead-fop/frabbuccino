@@ -1,0 +1,132 @@
+/* abc - The AspectBench Compiler
+ * Copyright (C) 2004 Julian Tibble
+ * Copyright (C) 2006 Eric Bodden
+ *
+ * This compiler is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ *
+ * This compiler is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this compiler, in the file LESSER-GPL;
+ * if not, write to the Free Software Foundation, Inc.,
+ * 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ */
+
+//package abc.main;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+
+import polyglot.util.InternalCompilerError;
+import soot.PackManager;
+import soot.Scene;
+import soot.SootClass;
+import soot.SootMethod;
+import soot.SootMethodRef;
+import soot.Transform;
+import soot.Trap;
+import soot.Value;
+import soot.tagkit.Host;
+import abc.aspectj.ExtensionInfo;
+import abc.aspectj.parse.AbcLexer;
+import abc.aspectj.parse.LexerAction_c;
+import abc.aspectj.parse.PerClauseLexerAction_c;
+import abc.aspectj.parse.sym;
+import abc.main.options.OptionsParser;
+import abc.weaving.aspectinfo.GlobalAspectInfo;
+
+/**
+ * This class should be sub-classed to extend the behaviour of abc
+ * <p>
+ * A sub-class, with overriden methods to effect some new behaviour,
+ * can be loaded at runtime by using the "-ext" switch to abc.
+ *
+ * @author Julian Tibble
+ * @author Eric Bodden
+ */
+public class AbcExtension
+{
+    
+    private GlobalAspectInfo globalAspectInfo = null;
+
+    /**
+     * Constructs a version string for all loaded extensions
+     */
+    final public String versions()
+    {
+        StringBuffer versions = new StringBuffer();
+        collectVersions(versions);
+        return versions.toString();
+    }
+
+    /**
+     * Override this method to add the version information
+     * for this extension, calling the same method in the
+     * super-class to ensure that all extensions are
+     * reported.
+     */
+    protected void collectVersions(StringBuffer versions)
+    {
+        versions.append("abc version " +
+                        new abc.aspectj.Version().toString() +
+                        "\n");
+    }
+
+    /**
+     * Creates an instance of the <code>ExtensionInfo</code> structure
+     * used for extending the Polyglot-based frontend.
+     */
+    public ExtensionInfo makeExtensionInfo(Collection jar_classes,
+                                            Collection aspect_sources)
+    {
+        return new abc.aspectj.ExtensionInfo(jar_classes, aspect_sources);
+    }
+
+    /**
+     * Returns the GlobalAspectInfo structure, which stores all the
+     * AspectJ-specific information from the frontend for use in the
+     * backend.
+     */
+    final public GlobalAspectInfo getGlobalAspectInfo()
+    {
+        if (globalAspectInfo == null)
+            globalAspectInfo = createGlobalAspectInfo();
+
+        return globalAspectInfo;
+    }
+
+    /**
+     * Override this to create a custom global aspect info.
+     */
+    protected GlobalAspectInfo createGlobalAspectInfo() {
+        return new GlobalAspectInfo();
+    }
+
+    /**
+     * Initialise the HashMaps that define how keywords are handled in the different lexer states.
+     *
+     * Keywords are added by calling the methods addJavaKeyword(), addAspectJKeyword(),
+     * lexer.addPointcutKeyword() and addPointcutIfExprKeyword(), which are defined in the Lexer_c
+     * class. There are the utility methods lexer.addGlobalKeyword() (which adds its parameters to all
+     * four states) and lexer.addAspectJContextKeyword() (which adds its parameters to the AspectJ and
+     * PointcutIfExpr states).
+     *
+     * Each of these methods takes two arguments - a String (the keyword to be added) and a
+     * class implementing abc.aspectj.parse.LexerAction defining what to do when this keyword is
+     * encountered.
+     *
+     * @author pavel
+     */
+    public void initLexerKeywords(AbcLexer lexer) {
+    }
+
+}

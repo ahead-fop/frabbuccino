@@ -1,0 +1,167 @@
+Running test 975: abctests\eaj\casting/Test of cast pointcuts
+Commandline: abc -d abctests\eaj\casting -warn-unused-advice:off -ext abc.eaj abctests\eaj\casting\Test.java 
+PASS: Test 975: "abctests\eaj\casting/Test of cast pointcuts" passed.
+
+
+Running test 976: abctests\eaj\global_pointcuts/Test of global and private pointcuts
+Commandline: abc -d abctests\eaj\global_pointcuts -warn-unused-advice:off -ext abc.eaj abctests\eaj\global_pointcuts\aaa\A.java abctests\eaj\global_pointcuts\bbb\B.java 
+PASS: Test 976: "abctests\eaj\global_pointcuts/Test of global and private pointcuts" passed.
+
+
+Running test 977: abctests\eaj\local_vars/Test of private pointcuts
+Commandline: abc -d abctests\eaj\local_vars -warn-unused-advice:off -ext abc.eaj abctests\eaj\local_vars\Fibonacci.java abctests\eaj\local_vars\Observer.java 
+PASS: Test 977: "abctests\eaj\local_vars/Test of private pointcuts" passed.
+
+
+Running test 992: abctests\bugs/cast pointcut can interact badly with jimple type assignment
+Commandline: abc -d abctests\bugs -injars abctests\bugs\cast.jar -warn-unused-advice:off -ext abc.eaj abctests\bugs\CastAspect.java 
+Test failed, compiled class behaved incorrectly
+Message: fail [ unexpected event "cast happened" found,  unexpected event "cast happened" found]
+org.aspectj.bridge.AbortException: [ unexpected event "cast happened" found,  unexpected event "cast happened" found]
+	at org.aspectj.bridge.MessageWriter.handleMessage(MessageWriter.java:47)
+	at org.aspectj.testing.Tester.handle(Tester.java:963)
+	at org.aspectj.testing.Tester.checkFailed(Tester.java:177)
+	at org.aspectj.testing.Tester.check(Tester.java:204)
+	at org.aspectj.testing.Tester.checkEqualIgnoreDups(Tester.java:702)
+	at org.aspectj.testing.Tester.checkEqual(Tester.java:742)
+	at org.aspectj.testing.Tester.checkEvents(Tester.java:922)
+	at org.aspectj.testing.Tester.checkAndClearEvents(Tester.java:933)
+	at org.aspectj.testing.Tester.checkAllEvents(Tester.java:846)
+	at Cast.main(Cast.java:5)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)
+	at java.lang.reflect.Method.invoke(Unknown Source)
+	at abc.testing.TestCase.runTest(TestCase.java:392)
+	at abc.testing.Main.doCase(Main.java:281)
+	at abc.testing.Main.main(Main.java:115)
+FAIL: Test 992: "abctests\bugs/cast pointcut can interact badly with jimple type assignment" failed.
+
+
+Running test 993: abctests\eaj\throw_pointcut/Try all advice types on the throw joinpoint
+Commandline: abc -d abctests\eaj\throw_pointcut -warn-unused-advice:off -ext abc.eaj abctests\eaj\throw_pointcut\Throw.java 
+Compilation succeeded with 1 warnings, which were matched and verified against the expected warnings.
+PASS: Test 993: "abctests\eaj\throw_pointcut/Try all advice types on the throw joinpoint" passed.
+
+
+Running test 1200: cflowdepth/Cflowdepth Factorial
+Commandline: abc -d cflowdepth -warn-unused-advice:off -ext abc.eaj cflowdepth\Fact.java 
+before fact; depth is 1
+before fact; depth is 2
+before fact; depth is 3
+before fact; depth is 4
+before fact; depth is 5
+before fact; depth is 6
+after fact; depth is 6
+after fact; depth is 5
+after fact; depth is 4
+after fact; depth is 3
+after fact; depth is 2
+after fact; depth is 1
+5! is 120
+PASS: Test 1200: "cflowdepth/Cflowdepth Factorial" passed.
+
+
+Running test 1201: cflowdepth/Cflowdepth Factorial with arguments
+Commandline: abc -d cflowdepth -warn-unused-advice:off -ext abc.eaj cflowdepth\Fact2.java 
+before fact; depth is 1
+before fact; depth is 2
+before fact; depth is 3
+before fact; depth is 4
+before fact; depth is 5
+before fact; depth is 6
+after fact; depth is 6
+after fact; depth is 5
+after fact; depth is 4
+after fact; depth is 3
+after fact; depth is 2
+after fact; depth is 1
+5! is 120
+PASS: Test 1201: "cflowdepth/Cflowdepth Factorial with arguments" passed.
+
+
+Running test 1202: cflowdepth/Cflowbelowdepth Factorial
+Commandline: abc -d cflowdepth -warn-unused-advice:off -ext abc.eaj cflowdepth\Fact3.java 
+before fact; depth is 1
+before fact; depth is 2
+before fact; depth is 3
+before fact; depth is 4
+before fact; depth is 5
+after fact; depth is 5
+after fact; depth is 4
+after fact; depth is 3
+after fact; depth is 2
+after fact; depth is 1
+5! is 120
+PASS: Test 1202: "cflowdepth/Cflowbelowdepth Factorial" passed.
+
+
+Running test 1203: cflowdepth/Cflowbelowdepth Factorial with arguments
+Commandline: abc -d cflowdepth -warn-unused-advice:off -ext abc.eaj cflowdepth\Fact4.java 
+before fact; depth is 1
+before fact; depth is 2
+before fact; depth is 3
+before fact; depth is 4
+before fact; depth is 5
+after fact; depth is 5
+after fact; depth is 4
+after fact; depth is 3
+after fact; depth is 2
+after fact; depth is 1
+5! is 120
+PASS: Test 1203: "cflowdepth/Cflowbelowdepth Factorial with arguments" passed.
+
+
+Running test 1204: cflowdepth/Cflowdepth Factorial
+Commandline: abc -d cflowdepth -warn-unused-advice:off -ext abc.eaj cflowdepth\Fact5.java 
+Compilation failed with 3 errors, which were matched and verified against the expected errors.
+PASS: Test 1204: "cflowdepth/Cflowdepth Factorial" passed.
+
+
+Running test 1212: cflowdepth/Cflowdepth in complicated booleans
+Commandline: abc -d cflowdepth -warn-unused-advice:off -ext abc.eaj cflowdepth\Test.java 
+before foo at depth: 1
+foo
+PASS: Test 1212: "cflowdepth/Cflowdepth in complicated booleans" passed.
+
+
+Running test 1214: contains\checkstatic/Contains static test
+Commandline: abc -d contains\checkstatic -warn-unused-advice:off -ext abc.eaj contains\checkstatic\ContainsTest.java 
+Compilation failed with 2 errors, which were matched and verified against the expected errors.
+PASS: Test 1214: "contains\checkstatic/Contains static test" passed.
+
+
+Running test 1215: contains\basic/Contains basic matching test
+Commandline: abc -d contains\basic -warn-unused-advice:off -ext abc.eaj contains\basic\ContainsTest.java 
+void ContainsTest.main(String[])
+main
+f
+void ContainsTest.g()
+g
+f
+void ContainsTest.h(boolean)
+h
+f
+void ContainsTest.i()
+i
+f
+f
+f
+f
+f
+void ContainsTest.j()
+j
+f
+f
+f
+f
+f
+k
+l
+void ContainsTest.g()
+g
+f
+callctr = 6
+PASS: Test 1215: "contains\basic/Contains basic matching test" passed.
+
+

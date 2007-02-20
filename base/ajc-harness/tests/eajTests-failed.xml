@@ -1,0 +1,7 @@
+<suite xmlns:ns="http://www.comlab.ox.ac.uk/abc" xmlns="http://www.comlab.ox.ac.uk/abc"> 
+ <ajc-test title="cast pointcut can interact badly with jimple type assignment" num="992" dir="abctests/bugs">
+       <compile options="-ext,abc.eaj" files="cast.jar,CastAspect.java"></compile>
+       <run class="Cast"></run>
+    </ajc-test>
+ 
+</suite>

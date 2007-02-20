@@ -1,0 +1,29 @@
+jars.loc=../jars
+
+## Location of Polyglot classes jar
+polyglot.loc=${jars.loc}/polyglot-1.3.4.jar
+
+## Location of Polyglot cup-classes (if not included in Polyglot jar)
+polyglot.cupclasses.loc=${jars.loc}/java_cup.jar
+
+## Location of JFlex classes jar
+jflex.loc=${jars.loc}/jflex-1.4.1.jar
+
+## Location of Soot classes (can also be sootclasses jar)
+soot.loc=${jars.loc}/sootclasses-20060914.jar
+
+## Location of Jasmin classes
+jasmin.loc=${jars.loc}/jasminclasses-20060914.jar
+
+## Location of xact jar
+xact.loc=${jars.loc}/xact-complete-1.0-1.jar
+
+## Location of paddle jar
+paddle.loc=${jars.loc}/paddle-20060914.jar
+
+## Location of Jedd runtime classes jar file
+jedd.runtime.jar=${jars.loc}/jedd-runtime-20060914.jar
+
+## Location of JavaBDD distribution
+javabdd.jar=${jars.loc}/javabdd-1.0b2.jar
+

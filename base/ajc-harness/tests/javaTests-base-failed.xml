@@ -1,0 +1,50 @@
+<suite xmlns:ns="http://www.comlab.ox.ac.uk/abc" xmlns="http://www.comlab.ox.ac.uk/abc"> 
+ <ajc-test title="Using 'aspect' as identifier is legal TODO" num="112" keywords="from-java,purejava" dir="pureJava" abccomment="abc doesn't allow keywords                        need to allow for syntax error. LJH ">
+        <compile files="KeywordAspect.java">
+          <message line="7" kind="error"></message> 
+          <message line="7" kind="error"></message> 
+          <message line="10" kind="error"></message> 
+          <message line="13" kind="error"></message> 
+          <message line="14" kind="error"></message> 
+          <message line="18" kind="error"></message> 
+          <message line="18" kind="error"></message> 
+          <ajcmessage kind="ignore"></ajcmessage>
+        </compile>
+        <ajcrun class="KeywordAspect"></ajcrun>
+    </ajc-test>
+<ajc-test title="Using 'pointcut' as identifier is legal TODO" num="113" keywords="from-java,purejava" dir="pureJava" abccomment="abc doesn't allow keywords, added error. LJH ">
+        <compile files="KeywordPointcut.java">
+          <message line="7" kind="error"></message>
+          <message line="7" kind="error"></message>
+          <message line="7" kind="error"></message>
+          <message line="8" kind="error"></message> 
+          <message line="8" kind="error"></message> 
+          <message line="9" kind="error"></message> 
+          <message line="9" kind="error"></message> 
+           <ajcmessage kind="ignore"></ajcmessage>
+        </compile>
+        <ajcrun class="KeywordPointcut"></ajcrun>
+    </ajc-test>
+<ajc-test title="suggested by jacks 3.7-15 all comments must be closed" num="179" keywords="from-java,purejava" dir="pureJava" abccomment="we report missing end of comment at end of file                    whereas ajc reports it at the beginning of the                   comment.  I think our error is fine.  July 2/04 LJH">
+        <compile files="OpenComment.java">
+            <ajcmessage line="7" kind="error"></ajcmessage>
+            <message line="10" kind="error"></message>
+        </compile>
+    </ajc-test>
+<ajc-test title="Crashes when the closing brace is reversed" num="247" keywords="from-errors,purejava,messages-vary" dir="errors" abccomment="reports unexptected EOF on line 12, that's ok, July 4/04 LJH                 Extra error without line number is abc parser giving up                  - PA/AGS">
+        <compile options="!eclipse" files="ClosingBrace.java">
+            <ajcmessage line="11" kind="error"></ajcmessage>
+            <message kind="error"></message>
+            <message line="12" kind="error"></message>
+        </compile>
+    </ajc-test>
+<ajc-test title="should have circular inheritance errors (1)" pr="737" num="619" keywords="from-resolved_105,purejava,messages-vary" dir="pureJava">
+      <abckeywords> <nate></nate><laurie></laurie></abckeywords>
+        <compile options="!eclipse" files="circle/Test1CF.java">
+            <message line="7" kind="error"></message>
+            <message line="15" kind="error"></message>
+            <message line="17" kind="error"></message>
+        </compile>
+    </ajc-test>
+ 
+</suite>
