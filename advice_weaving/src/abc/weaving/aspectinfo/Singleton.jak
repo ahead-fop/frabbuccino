@@ -1,0 +1,16 @@
+
+import abc.weaving.matching.ShadowMatch;
+import abc.weaving.residues.*;
+
+
+public refines class Singleton {
+
+    public Residue matchesAt(Aspect aspct,ShadowMatch sm) {
+        return AlwaysMatch.v();
+    }
+
+    public Residue getAspectInstance(Aspect aspct,ShadowMatch sm) {
+        return new AspectOf(aspct.getInstanceClass().getSootClass(),null);
+    }
+
+}

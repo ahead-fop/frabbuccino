@@ -1,0 +1,177 @@
+
+import abc.soot.util.LocalGeneratorEx;
+import abc.soot.util.SwitchFolder;
+import abc.soot.util.Restructure;
+import abc.aspectj.visit.AspectInfoHarvester;
+import abc.weaving.aspectinfo.GlobalCflowSetupFactory;
+import abc.weaving.aspectinfo.AbstractAdviceDecl;
+import abc.weaving.aspectinfo.AdviceDecl;
+import abc.weaving.matching.MethodAdviceList;
+import abc.weaving.matching.ConstructorCallShadowMatch;
+import abc.weaving.matching.ExecutionShadowMatch;
+import abc.weaving.matching.StmtShadowMatch;
+import abc.weaving.weaver.CflowCodeGenUtils;
+import abc.weaving.weaver.InterprocConstantPropagator;
+import abc.weaving.weaver.ReweavingPass;
+import abc.weaving.weaver.UnusedMethodsRemover;
+import abc.weaving.weaver.WeavingState;
+import abc.weaving.weaver.adviceinliner.AdviceInliner;
+import abc.weaving.weaver.around.AroundWeaver;
+import abc.weaving.weaver.around.Util;
+
+public refines class Main {
+
+    public static void reset() {
+        AdviceInliner.reset();
+        AspectInfoHarvester.reset();
+        ConstructorCallShadowMatch.reset();
+        ExecutionShadowMatch.reset();
+        StmtShadowMatch.reset();
+        AroundWeaver.reset();
+        GlobalCflowSetupFactory.reset();
+        CflowCodeGenUtils.reset();
+        WeavingState.reset();
+        Util.reset();
+        LocalGeneratorEx.reset();
+        Restructure.reset();
+        SwitchFolder.reset();
+        Super().reset();
+    }
+
+    // HOOK method
+    protected void setupReweaving() {
+        Super().setupReweaving();
+
+        List defaultSootArgs = new ArrayList();        
+
+        //set default soot args
+        final List reweavingAnalyses = getAbcExtension().getReweavingPasses();
+        for (Iterator iter = reweavingAnalyses.iterator(); iter.hasNext();) {
+            ReweavingPass analysis = (ReweavingPass) iter.next();
+            analysis.defaultSootArgs(defaultSootArgs);            
+        }
+
+        //set the args from the commandline
+        defaultSootArgs.addAll(soot_args);
+        soot_args = defaultSootArgs;
+
+        //override soot args if necessary
+        for (Iterator iter = reweavingAnalyses.iterator(); iter.hasNext();) {
+            ReweavingPass analysis = (ReweavingPass) iter.next();
+            analysis.enforceSootArgs(soot_args);
+        }
+
+    }
+
+    protected void addBasicClassesToSoot() {
+        Super().addBasicClassesToSoot();
+        getAbcExtension().addBasicClassesToSoot();
+    }
+
+    protected void addJimplePacks() {
+        Super().addJimplePacks();
+        getAbcExtension().addJimplePacks();
+    }
+
+    protected void weave_advice() throws SemanticException {
+        Super().weave_advice();
+
+        // Make sure that all the standard AspectJ shadow types are loaded
+        AbcTimer.mark("Load shadow types");
+        phaseDebug("Load shadow types");
+
+        // for each shadow in each weavable class, compute list of applicable advice
+        abc.main.Main.v().getAbcExtension().getGlobalAspectInfo().computeAdviceLists();
+        AbcTimer.mark("Compute advice lists");
+        phaseDebug("Compute advice lists");                
+
+        if(Debug.v().printAdviceApplicationCount) {
+            int adviceApplCount=0;
+
+            for( Iterator clIt = getAbcExtension().getGlobalAspectInfo().getWeavableClasses().iterator(); clIt.hasNext(); ) {
+
+                final AbcClass cl = (AbcClass) clIt.next();
+                for( Iterator methodIt = cl.getSootClass().getMethods().iterator(); methodIt.hasNext(); ) {
+                    final SootMethod method = (SootMethod) methodIt.next(); 
+                    MethodAdviceList list=getAbcExtension().getGlobalAspectInfo().getAdviceList(method);
+                    if (list==null)
+                        continue;
+                    List allAdvice=list.allAdvice();
+                    adviceApplCount += allAdvice.size();                           	
+                }
+            }                   
+            System.out.println("Number of advice applications: " + adviceApplCount);
+        }
+        if(Debug.v().matcherTest) {
+            System.err.println("--- BEGIN ADVICE LISTS ---");
+            // print out matching information for testing purposes
+            for( Iterator clIt = getAbcExtension().getGlobalAspectInfo().getWeavableClasses().iterator(); clIt.hasNext(); ) {
+                final AbcClass cl = (AbcClass) clIt.next();
+                for( Iterator methodIt = cl.getSootClass().getMethods().iterator(); methodIt.hasNext(); ) {
+                    final SootMethod method = (SootMethod) methodIt.next();
+                    final StringBuffer sb=new StringBuffer(1000);
+                    sb.append("method: "+method.getSignature()+"\n");
+                    getAbcExtension().getGlobalAspectInfo().getAdviceList(method).debugInfo(" ",sb);
+                    System.err.println(sb.toString());
+                }
+            }         
+            System.err.println("--- END ADVICE LISTS ---");
+        }
+
+        if(abc.main.options.OptionsParser.v().warn_unused_advice()) {
+            for( Iterator adIt = getAbcExtension().getGlobalAspectInfo().getAdviceDecls().iterator(); adIt.hasNext(); ) {
+                final AbstractAdviceDecl ad = (AbstractAdviceDecl) adIt.next();
+
+                if(ad instanceof AdviceDecl && ad.getApplWarning() != null)
+                    error_queue.enqueue(ErrorInfo.WARNING,
+                            ad.getApplWarning(),
+                            ad.getPosition());
+            }
+        }
+
+        getAbcExtension().getWeaver().weave(); // timer marks inside weave() */
+    }
+
+    protected void post_weaving() throws CompilerFailedException {
+        Super().post_weaving();
+
+        if (OptionsParser.v().O()!=0) {
+
+            if (OptionsParser.v().around_inlining() || OptionsParser.v().before_after_inlining()) {
+                getAbcExtension().getWeaver().doInlining();
+
+                AbcTimer.mark("Advice inlining");
+                phaseDebug("Advice inlining");
+
+                InterprocConstantPropagator.inlineConstantArguments();
+
+                AbcTimer.mark("Interproc. constant propagator");
+                phaseDebug("Interproc. constant propagator");
+
+                getAbcExtension().getWeaver().runBoxingRemover();
+
+                AbcTimer.mark("Boxing remover");
+                phaseDebug("Boxing remover");
+
+                if (!Debug.v().disableDuplicatesRemover) {
+                    AdviceInliner.v().removeDuplicateInlineMethods();
+
+                    AbcTimer.mark("Duplicates remover");
+                    phaseDebug("Duplicates remover");
+                }
+
+                UnusedMethodsRemover.removeUnusedMethods();
+
+                AbcTimer.mark("Removing unused methods");
+                phaseDebug("Removing unused methods");
+
+                AdviceInliner.v().specializeReturnTypesOfInlineMethods();
+
+                AbcTimer.mark("Specializing return types");
+                phaseDebug("Specializing return types");
+            }
+        }
+
+        abortIfErrors();
+    }
+}

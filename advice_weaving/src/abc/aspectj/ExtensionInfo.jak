@@ -1,0 +1,18 @@
+
+import abc.aspectj.visit.ComputePrecedenceRelation;
+
+public refines class ExtensionInfo {
+
+    public static final Pass.ID COMPUTE_PRECEDENCE_RELATION = new Pass.ID("compute-precedence-relation");
+    public static final Pass.ID PRECEDENCE_COMPUTED = new Pass.ID("precedence-computed");
+
+    protected void passes_precedence_relation(List l, Job job)
+    {
+        Super().passes_precedence_relation(l, job);
+
+        // compute precedence relation between aspects, based on matched name patterns
+        l.add(new VisitorPass(COMPUTE_PRECEDENCE_RELATION, job, new ComputePrecedenceRelation(job, ts, nf, this)));
+        l.add(new GlobalBarrierPass(PRECEDENCE_COMPUTED, job));
+    }
+
+}

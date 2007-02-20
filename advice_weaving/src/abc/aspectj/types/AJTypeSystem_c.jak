@@ -1,0 +1,71 @@
+
+public refines class AJTypeSystem_c
+{
+
+    // importing the aspectJ runtime classes
+	protected ClassType JOINPOINT_;
+	
+    public ClassType JoinPoint()  { 
+	if (JOINPOINT_ != null) return JOINPOINT_;
+	if (abc.main.Debug.v().thisJoinPointObject) {
+	    return JOINPOINT_ = load("java.lang.Object");
+	}
+	return JOINPOINT_ = load("org.aspectj.lang.JoinPoint"); 
+    }
+
+	public ClassType JoinPointStaticPart() { 
+		ClassType jp = JoinPoint();
+		return jp.memberClassNamed("StaticPart");
+	}
+	
+	public MethodInstance adviceInstance(Position pos,
+                                ReferenceType container, Flags flags,
+                                Type returnType, String name, List argTypes,
+                                List excTypes, String signature)
+    {
+        assert_(container);
+        assert_(returnType);
+        assert_(argTypes);
+        assert_(excTypes);
+        return new AdviceInstance_c(this, pos, container, flags,
+					   returnType, name, argTypes, excTypes, signature);
+	}	
+   
+	public MethodInstance pointcutInstance(Position pos,
+											ReferenceType container, Flags flags,
+											Type returnType, String name,
+											List argTypes, List excTypes) {
+
+			   assert_(container);
+			   assert_(returnType);
+			   assert_(argTypes);
+			   assert_(excTypes);
+		   return new PointcutInstance_c(this, pos, container, flags,
+						   returnType, name, argTypes, excTypes);
+	}	
+	
+	protected Flags POINTCUT_FLAGS = ACCESS_FLAGS.Abstract().Final();
+	
+	public void checkPointcutFlags(Flags f) throws SemanticException {
+		if (! f.clear(POINTCUT_FLAGS).equals(Flags.NONE)) {
+			throw new SemanticException("Cannot declare pointcut with flags " +
+			                            f.clear(POINTCUT_FLAGS) +".");
+		}
+		
+		if (f.isAbstract() && f.isPrivate())
+			throw new SemanticException("Cannot declare pointcut that is both abstract and private.");
+	}
+
+	public PointcutInstance_c findPointCutNamed(ClassType ct, String name) 
+											throws SemanticException {
+	   java.util.Set ms = methodsNamed(ct,"$pointcut$"+name);
+	   if (ms.size() == 0)
+			throw new SemanticException("Pointcut "+name+" not found.");
+	   if (ms.size() > 1)
+			throw new SemanticException("Ambiguous pointcut reference.");
+	   // System.out.println("pointcut reference to "+name+" found in "+ ct);
+	   return (PointcutInstance_c) ms.iterator().next(); 
+	}
+
+}
+

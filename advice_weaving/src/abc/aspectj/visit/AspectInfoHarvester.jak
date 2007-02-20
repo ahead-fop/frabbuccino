@@ -1,0 +1,56 @@
+
+public refines class AspectInfoHarvester {
+    private static Map pc_decl_map = new HashMap();
+
+    public static void reset() {
+	pc_decl_map=new HashMap();
+    }
+
+
+    /** Convert a list of polyglot nodes representing argument patterns.
+     *  @param nodes a list containing {@link polyglot.ast.Local}, {@link polyglot.types.TypeNode},
+     *               {@link abc.aspectj.ast.ArgStar} and {@link abc.aspectj.ast.ArgDotDot} objects.
+     *  @return a list of {@link abc.weaving.aspectinfo.ArgPattern} objects.
+     */
+    public static List/*<ArgPattern>*/ convertArgPatterns(List/*<Node>*/ nodes) {
+	List aps = new ArrayList();
+	Iterator ni = nodes.iterator();
+	while (ni.hasNext()) {
+	    Node n = (Node) ni.next();
+	    abc.weaving.aspectinfo.ArgPattern ap;
+	    if (n instanceof Local) {
+		ap = new abc.weaving.aspectinfo.ArgVar(new Var(((Local)n).name(), n.position()), n.position());
+	    } else if (n instanceof TypeNode) {
+		ap = new abc.weaving.aspectinfo.ArgType(AbcFactory.AbcType(((TypeNode)n).type()), n.position());
+	    } else if (n instanceof ArgStar) {
+		ap = new abc.weaving.aspectinfo.ArgAny(n.position());
+	    } else if (n instanceof ArgDotDot) {
+		ap = new abc.weaving.aspectinfo.ArgFill(n.position());
+	    } else {
+		throw new RuntimeException("Unknown argument pattern type: "+n.getClass());
+	    }
+	    aps.add(ap);
+	}
+	return aps;
+    }
+
+    /** Convert a list of polyglot formals into aspect info formals.
+     *  @param pformals a list of {@link polyglot.ast.Formal} objects.
+     *  @return a list of {@link abc.weaving.aspectinfo.Formal} objects.
+     */
+    public static List/*<abc.weaving.aspectinfo.Formal>*/ convertFormals(List/*<polyglot.ast.Formal>*/ pformals) {
+	List formals = new ArrayList();
+	Iterator mdfi = pformals.iterator();
+	while (mdfi.hasNext()) {
+	    polyglot.ast.Formal mdf = (polyglot.ast.Formal)mdfi.next();
+	    formals.add(new abc.weaving.aspectinfo.Formal(AbcFactory.AbcType((polyglot.types.Type)mdf.type().type()),
+							  mdf.name(), mdf.position()));
+	}
+	return formals;
+    }
+
+    public static Map pointcutDeclarationMap() {
+	return pc_decl_map;
+    }
+
+}

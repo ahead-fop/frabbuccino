@@ -1,0 +1,29 @@
+
+public refines class Formal {
+    
+    /** Checks whether there is a binding with source var having the
+     *  same name as this formal in a renaming
+     * 
+     * @param renaming The Renaming(Var->VarBox) 
+     */
+    public boolean isInRenamingAsSource
+				(Hashtable/*<Var, PointcutVarEntry>*/ renaming) {
+    	// NOTE that Var.equals() compares by name only, so can
+    	// create a new Var object and remove just that
+    	Var v = new Var(name, getPosition());
+    	if (renaming.containsKey(v)) {
+    		VarBox ve = 
+				(VarBox) renaming.get(v);
+    		return (ve.hasVar());
+    	} else return false;
+    }
+    
+    public void removeFromRenamingAsSource
+    			(Hashtable/*<Var, PointcutVarEntry>*/ renaming) {
+    	Var v = new Var(name, getPosition());
+    	if (renaming.containsKey(v)) {
+    		renaming.remove(v);
+    	}
+    }
+    
+}
