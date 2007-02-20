@@ -1,0 +1,6 @@
+
+public refines interface AJNodeFactory {
+
+    public PCContains PCContains(Position pos, Pointcut param); 
+
+}

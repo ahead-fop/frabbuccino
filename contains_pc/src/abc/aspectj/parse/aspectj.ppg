@@ -1,0 +1,22 @@
+
+include "previous.ppg"
+
+package abc.aspectj.parse;
+
+
+// ------- tokens ----------------------------------
+
+terminal Token PC_CONTAINS;
+
+// ------- extensions ------------------------------
+
+start with goal;
+
+extend basic_pointcut_expr ::=
+    	PC_CONTAINS:x LPAREN pointcut_expr:pc RPAREN:y
+    	{:
+    		Grm.parserTrace("CONTAINS pointcut");
+    		RESULT = parser.nf.PCContains(parser.pos(x,y), pc);
+    	:}
+    ;
+
