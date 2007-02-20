@@ -1,0 +1,22 @@
+
+public refines class AJAbstractExtFactory_c {
+
+    public Ext extPCCast() {
+        Ext e = extPCCastImpl();
+
+        if (nextExtFactory != null) {
+            Ext e2 = nextExtFactory.extPCCast();
+            e = composeExts(e, e2);
+        }
+        return postExtPCCast(e);
+    }
+
+    protected Ext extPCCastImpl() {
+        return extPointcutImpl();
+    }
+
+    protected Ext postExtPCCast(Ext e) {
+        return postExtPointcut(e);
+    }
+
+}

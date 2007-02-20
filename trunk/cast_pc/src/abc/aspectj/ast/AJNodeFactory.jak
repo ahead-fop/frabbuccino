@@ -1,0 +1,6 @@
+
+public refines interface AJNodeFactory {
+
+    public PCCast PCCast(Position pos, TypePatternExpr type_pattern);
+
+}
