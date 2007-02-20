@@ -1,0 +1,209 @@
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.NoSuchElementException;
+import polyglot.types.SemanticException;
+import polyglot.util.Position;
+
+public refines class AbcFactory {
+    protected static Map/*<String,ClassType>*/ name_to_ct;
+
+    public static void init(Resolver res) {
+        Super().init(res);
+        name_to_ct = new HashMap();
+    }
+
+    public static void reset() {
+        Super().reset();
+        name_to_ct = null;
+    }
+
+    public static void registerName(ClassType ct, String name) {
+        Super().registerName(ct, name);
+        name_to_ct.put(name, ct);
+    }
+
+    public static AbcType AbcType(polyglot.types.Type t) {
+        return new AbcType(t);
+    }
+
+    public static AbcType AbcType(soot.Type t) {
+        return new AbcType(t);
+    }
+
+    public static int modifiers(polyglot.types.Flags mods) {
+        return soot.javaToJimple.Util.getModifier(mods);
+    }
+
+    public static ClassType sootClassToClassType(SootClass sc) {
+        boolean debug = abc.main.Debug.v().sootClassToClassType;
+        if (debug) System.err.print("To ClassType: "+sc.getName()+" ... ");
+        if (name_to_ct.containsKey(sc.getName())) {
+            if (debug) System.err.println("KNOWN");
+            return (ClassType)name_to_ct.get(sc.getName());
+        } else {
+            try {
+                if (debug) System.err.println("LOOKUP");
+                ClassType ct = (ClassType)resolver.find(sc.getName());
+                registerName(ct, sc.getName());
+                return ct;
+            } catch (SemanticException e) {
+                throw (NoSuchElementException)new NoSuchElementException("No such class: "+sc).initCause(e);
+            }
+        }
+    }
+
+    public static MethodSig MethodSig(polyglot.ast.MethodDecl m) {
+        return MethodSig(m, (polyglot.types.ClassType)m.methodInstance().container());
+    }
+
+    public static MethodSig MethodSig(polyglot.ast.MethodDecl m, polyglot.types.ClassType container) {
+        int mod = soot.javaToJimple.Util.getModifier(m.flags());
+        AbcClass cl = AbcFactory.AbcClass(container);
+        AbcType rtype = AbcFactory.AbcType(m.returnType().type());
+        String name = m.name();
+        List formals = new ArrayList();
+        Iterator mdfi = m.formals().iterator();
+        while (mdfi.hasNext()) {
+            polyglot.ast.Formal mdf = (polyglot.ast.Formal)mdfi.next();
+            formals.add(new abc.weaving.aspectinfo.Formal(AbcFactory.AbcType((polyglot.types.Type)mdf.type().type()),
+                        mdf.name(), mdf.position()));
+        }
+        List exc = new ArrayList();
+        Iterator ti = m.throwTypes().iterator();
+        while (ti.hasNext()) {
+            polyglot.ast.TypeNode t = (polyglot.ast.TypeNode)ti.next();
+            exc.add(AbcFactory.AbcClass((polyglot.types.ClassType)t.type()));
+        }
+        return new MethodSig(mod, cl, rtype, name, formals, exc, m.position());
+    }
+
+    public static MethodSig MethodSig(polyglot.types.MethodInstance mi) {
+        polyglot.types.Type retType = mi.returnType();
+        String methodname = mi.name();
+        int mod = soot.javaToJimple.Util.getModifier(mi.flags());
+        AbcClass cl = AbcFactory.AbcClass((polyglot.types.ClassType)mi.container());
+        AbcType rtype = AbcFactory.AbcType(retType);
+        String name = methodname;
+        List formals = new ArrayList();
+        int index = 0;
+        Iterator fi = mi.formalTypes().iterator(); 
+        while (fi.hasNext()) {
+            polyglot.types.Type ft = (polyglot.types.Type)fi.next();
+            formals.add(new abc.weaving.aspectinfo.Formal(AbcFactory.AbcType(ft),"a$"+index, mi.position()));
+            index++;
+        }
+        List exc = new ArrayList();
+        Iterator ti = mi.throwTypes().iterator();
+        while (ti.hasNext()) {
+            polyglot.types.ClassType t = (polyglot.types.ClassType)ti.next();
+            exc.add(AbcFactory.AbcClass(t));
+        }
+        return new MethodSig(mod, cl, rtype, name, formals, exc, mi.position());	
+    }
+
+    public static MethodSig MethodSig(polyglot.types.ConstructorInstance mi) {
+        int mod = soot.javaToJimple.Util.getModifier(mi.flags());
+        AbcClass cl = AbcFactory.AbcClass((polyglot.types.ClassType)mi.container());
+        AbcType rtype = AbcFactory.AbcType(mi.container());
+        String name = "<init>";
+        List formals = new ArrayList();
+        ClassType cont = mi.container().toClass();
+        if (cont.isInnerClass()) {
+            formals.add(0,new abc.weaving.aspectinfo.Formal(AbcFactory.AbcType(cont.outer()),"outer$",mi.position()));
+        }
+        int index = 0;
+        Iterator fi = mi.formalTypes().iterator(); 
+        while (fi.hasNext()) {
+            polyglot.types.Type ft = (polyglot.types.Type)fi.next();
+            formals.add(new abc.weaving.aspectinfo.Formal(AbcFactory.AbcType(ft),"a$"+index, mi.position()));
+            index++;
+        }
+        List exc = new ArrayList();
+        Iterator ti = mi.throwTypes().iterator();
+        while (ti.hasNext()) {
+            polyglot.types.ClassType t = (polyglot.types.ClassType)ti.next();
+            exc.add(AbcFactory.AbcClass(t));
+        }
+        return new MethodSig(mod, cl, rtype, name, formals, exc, mi.position());	
+    }
+
+
+    public static MethodSig MethodSig(soot.SootMethod m) {
+        int mod = m.getModifiers();
+        AbcClass cl = AbcFactory.AbcClass(m.getDeclaringClass());
+        AbcType rtype = AbcFactory.AbcType(m.getReturnType());
+        String name = m.getName();
+        List formals = new ArrayList();
+        int index = 0;
+        Iterator mfti = m.getParameterTypes().iterator();
+        while (mfti.hasNext()) {
+            soot.Type mft = (soot.Type)mfti.next();
+            formals.add(new Formal(AbcFactory.AbcType(mft), "a$"+index, null));
+            index++;
+        }
+        List exc = new ArrayList();
+        Iterator ti = m.getExceptions().iterator();
+        while (ti.hasNext()) {
+            soot.SootClass t = (soot.SootClass)ti.next();
+            if(t==null) throw new polyglot.util.InternalCompilerError
+                ("Exception in throws list of soot method "+m+" was null");
+            exc.add(AbcFactory.AbcClass(t));
+        }
+        return new MethodSig(mod, cl, rtype, name, formals, exc, null);
+    }
+
+    public static MethodSig MethodSig(soot.SootMethodRef mr) {
+        int mod = 0;
+        AbcClass cl = AbcFactory.AbcClass(mr.declaringClass());
+        AbcType rtype = AbcFactory.AbcType(mr.returnType());
+        String name = mr.name();
+        List formals = new ArrayList();
+        int index = 0;
+        Iterator mfti = mr.parameterTypes().iterator();
+        while (mfti.hasNext()) {
+            soot.Type mft = (soot.Type)mfti.next();
+            formals.add(new Formal(AbcFactory.AbcType(mft), "a$"+index, null));
+            index++;
+        }
+        List exc = new ArrayList();
+        return new MethodSig(mod, cl, rtype, name, formals, exc, null);
+    }
+
+    public static FieldSig FieldSig(polyglot.ast.FieldDecl f) {
+        return FieldSig(f, (polyglot.types.ClassType)f.fieldInstance().container());
+    }
+
+    public static FieldSig FieldSig(polyglot.ast.FieldDecl f, polyglot.types.ClassType container) {
+        int mod = soot.javaToJimple.Util.getModifier(f.flags());
+        AbcClass cl = AbcFactory.AbcClass(container);
+        AbcType type = AbcFactory.AbcType(f.type().type());
+        String name = f.name();
+        return new FieldSig(mod, cl, type, name, f.position());
+    }
+
+    public static FieldSig FieldSig(polyglot.types.FieldInstance fi) {
+        int mod = soot.javaToJimple.Util.getModifier(fi.flags());
+        AbcClass cl = AbcFactory.AbcClass((polyglot.types.ClassType)fi.container());
+        AbcType type = AbcFactory.AbcType(fi.type());
+        String name = fi.name();
+        return new FieldSig(mod, cl, type, name, fi.position());
+    }
+
+    public static FieldSig FieldSig(soot.SootField f) {
+        int mod = f.getModifiers();
+        AbcClass cl = AbcFactory.AbcClass(f.getDeclaringClass());
+        AbcType type = AbcFactory.AbcType(f.getType());
+        String name = f.getName();
+        return new FieldSig(mod, cl, type, name, null);
+    }
+
+    public static FieldSig FieldSig(soot.SootFieldRef fr) {
+        int mod = 0;
+        AbcClass cl = AbcFactory.AbcClass(fr.declaringClass());
+        AbcType type = AbcFactory.AbcType(fr.type());
+        String name = fr.name();
+        return new FieldSig(mod, cl, type, name, null);
+    }
+}

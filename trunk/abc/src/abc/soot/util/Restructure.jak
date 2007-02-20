@@ -1,0 +1,158 @@
+/* abc - The AspectBench Compiler
+ * Copyright (C) 2004 Laurie Hendren
+ * Copyright (C) 2004 Ondrej Lhotak
+ * Copyright (C) 2004 Jennifer Lhotak
+ * Copyright (C) 2004 Sascha Kuzins
+ * Copyright (C) 2004 Ganesh Sittampalam
+ *
+ * This compiler is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ *
+ * This compiler is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this compiler, in the file LESSER-GPL;
+ * if not, write to the Free Software Foundation, Inc.,
+ * 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ */
+
+//package abc.soot.util;
+
+import java.util.*;
+
+import polyglot.util.InternalCompilerError;
+
+import soot.*;
+import soot.util.*;
+import soot.jimple.*;
+import soot.jimple.toolkits.scalar.*;
+
+
+
+/** This class contains a variety of helper methods to restructure Soot
+ *    method Bodies.
+ *
+ * @author Laurie Hendren
+ * @author Ondrej Lhotak
+ * @author Jennifer Lhotak
+ * @author Sascha Kuzins
+ * @author Ganesh Sittampalam
+ */
+
+public class Restructure {
+
+   private static void debug(String message)
+     { if (abc.main.Debug.v().restructure)
+         System.err.println("RST*** " + message);
+     }
+
+   /* ------------------- Utility restructurers ----------------------- */
+
+  /** Given a Chain for a body of an <init> method, find the call to
+   *  the <init> corresponding to either a this() or super() call.  Check
+   *  that there is exactly one such <init>, otherwise throw a 
+   *  InternalCompilerError.   Return the <init> Stmt.
+   */
+  public static InvokeStmt findInitStmt(Chain units)
+    { // look for the <init> 
+      Iterator it = units.snapshotIterator();
+      InvokeStmt initstmt = null;
+
+      // need to track all locals containing refs to "this"
+      LinkedList receivercopies = new LinkedList();
+
+      // get the "this", should be first identity statement
+      Stmt first = (Stmt) it.next();
+      Local thisloc = null;
+      if ( (first instanceof IdentityStmt) && 
+	   ((IdentityStmt) first).getRightOp() instanceof ThisRef
+	 )
+        { thisloc = (Local) 
+	        ((IdentityStmt) first).getLeftOp();//the local for "this" 
+          // add to list of locals containing this
+          receivercopies.add(thisloc);
+	}
+	else
+	  throw new InternalCompilerError("Expecting an identity stmt for this");
+	
+      int countinits = 0;
+      debug("--- Starting to look through statement list ..... ");
+      while ( it.hasNext() )
+        { Stmt u = (Stmt) it.next();
+          debug(" ... Looking at stmt " + u);
+
+	  // if we find a stmt lhs = rhs, where rhs is already a copy
+	  //     of "this",  add lhs to receivercopies
+	  if ((u instanceof AssignStmt) &&
+	      receivercopies.contains(((AssignStmt) u).getRightOp()))
+	    receivercopies.add(((AssignStmt) u).getLeftOp());
+
+          if ((u instanceof InvokeStmt) && 
+	      ((InvokeStmt) u).getInvokeExpr() instanceof SpecialInvokeExpr &&
+	      ((InvokeStmt) u).getInvokeExpr().getMethodRef().name()
+	      .equals(SootMethod.constructorName) &&
+	      receivercopies.contains
+	      (((SpecialInvokeExpr) ((InvokeStmt) u).getInvokeExpr()).getBase()))
+	    { debug("Found <init> " + u);
+	      countinits++;
+	      if (countinits == 1) // great, found it
+	        initstmt = (InvokeStmt) u;  
+	      else
+	        throw new InternalCompilerError("Expecting only one <init>");
+             }	 
+          } // all units
+	 
+       debug("--- Finished looking through statement list ..... ");
+       if (countinits == 0)     
+         throw new InternalCompilerError("Could not find a matching <init>");
+
+       return(initstmt);
+     }
+
+   /** Given a Chain for the body of a method,  find the first "real"
+    *  stmt (i.e. not an identity stmt or the copy of "this" we often make) 
+    *  and return a reference to it.
+    */
+    public static Stmt findFirstRealStmt(SootMethod m,Chain units)
+    {
+	return findFirstRealStmt(m,units,false);
+    }
+
+    public static Stmt findFirstRealStmtOrNop(SootMethod m,Chain units)
+    {
+	return findFirstRealStmt(m,units,true);
+    }
+
+    private static Stmt findFirstRealStmt(SootMethod m,Chain units,boolean allowNops)
+     { Iterator it = units.snapshotIterator();
+       while ( it.hasNext() ) { 
+	     Stmt u = (Stmt) it.next();
+	     if(u instanceof IdentityStmt) continue;
+	     if(u instanceof NopStmt && !allowNops) continue;
+	     // skip over any copy of "this" we made
+	     //if(u instanceof AssignStmt)
+		 //if(thiscopies.containsKey(m)) 
+		   //  if(((AssignStmt) u).getLeftOp()==thiscopies.get(m))
+			 //continue;
+	     return u;
+          }
+        throw new InternalCompilerError("Expecting to find a real stmt");
+      }
+    public static Stmt findFirstRealStmtOrNull(SootMethod m,Chain units)
+    { 
+    	Iterator it = units.iterator();
+      while ( it.hasNext() ) { 
+	     Stmt u = (Stmt) it.next();
+	     if(u instanceof IdentityStmt) 
+	     	continue;
+	     return u;
+       }
+       return null;
+     }
+
+} // class Restructure

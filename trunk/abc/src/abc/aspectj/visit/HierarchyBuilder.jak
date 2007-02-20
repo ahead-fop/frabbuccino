@@ -1,0 +1,10 @@
+
+public refines class HierarchyBuilder {
+
+    protected void insertClassAndSuperclasses(ClassType ct, boolean weavable) {
+        Super().insertClassAndSuperclasses(ct, weavable);
+        ext.hierarchy.insertClassAndSuperclasses(ct, weavable);
+    }
+
+}
+

@@ -1,0 +1,330 @@
+/* abc - The AspectBench Compiler
+ * Copyright (C) 2004 Julian Tibble
+ *
+ * This compiler is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ *
+ * This compiler is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this compiler, in the file LESSER-GPL;
+ * if not, write to the Free Software Foundation, Inc.,
+ * 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ */
+
+//package abc.aspectj.ast;
+
+import polyglot.ast.JL;
+import polyglot.ext.jl.ast.AbstractDelFactory_c;
+
+/** Delegate factory.
+ * 
+ * @author Julian Tibble
+ */
+public abstract class AJAbstractDelFactory_c extends AbstractDelFactory_c
+                                                 implements AJDelFactory
+{
+    protected AJAbstractDelFactory_c nextDelFactory;
+
+    protected AJAbstractDelFactory_c() {
+        this(null);
+    }
+
+    protected AJAbstractDelFactory_c(AJAbstractDelFactory_c nextDelFactory) {
+        Super(AJAbstractDelFactory_c)(nextDelFactory);
+        this.nextDelFactory = nextDelFactory;
+    }
+
+    // Final methods that call the implementation, and check
+    // for further extensions. Follows the design of
+    // AbstractDelFactory_c
+
+
+    public final JL delAspectDecl() {
+        JL e = delAspectDeclImpl();
+
+        if (nextDelFactory != null) {
+            JL e2 = nextDelFactory.delAspectDecl();
+            e = composeDels(e, e2);
+        }
+        return postDelAspectDecl(e);
+    }
+
+    public final JL delAspectBody() {
+        JL e = delAspectBodyImpl();
+
+        if (nextDelFactory != null) {
+            JL e2 = nextDelFactory.delAspectBody();
+            e = composeDels(e, e2);
+        }
+        return postDelAspectBody(e);
+    }
+
+    public final JL delPerClause() {
+        JL e = delPerClauseImpl();
+
+        if (nextDelFactory != null) {
+            JL e2 = nextDelFactory.delPerClause();
+            e = composeDels(e, e2);
+        }
+        return postDelPerClause(e);
+    }
+
+    public final JL delDeclareDecl() {
+        JL e = delDeclareDeclImpl();
+
+        if (nextDelFactory != null) {
+            JL e2 = nextDelFactory.delDeclareDecl();
+            e = composeDels(e, e2);
+        }
+        return postDelDeclareDecl(e);
+    }
+
+    public final JL delDeclareParents() {
+        JL e = delDeclareParentsImpl();
+
+        if (nextDelFactory != null) {
+            JL e2 = nextDelFactory.delDeclareParents();
+            e = composeDels(e, e2);
+        }
+        return postDelDeclareParents(e);
+    }
+
+    public final JL delIntertypeMethodDecl() {
+        JL e = delIntertypeMethodDeclImpl();
+
+        if (nextDelFactory != null) {
+            JL e2 = nextDelFactory.delIntertypeMethodDecl();
+            e = composeDels(e, e2);
+        }
+        return postDelIntertypeMethodDecl(e);
+    }
+
+    public final JL delIntertypeConstructorDecl() {
+        JL e = delIntertypeConstructorDeclImpl();
+
+        if (nextDelFactory != null) {
+            JL e2 = nextDelFactory.delIntertypeConstructorDecl();
+            e = composeDels(e, e2);
+        }
+        return postDelIntertypeConstructorDecl(e);
+    }
+
+    public final JL delIntertypeFieldDecl() {
+        JL e = delIntertypeFieldDeclImpl();
+
+        if (nextDelFactory != null) {
+            JL e2 = nextDelFactory.delIntertypeFieldDecl();
+            e = composeDels(e, e2);
+        }
+        return postDelIntertypeFieldDecl(e);
+    }
+
+    public final JL delNamePattern() {
+        JL e = delNamePatternImpl();
+
+        if (nextDelFactory != null) {
+            JL e2 = nextDelFactory.delNamePattern();
+            e = composeDels(e, e2);
+        }
+        return postDelNamePattern(e);
+    }
+
+    public final JL delSimpleNamePattern() {
+        JL e = delSimpleNamePatternImpl();
+
+        if (nextDelFactory != null) {
+            JL e2 = nextDelFactory.delSimpleNamePattern();
+            e = composeDels(e, e2);
+        }
+        return postDelSimpleNamePattern(e);
+    }
+
+    public final JL delClassnamePatternExpr() {
+        JL e = delClassnamePatternExprImpl();
+
+        if (nextDelFactory != null) {
+            JL e2 = nextDelFactory.delClassnamePatternExpr();
+            e = composeDels(e, e2);
+        }
+        return postDelClassnamePatternExpr(e);
+    }
+
+    public final JL delCPEUniversal() {
+        JL e = delCPEUniversalImpl();
+
+        if (nextDelFactory != null) {
+            JL e2 = nextDelFactory.delCPEUniversal();
+            e = composeDels(e, e2);
+        }
+        return postDelCPEUniversal(e);
+    }
+
+    public final JL delCPEName() {
+        JL e = delCPENameImpl();
+
+        if (nextDelFactory != null) {
+            JL e2 = nextDelFactory.delCPEName();
+            e = composeDels(e, e2);
+        }
+        return postDelCPEName(e);
+    }
+
+    public final JL delAJClassBody() {
+        JL e = delAJClassBodyImpl();
+
+        if (nextDelFactory != null) {
+            JL e2 = nextDelFactory.delAJClassBody();
+            e = composeDels(e, e2);
+        }
+        return postDelAJClassBody(e);
+    }
+
+    public final JL delAJClassDecl() {
+        JL e = delAJClassDeclImpl();
+
+        if (nextDelFactory != null) {
+            JL e2 = nextDelFactory.delAJClassDecl();
+            e = composeDels(e, e2);
+        }
+        return postDelAJClassDecl(e);
+    }
+
+
+
+    //
+    // Implementations
+    //
+
+
+    protected JL delAspectDeclImpl() {
+        return delClassDeclImpl();
+    }
+
+    protected JL delAspectBodyImpl() {
+        return delClassBodyImpl();
+    }
+
+    protected JL delPerClauseImpl() {
+        return delNodeImpl();
+    }
+
+    protected JL delDeclareDeclImpl() {
+        return delTermImpl();
+    }
+
+    protected JL delDeclareParentsImpl() {
+        return delDeclareDecl();
+    }
+
+    protected JL delIntertypeMethodDeclImpl() {
+        return delMethodDeclImpl();
+    }
+
+    protected JL delIntertypeConstructorDeclImpl() {
+        return delConstructorDeclImpl();
+    }
+
+    protected JL delIntertypeFieldDeclImpl() {
+        return delFieldDeclImpl();
+    }
+
+    protected JL delNamePatternImpl() {
+        return delNodeImpl();
+    }
+
+    protected JL delSimpleNamePatternImpl() {
+        return delNamePatternImpl();
+    }
+
+    protected JL delClassnamePatternExprImpl() {
+        return delNodeImpl();
+    }
+
+    protected JL delCPEUniversalImpl() {
+        return delClassnamePatternExprImpl();
+    }
+
+    protected JL delCPENameImpl() {
+        return delClassnamePatternExprImpl();
+    }
+
+    protected JL delAJClassBodyImpl() {
+        return delClassBodyImpl();
+    }
+
+    protected JL delAJClassDeclImpl() {
+        return delClassDeclImpl();
+    }
+
+    //
+    // Post methods
+    //
+
+
+    protected JL postDelAspectDecl(JL del) {
+        return postDelClassDecl(del);
+    }
+
+    protected JL postDelAspectBody(JL del) {
+        return postDelClassBody(del);
+    }
+
+    protected JL postDelPerClause(JL del) {
+        return postDelNode(del);
+    }
+
+    protected JL postDelDeclareDecl(JL del) {
+        return postDelTerm(del);
+    }
+
+    protected JL postDelDeclareParents(JL del) {
+        return postDelDeclareDecl(del);
+    }
+
+    protected JL postDelIntertypeMethodDecl(JL del) {
+        return postDelMethodDecl(del);
+    }
+
+    protected JL postDelIntertypeConstructorDecl(JL del) {
+        return postDelConstructorDecl(del);
+    }
+
+    protected JL postDelIntertypeFieldDecl(JL del) {
+        return postDelFieldDecl(del);
+    }
+
+    protected JL postDelNamePattern(JL del) {
+        return postDelNode(del);
+    }
+
+    protected JL postDelSimpleNamePattern(JL del) {
+        return postDelNamePattern(del);
+    }
+
+    protected JL postDelClassnamePatternExpr(JL del) {
+        return postDelNode(del);
+    }
+
+    protected JL postDelCPEUniversal(JL del) {
+        return postDelClassnamePatternExpr(del);
+    }
+
+    protected JL postDelCPEName(JL del) {
+        return postDelClassnamePatternExpr(del);
+    }
+
+    protected JL postDelAJClassBody(JL del) {
+        return postDelClassBody(del);
+    }
+
+    protected JL postDelAJClassDecl(JL del) {
+        return postDelClassDecl(del);
+    }
+
+}

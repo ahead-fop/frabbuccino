@@ -1,0 +1,167 @@
+
+import polyglot.ast.AmbAssign;
+import polyglot.ast.ArrayAccess;
+import polyglot.ast.ArrayAccessAssign;
+import polyglot.ast.Assign;
+import polyglot.ast.Block;
+import polyglot.ast.Call;
+import polyglot.ast.CharLit;
+import polyglot.ast.ConstructorCall;
+import polyglot.ast.ConstructorDecl;
+import polyglot.ast.DelFactory;
+import polyglot.ast.Disamb;
+import polyglot.ast.ExtFactory;
+import polyglot.ast.Field;
+import polyglot.ast.FieldAssign;
+import polyglot.ast.Local;
+import polyglot.ast.LocalAssign;
+import polyglot.ast.MethodDecl;
+import polyglot.ast.Receiver;
+import polyglot.ast.Special;
+import polyglot.types.SemanticException;
+import polyglot.types.Type;
+
+public refines class AJNodeFactory_c implements AJNodeFactory {
+
+    protected final AJExtFactory extFactory;
+    protected final AJDelFactory delFactory;
+
+    refines AJNodeFactory_c()
+    {
+        // FIXME: This doesn't work with AHEAD.
+        /*
+        this(new AJAbstractExtFactory_c() {},
+             new AJAbstractDelFactory_c() {});
+        */
+        extFactory = new AJAbstractExtFactory_c() {};
+        delFactory = new AJAbstractDelFactory_c() {};
+    }
+
+    public AJNodeFactory_c(AJExtFactory nextExtFactory)
+    {
+        //this(nextExtFactory, new AJAbstractDelFactory_c() {});
+        this.extFactory = nextExtFactory;
+        this.delFactory = new AJAbstractDelFactory_c() {};
+    }
+
+    public AJNodeFactory_c(AJExtFactory
+                                nextExtFactory,
+                                AJDelFactory
+                                nextDelFactory)
+    {
+        this.extFactory = nextExtFactory;
+        this.delFactory = nextDelFactory;
+    }
+
+    protected ExtFactory extFactory() {
+        return extFactory;
+    }
+
+    protected DelFactory delFactory() {
+        return delFactory;
+    }
+
+    public  AspectDecl AspectDecl(Position pos,
+                                  boolean is_privileged,
+                                  Flags flags,
+                                  String name,
+                                  TypeNode superClass,
+                                  List interfaces,
+                                  PerClause per,
+                                  AspectBody body) {
+	AspectDecl n = new AspectDecl_c(pos,is_privileged, flags, name, 
+                                        superClass, interfaces, per, body);
+        n = (AspectDecl)n.ext(extFactory.extAspectDecl());
+        n = (AspectDecl)n.del(delFactory.delAspectDecl());
+        return n;
+    }
+
+    public AspectBody AspectBody(Position pos, List members) {
+        AspectBody n = new AspectBody_c(pos,members);
+        n = (AspectBody)n.ext(extFactory.extAspectBody());
+        n = (AspectBody)n.del(delFactory.delAspectBody());
+        return n;
+    }
+
+    public DeclareParents DeclareParents(Position pos,
+					 ClassnamePatternExpr pat,
+					 List parents,
+					 DeclareParents.Kind kind) {
+        DeclareParents n = new DeclareParents_c(pos,pat,parents,kind);
+        n = (DeclareParents)n.ext(extFactory.extDeclareParents());
+        n = (DeclareParents)n.del(delFactory.delDeclareParents());
+        return n;
+    }
+
+    public IntertypeMethodDecl
+           IntertypeMethodDecl(Position pos,
+                               Flags flags,
+                               TypeNode returnType,
+                               TypeNode host,
+                               String name,
+                               List formals,
+                               List throwTypes,
+	  	               Block body) {
+	IntertypeMethodDecl n = new IntertypeMethodDecl_c(pos,flags,returnType,
+							  host,name,formals,
+							  throwTypes,body);
+        n = (IntertypeMethodDecl)n.ext(extFactory.extIntertypeMethodDecl());
+        n = (IntertypeMethodDecl)n.del(delFactory.delIntertypeMethodDecl());
+	return n;
+    }
+
+    public IntertypeConstructorDecl
+           IntertypeConstructorDecl(Position pos,
+                               Flags flags,
+                               TypeNode host,
+                               String name,
+                               List formals,
+                               List throwTypes,
+	  	               Block body) {
+	IntertypeConstructorDecl n 
+                         = new IntertypeConstructorDecl_c(pos,flags,
+							  host,name,formals,
+							  throwTypes,body);
+        n = (IntertypeConstructorDecl)n.ext(
+                        extFactory.extIntertypeConstructorDecl());
+        n = (IntertypeConstructorDecl)n.del(
+                        delFactory.delIntertypeConstructorDecl());
+	return n;
+    }
+
+    public IntertypeFieldDecl
+	   IntertypeFieldDecl(Position pos,
+		   	      Flags flags,
+			      TypeNode type,
+			      TypeNode host,
+			      String name,
+			      Expr init) {
+	IntertypeFieldDecl n
+	    = new IntertypeFieldDecl_c(pos,flags,type,host,name,init);
+        n = (IntertypeFieldDecl)n.ext(extFactory.extIntertypeFieldDecl());
+        n = (IntertypeFieldDecl)n.del(delFactory.delIntertypeFieldDecl());
+	return n;
+    }
+
+    public SimpleNamePattern SimpleNamePattern(Position pos, String pat) {
+	SimpleNamePattern n = new SimpleNamePattern_c(pos,pat);
+        n = (SimpleNamePattern)n.ext(extFactory.extSimpleNamePattern());
+        n = (SimpleNamePattern)n.del(delFactory.delSimpleNamePattern());
+        return n;
+    }
+
+    public CPEUniversal CPEUniversal(Position pos) {
+	CPEUniversal n = new CPEUniversal_c(pos);
+        n = (CPEUniversal)n.ext(extFactory.extCPEUniversal());
+        n = (CPEUniversal)n.del(delFactory.delCPEUniversal());
+        return n;
+    }
+
+    public CPEName CPEName(Position pos, NamePattern pat) {
+	CPEName n = new CPEName_c(pos,pat);
+        n = (CPEName)n.ext(extFactory.extCPEName());
+        n = (CPEName)n.del(delFactory.delCPEName());
+        return n;
+    }
+
+}
