@@ -1,0 +1,37 @@
+
+import abc.aspectj.ast.AJNodeFactory;
+import abc.aspectj.types.AJTypeSystem;
+import abc.aspectj.visit.GlobalPointcuts;
+
+public refines class ExtensionInfo
+{
+
+    public static final Pass.ID COLLECT_GLOBAL_POINTCUTS =
+        new Pass.ID("collect-global-pointcuts");
+    public static final Pass.ID COLLECTED_GLOBAL_POINTCUTS =
+        new Pass.ID("collected-global-pointcuts");
+    public static final Pass.ID CONJOIN_GLOBAL_POINTCUTS =
+        new Pass.ID("conjoin-global-pointcuts");
+    public static final Pass.ID CONJOINED_GLOBAL_POINTCUTS =
+        new Pass.ID("conjoined-global-pointcuts");
+
+    protected void passes_post_hierarchy(List l, Job job)
+    {
+        Super().passes_post_hierarchy(l, job);
+
+        l.add(new VisitorPass(COLLECT_GLOBAL_POINTCUTS,
+                    job,
+                    new GlobalPointcuts(GlobalPointcuts.COLLECT,
+                        job,
+                        (AJTypeSystem) ts,
+                        (AJNodeFactory) nf)));
+        l.add(new GlobalBarrierPass(COLLECTED_GLOBAL_POINTCUTS, job));
+        l.add(new VisitorPass(CONJOIN_GLOBAL_POINTCUTS,
+                    job,
+                    new GlobalPointcuts(GlobalPointcuts.CONJOIN,
+                        job,
+                        (AJTypeSystem) ts,
+                        (AJNodeFactory) nf)));
+    }
+
+}

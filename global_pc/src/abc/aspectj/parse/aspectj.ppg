@@ -1,0 +1,47 @@
+
+include "previous.ppg"
+
+package abc.aspectj.parse;
+
+
+// ------- tokens ----------------------------------
+
+terminal Token GLOBAL;
+
+// ------- non-terminals ---------------------------
+
+non terminal GlobalPointcutDecl global_pointcut_decl;
+
+// ------- extensions ------------------------------
+
+start with goal;
+
+extend class_member_declaration ::=
+        global_pointcut_decl:a
+        {:
+            Grm.parserTrace("class_member_declaration is a global_pointcut_decl");
+            List l = new TypedList(new LinkedList(), ClassMember.class, false);
+            l.add(a);
+            RESULT = l;
+        :}
+    ;
+
+extend interface_member_declaration ::=
+        global_pointcut_decl:a
+        {:
+            Grm.parserTrace("class_member_declaration is a global_pointcut_decl");
+            List l = new TypedList(new LinkedList(), ClassMember.class, false);
+            l.add(a);
+            RESULT = l;
+        :}
+    ;
+
+global_pointcut_decl ::=
+        GLOBAL:x COLON classname_pattern_expr:a COLON pointcut_expr:b SEMICOLON:y
+        {:
+            Grm.parserTrace("GLOBAL type_pattern_expr, pointcut_expr");
+            RESULT = parser.nf.GlobalPointcutDecl(parser.pos(x,y),a, b);
+        :}
+    ;
+
+

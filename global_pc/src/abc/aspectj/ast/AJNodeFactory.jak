@@ -1,0 +1,9 @@
+
+public refines interface AJNodeFactory {
+
+    public GlobalPointcutDecl GlobalPointcutDecl(
+            Position pos,
+            ClassnamePatternExpr aspect_pattern,
+            Pointcut pc);
+
+}
