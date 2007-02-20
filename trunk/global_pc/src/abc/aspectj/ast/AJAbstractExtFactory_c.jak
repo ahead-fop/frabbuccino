@@ -1,0 +1,24 @@
+
+import polyglot.ast.Ext;
+
+public refines class AJAbstractExtFactory_c {
+
+    public Ext extGlobalPointcutDecl() {
+        Ext e = extGlobalPointcutDeclImpl();
+
+        if (nextExtFactory != null) {
+            Ext e2 = nextExtFactory.extGlobalPointcutDecl();
+            e = composeExts(e, e2);
+        }
+        return postExtGlobalPointcutDecl(e);
+    }
+
+    protected Ext extGlobalPointcutDeclImpl() {
+        return extPointcutDeclImpl();
+    }
+
+    protected Ext postExtGlobalPointcutDecl(Ext e) {
+        return postExtPointcutDecl(e);
+    }
+
+}

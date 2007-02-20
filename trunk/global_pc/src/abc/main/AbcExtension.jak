@@ -1,0 +1,14 @@
+
+public refines class AbcExtension
+{
+
+    public void initLexerKeywords(AbcLexer lexer) {
+        // Add the base keywords
+        Super().initLexerKeywords(lexer);
+
+        // keyword for the "global pointcut" extension
+        lexer.addGlobalKeyword("global", new LexerAction_c(new Integer(abc.aspectj.parse.sym.GLOBAL),
+                    new Integer(lexer.pointcut_state())));
+    }
+
+}

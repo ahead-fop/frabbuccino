@@ -1,0 +1,9 @@
+
+public refines interface AJExtFactory {
+
+    /**
+     * @return extensions for global pointcut declarations
+     */
+    public Ext extGlobalPointcutDecl();
+
+}

@@ -1,0 +1,16 @@
+
+public refines class AJNodeFactory_c
+{
+
+    public GlobalPointcutDecl GlobalPointcutDecl(
+            Position pos,
+            ClassnamePatternExpr aspect_pattern,
+            Pointcut pc)
+    {
+        GlobalPointcutDecl n = new GlobalPointcutDecl_c(pos, aspect_pattern,pc);
+        n = (GlobalPointcutDecl)n.ext(((AJExtFactory)extFactory()).extGlobalPointcutDecl());
+        n = (GlobalPointcutDecl)n.del(((AJDelFactory)delFactory()).delGlobalPointcutDecl());
+        return n;
+    }
+
+}

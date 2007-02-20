@@ -1,0 +1,22 @@
+
+public refines class AJAbstractDelFactory_c {
+
+    public final JL delGlobalPointcutDecl() {
+        JL e = delGlobalPointcutDeclImpl();
+
+        if (nextDelFactory != null) {
+            JL e2 = nextDelFactory.delGlobalPointcutDecl();
+            e = composeDels(e, e2);
+        }
+        return postDelGlobalPointcutDecl(e);
+    }
+
+    protected JL delGlobalPointcutDeclImpl() {
+        return delPointcutDeclImpl();
+    }
+
+    protected JL postDelGlobalPointcutDecl(JL del) {
+        return postDelPointcut(del);
+    }
+
+}
