@@ -1,0 +1,9 @@
+
+public refines interface AJDelFactory {
+
+    /**
+     * @return delegates for cast pointcuts
+     */
+    public JL delPCThrow();
+
+}

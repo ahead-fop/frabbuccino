@@ -1,0 +1,13 @@
+
+import org.aspectj.lang.reflect.ThrowSignature;
+
+public refines class Factory
+{
+
+    public ThrowSignature makeThrowSig(String stringRep) {
+        ThrowSignatureImpl ret = new ThrowSignatureImpl(stringRep);
+        ret.setLookupClassLoader(lookupClassLoader);
+        return ret;
+    }
+
+}

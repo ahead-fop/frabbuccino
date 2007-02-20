@@ -1,0 +1,28 @@
+
+include "previous.ppg"
+
+package abc.aspectj.parse;
+
+
+// ------- tokens ----------------------------------
+
+terminal Token PC_THROW;
+
+// ------- extensions ------------------------------
+
+start with goal;
+
+extend basic_pointcut_expr ::=
+        PC_THROW:x LPAREN RPAREN:y
+        {:
+            Grm.parserTrace("THROW pointcut");
+            RESULT = parser.nf.PCThrow(parser.pos(x,y), parser.nf.TPEUniversal(parser.pos(x,y)));
+        :}
+    |
+        PC_THROW:x LPAREN type_pattern_expr:a RPAREN:y
+        {:
+            Grm.parserTrace("THROW pointcut with type_pattern_expr");
+            RESULT = parser.nf.PCThrow(parser.pos(x,y), a);
+        :}
+    ;
+

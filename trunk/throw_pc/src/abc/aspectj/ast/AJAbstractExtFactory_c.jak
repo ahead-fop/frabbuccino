@@ -1,0 +1,22 @@
+
+public refines class AJAbstractExtFactory_c {
+
+    public Ext extPCThrow() {
+        Ext e = extPCThrowImpl();
+
+        if (nextExtFactory != null) {
+            Ext e2 = nextExtFactory.extPCThrow();
+            e = composeExts(e, e2);
+        }
+        return postExtPCThrow(e);
+    }
+
+    protected Ext extPCThrowImpl() {
+        return extPointcutImpl();
+    }
+
+    protected Ext postExtPCThrow(Ext e) {
+        return postExtPointcut(e);
+    }
+
+}
