@@ -1,0 +1,12 @@
+
+public refines class AJNodeFactory_c
+{
+
+    public PCContains PCContains(Position pos, Pointcut param) {
+        PCContains n = new PCContains_c(pos,param);
+        n = (PCContains)n.ext(((AJExtFactory)extFactory()).extPCContains());
+        n = (PCContains)n.del(((AJDelFactory)delFactory()).delPCContains());
+        return n;
+    }
+
+}

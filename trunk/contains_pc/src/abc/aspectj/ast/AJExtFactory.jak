@@ -1,0 +1,9 @@
+
+public refines interface AJExtFactory {
+
+    /**
+     * @return extension for contains pointcuts
+     */
+    public Ext extPCContains();
+
+}

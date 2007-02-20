@@ -1,0 +1,23 @@
+
+import abc.aspectj.ast.AJNodeFactory;
+import abc.aspectj.types.AJTypeSystem;
+import abc.aspectj.visit.CheckPCContainsStatic;
+
+public refines class ExtensionInfo
+{
+
+    public static final Pass.ID CHECK_PCCONTAINS_STATIC = 
+        new Pass.ID("check_pccontains_static");
+
+    protected void passes_post_hierarchy(List l, Job job)
+    {
+        Super().passes_post_hierarchy(l, job);
+
+        l.add(new VisitorPass(CHECK_PCCONTAINS_STATIC,
+                    job,
+                    new CheckPCContainsStatic(job,
+                        (AJTypeSystem) ts, 
+                        (AJNodeFactory)nf)));
+    }
+
+}

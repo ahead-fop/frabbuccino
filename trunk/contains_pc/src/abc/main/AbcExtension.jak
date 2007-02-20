@@ -1,0 +1,18 @@
+
+import abc.aspectj.parse.AbcLexer;
+import abc.aspectj.parse.LexerAction_c;
+
+public refines class AbcExtension
+{
+
+    public void initLexerKeywords(AbcLexer lexer) {
+        // Add the base keywords
+        Super().initLexerKeywords(lexer);
+
+        if(!Debug.v().noContainsPointcut) {
+            //keyword for the "contains" pointcut extension
+            lexer.addPointcutKeyword("contains", new LexerAction_c(new Integer(abc.aspectj.parse.sym.PC_CONTAINS)));
+        }
+    }
+
+}

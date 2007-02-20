@@ -1,0 +1,22 @@
+
+public refines class AJAbstractExtFactory_c {
+
+    public Ext extPCContains() {
+        Ext e = extPCContainsImpl();
+
+        if (nextExtFactory != null) {
+            Ext e2 = nextExtFactory.extPCContains();
+            e = composeExts(e, e2);
+        }
+        return postExtPCContains(e);
+    }
+
+    protected Ext extPCContainsImpl() {
+        return extPointcutImpl();
+    }
+
+    protected Ext postExtPCContains(Ext e) {
+        return postExtPointcut(e);
+    }
+
+}
