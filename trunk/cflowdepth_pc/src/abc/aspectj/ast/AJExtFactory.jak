@@ -1,0 +1,14 @@
+
+public refines interface AJExtFactory {
+
+    /**
+     * @return extensions for cflowdepth pointcuts 
+     */
+    public Ext extPCCflowDepth();
+
+    /**
+     * @return extensions for cflowbelowdepth pointcuts
+     */
+    public Ext extPCCflowBelowDepth();
+
+}

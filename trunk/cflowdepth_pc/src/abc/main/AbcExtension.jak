@@ -1,0 +1,16 @@
+
+public refines class AbcExtension
+{
+
+    public void initLexerKeywords(AbcLexer lexer) {
+        // Add the base keywords
+        Super().initLexerKeywords(lexer);
+
+        // keyword for the "cflowdepth" pointcut extension
+        lexer.addPointcutKeyword("cflowdepth", new LexerAction_c(new Integer(abc.aspectj.parse.sym.PC_CFLOWDEPTH)));
+
+        // keyword for the "cflowbelowdepth" pointcut extension
+        lexer.addPointcutKeyword("cflowbelowdepth", new LexerAction_c(new Integer(abc.aspectj.parse.sym.PC_CFLOWBELOWDEPTH)));
+    }
+
+}
